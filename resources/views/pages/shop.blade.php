@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('title', 'Shop - PetMart.LK')
 
 @section('content')
@@ -245,20 +246,43 @@
                 <span class="text-xs text-gray-400">(128 reviews)</span>
               </div>
               
-              <!-- Price and Add Button -->
-              <div class="flex items-center justify-between pt-4 border-t border-gray-800">
-                <div>
-                  <span class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                    Rs. {{ number_format((float)$product->price, 2) }}
-                  </span>
-                </div>
-                <button class="group/btn bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg flex items-center gap-1.5 h-9">
-                  <svg class="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                  </svg>
-                  <span>Add</span>
-                </button>
-              </div>
+<div class="flex items-center justify-between pt-4 border-t border-gray-800">
+
+    <!-- PRICE -->
+    <span class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+        Rs. {{ number_format((float)$product->price, 2) }}
+    </span>
+
+    <!-- ACTION BUTTONS -->
+    <div class="flex items-center gap-3">
+
+        <!-- ❤️ FAVORITE -->
+        <button 
+            class="favorite-btn"
+            data-pet-id="{{ $product->id }}"
+            data-favorited="{{ in_array($product->id, $favoriteIds) ? '1' : '0' }}"
+        >
+            <svg class="w-5 h-5 {{ in_array($product->id, $favoriteIds) ? 'text-red-500' : 'text-gray-400' }}"
+                 fill="{{ in_array($product->id, $favoriteIds) ? 'currentColor' : 'none' }}"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+        </button>
+
+        <!-- 🛒 ADD TO CART -->
+        <form action="{{ route('cart.add') }}" method="POST" class="inline-block">
+            @csrf
+            <input type="hidden" name="pet_id" value="{{ $product->id }}">
+            <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                Add
+            </button>
+        </form>
+
+    </div>
+</div>
+
             </div>
           </div>
           @endforeach
@@ -280,6 +304,65 @@
     </div>
   </section>
 </div>
+<script>
+const FAV_TOKEN = "{{ session('user_token') }}";
+
+document.querySelectorAll('.favorite-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+
+        if (!FAV_TOKEN) {
+            alert("Please login first");
+            return;
+        }
+
+        const petId = btn.dataset.petId;
+        const isFav = btn.dataset.favorited === "1";
+
+        const url = isFav 
+            ? `/api/favorites/${petId}` 
+            : `/api/favorites`;
+
+        const options = {
+            method: isFav ? "DELETE" : "POST",
+            headers: {
+                "Authorization": "Bearer " + FAV_TOKEN,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: isFav ? null : JSON.stringify({ pet_id: petId })
+        };
+
+        try {
+            const res = await fetch(url, options);
+            const data = await res.json();
+
+            if (res.ok || res.status === 200 || res.status === 201) {
+                // Toggle UI immediately
+                btn.dataset.favorited = isFav ? "0" : "1";
+
+                const svg = btn.querySelector('svg');
+
+                if (isFav) {
+                    svg.classList.remove("text-red-500");
+                    svg.classList.add("text-gray-400");
+                    svg.setAttribute("fill", "none");
+                } else {
+                    svg.classList.remove("text-gray-400");
+                    svg.classList.add("text-red-500");
+                    svg.setAttribute("fill", "currentColor");
+                }
+            } else {
+                console.error("Error:", data);
+                alert("Failed to update favorite: " + (data.message || "Unknown error"));
+            }
+        } catch (error) {
+            console.error("Fetch error:", error);
+            alert("Network error. Please try again.");
+        }
+    });
+});
+</script>
+
 
 <script>
   // Image Error Tracking
@@ -522,7 +605,9 @@
     }
 
     // Update count on filter change
-    const filterInputs = document.querySelectorAll('#filters select, #filters input');
+const filterInputs = document.querySelectorAll('#filters select, #filters input');
+
+
     filterInputs.forEach(input => {
       input.addEventListener('change', updateActiveFiltersCount);
       input.addEventListener('input', updateActiveFiltersCount);
@@ -545,5 +630,8 @@
     }
   });
 </script>
+
+
+
 @endsection
 

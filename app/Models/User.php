@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Model
+class User extends Authenticatable
 {
-    // SQL Server table name - User is a reserved keyword, Laravel should handle brackets automatically
+    use HasApiTokens, Notifiable;
     protected $table = 'User';
-    
+
     protected $primaryKey = 'id';
-    
+
     public $timestamps = false;
-    
+
     protected $fillable = [
         'name',
         'address',
@@ -20,11 +22,12 @@ class User extends Model
         'email',
         'password',
         'confirm_password',
-        'role'
+        'role',
+        'created_at'
     ];
 
     protected $hidden = [
         'password',
         'confirm_password'
-        ];
+    ];
 }
