@@ -29,7 +29,6 @@ class AuthController extends Controller
             'phonenumber' => 'required|string|max:15',
             'address' => 'required|string|max:255',
             'password' => 'required|string|min:6',
-            'confirm_password' => 'required|same:password',
         ]);
 
         if ($validator->fails()) {
@@ -53,7 +52,6 @@ class AuthController extends Controller
             'phonenumber' => $request->phonenumber,
             'address' => $request->address,
             'password' => $hashedPassword,
-            'confirm_password' => $hashedPassword, // legacy column
             'role' => 'user',
             'created_at' => now(),
         ]);

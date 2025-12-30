@@ -9,7 +9,6 @@ CREATE TABLE [User] (
     phonenumber NVARCHAR(15) NOT NULL,
     email NVARCHAR(100) UNIQUE NOT NULL,
     password NVARCHAR(100) NOT NULL,
-    confirm_password NVARCHAR(100) NOT NULL,
     role NVARCHAR(50) DEFAULT 'user',
     created_at DATETIME NULL
 );
@@ -294,5 +293,22 @@ DROP TABLE IF EXISTS cart;
 ALTER TABLE [User]
 ALTER COLUMN password NVARCHAR(255) NOT NULL;
 
-ALTER TABLE [User]
-ALTER COLUMN confirm_password NVARCHAR(255) NOT NULL;
+-- Remove confirm_password column if it exists
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'User' AND COLUMN_NAME = 'confirm_password')
+BEGIN
+    ALTER TABLE [User] DROP COLUMN confirm_password;
+END;
+GO
+
+-- Clear all user-related data and remove confirm_password column
+DELETE FROM cart_items;
+DELETE FROM cart;
+DELETE FROM favorites;
+DELETE FROM personal_access_tokens;
+DELETE FROM [User];
+DBCC CHECKIDENT ('[User]', RESEED, 0);
+
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'User' AND COLUMN_NAME = 'confirm_password')
+BEGIN
+    ALTER TABLE [User] DROP COLUMN confirm_password;
+END;

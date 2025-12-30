@@ -20,7 +20,6 @@ CREATE TABLE [User] (
     phonenumber NVARCHAR(15) NOT NULL,
     email NVARCHAR(100) UNIQUE NOT NULL,
     password NVARCHAR(100) NOT NULL,
-    confirm_password NVARCHAR(100) NOT NULL,
     role NVARCHAR(50) DEFAULT 'user',
     created_at DATETIME NULL
 );

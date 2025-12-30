@@ -6,12 +6,10 @@ use App\Models\Pet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    /**
-     * 🔐 ADMIN ACCESS CHECK
-     */
     private function ensureAdmin()
     {
         if (!Auth::check() || Auth::user()->role !== 'admin') {
@@ -19,9 +17,6 @@ class AdminController extends Controller
         }
     }
 
-    /**
-     * 📊 Admin Dashboard
-     */
     public function index()
     {
         $this->ensureAdmin();
@@ -47,9 +42,6 @@ class AdminController extends Controller
         );
     }
 
-    /**
-     * 📦 Products List
-     */
     public function products()
     {
         $this->ensureAdmin();
@@ -58,9 +50,6 @@ class AdminController extends Controller
         return view('admin.products', compact('products'));
     }
 
-    /**
-     * 👤 Users List
-     */
     public function users()
     {
         $this->ensureAdmin();
@@ -69,9 +58,6 @@ class AdminController extends Controller
         return view('admin.users', compact('users'));
     }
 
-    /**
-     * ➕ Create Product Page
-     */
     public function createProduct()
     {
         $this->ensureAdmin();
@@ -79,9 +65,6 @@ class AdminController extends Controller
         return view('admin.create-product');
     }
 
-    /**
-     * 💾 Store Product
-     */
     public function storeProduct(Request $request)
     {
         $this->ensureAdmin();
@@ -108,9 +91,6 @@ class AdminController extends Controller
             ->with('success', 'Product created successfully');
     }
 
-    /**
-     * ✏️ Edit Product Page
-     */
     public function editProduct($id)
     {
         $this->ensureAdmin();
@@ -119,9 +99,6 @@ class AdminController extends Controller
         return view('admin.edit-product', compact('product'));
     }
 
-    /**
-     * 🔄 Update Product
-     */
     public function updateProduct(Request $request, $id)
     {
         $this->ensureAdmin();
@@ -149,9 +126,6 @@ class AdminController extends Controller
             ->with('success', 'Product updated successfully');
     }
 
-    /**
-     * ❌ Delete Product
-     */
     public function deleteProduct($id)
     {
         $this->ensureAdmin();
@@ -162,5 +136,108 @@ class AdminController extends Controller
         return redirect()
             ->route('admin.products')
             ->with('success', 'Product deleted successfully');
+    }
+
+    public function createUser()
+    {
+        $this->ensureAdmin();
+        return view('admin.create-user');
+    }
+
+    public function storeUser(Request $request)
+    {
+        $this->ensureAdmin();
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:100|unique:User,email',
+            'phonenumber' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'password' => 'required|string|min:6',
+            'role' => 'required|in:user,admin',
+        ]);
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phonenumber' => $validated['phonenumber'],
+            'address' => $validated['address'],
+            'password' => Hash::make($validated['password']),
+            'role' => $validated['role'],
+            'created_at' => now(),
+        ]);
+
+        return redirect()
+            ->route('admin.users')
+            ->with('success', 'User created successfully');
+    }
+
+    public function editUser($id)
+    {
+        $this->ensureAdmin();
+        $user = User::findOrFail($id);
+        return view('admin.edit-user', compact('user'));
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $this->ensureAdmin();
+
+        $user = User::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:100|unique:User,email,' . $id,
+            'phonenumber' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'password' => 'nullable|string|min:6',
+            'role' => 'required|in:user,admin',
+        ]);
+
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phonenumber' => $validated['phonenumber'],
+            'address' => $validated['address'],
+            'role' => $validated['role'],
+        ];
+
+        if (!empty($validated['password'])) {
+            $updateData['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($updateData);
+
+        return redirect()
+            ->route('admin.users')
+            ->with('success', 'User updated successfully');
+    }
+
+    public function deleteUser($id)
+    {
+        $this->ensureAdmin();
+
+        $user = User::findOrFail($id);
+
+        if ($user->id === Auth::id()) {
+            return redirect()
+                ->route('admin.users')
+                ->with('error', 'You cannot delete your own account');
+        }
+
+        $user->delete();
+
+        return redirect()
+            ->route('admin.users')
+            ->with('success', 'User deleted successfully');
+    }
+
+    public function profile()
+    {
+        $this->ensureAdmin();
+        
+        $user = User::findOrFail(Auth::id());
+        
+        return view('admin.profile', compact('user'));
     }
 }

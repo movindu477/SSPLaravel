@@ -3,7 +3,7 @@
 @section('title', 'Login - PetMart')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
         <div class="text-center">
             <h2 class="text-4xl font-bold text-gray-900 mb-2">Welcome Back</h2>
@@ -54,7 +54,7 @@
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                     <input id="email" name="email" type="email" autocomplete="email" required value="{{ old('email') }}"
-                           class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                           class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent transition-all"
                            placeholder="Enter your email">
                 </div>
 
@@ -79,17 +79,17 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <input id="remember-me" name="remember-me" type="checkbox" 
-                               class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                               class="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded">
                         <label for="remember-me" class="ml-2 block text-sm text-gray-700">Remember me</label>
                     </div>
                     <div class="text-sm">
-                        <a href="#" class="font-medium text-purple-600 hover:text-purple-500 transition-colors">Forgot password?</a>
+                        <a href="#" class="font-medium text-cyan-600 hover:text-cyan-500 transition-colors">Forgot password?</a>
                     </div>
                 </div>
 
                 <div>
                     <button type="submit" 
-                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transform hover:scale-105 transition-all duration-300 shadow-lg">
                         Sign In
                     </button>
                 </div>
@@ -97,7 +97,7 @@
 
             <p class="mt-6 text-center text-sm text-gray-600">
                 Don't have an account?
-                <a href="{{ route('register') }}" class="font-medium text-purple-600 hover:text-purple-500 transition-colors">Sign up here</a>
+                <a href="{{ route('register') }}" class="font-medium text-cyan-600 hover:text-cyan-500 transition-colors">Sign up here</a>
             </p>
         </div>
     </div>

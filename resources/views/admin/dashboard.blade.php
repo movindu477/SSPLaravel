@@ -11,14 +11,14 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-600">
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-cyan-600">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-600 text-sm mb-1">Total Products</p>
                         <p class="text-3xl font-bold text-gray-800">{{ $totalProducts }}</p>
                     </div>
-                    <div class="bg-purple-100 rounded-full p-4">
-                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-cyan-100 rounded-full p-4">
+                        <svg class="w-8 h-8 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
                     </div>
@@ -58,7 +58,7 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-bold text-gray-800">Recent Products</h2>
-                    <a href="{{ route('admin.products') }}" class="text-purple-600 hover:text-purple-700 font-semibold">View All</a>
+                    <a href="{{ route('admin.products') }}" class="text-cyan-600 hover:text-cyan-700 font-semibold">View All</a>
                 </div>
                 <div class="space-y-4">
                     @foreach($recentProducts as $product)
@@ -68,7 +68,7 @@
                             <h3 class="font-semibold text-gray-800">{{ $product->product_name }}</h3>
                             <p class="text-sm text-gray-600">{{ $product->pet_type }} - {{ $product->accessories_type }}</p>
                         </div>
-                        <span class="font-bold text-purple-600">Rs. {{ number_format($product->price, 2) }}</span>
+                        <span class="font-bold text-cyan-600">Rs. {{ number_format($product->price, 2) }}</span>
                     </div>
                     @endforeach
                 </div>
@@ -77,19 +77,19 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-bold text-gray-800">Recent Users</h2>
-                    <a href="{{ route('admin.users') }}" class="text-purple-600 hover:text-purple-700 font-semibold">View All</a>
+                    <a href="{{ route('admin.users') }}" class="text-cyan-600 hover:text-cyan-700 font-semibold">View All</a>
                 </div>
                 <div class="space-y-4">
                     @foreach($recentUsers as $user)
                     <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                            <span class="text-purple-600 font-semibold">{{ substr($user->name, 0, 1) }}</span>
+                        <div class="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center">
+                            <span class="text-cyan-600 font-semibold">{{ substr($user->name, 0, 1) }}</span>
                         </div>
                         <div class="flex-1">
                             <h3 class="font-semibold text-gray-800">{{ $user->name }}</h3>
                             <p class="text-sm text-gray-600">{{ $user->email }}</p>
                         </div>
-                        <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">{{ $user->role }}</span>
+                        <span class="px-3 py-1 bg-cyan-100 text-cyan-700 rounded-full text-xs font-semibold">{{ $user->role }}</span>
                     </div>
                     @endforeach
                 </div>
@@ -97,13 +97,13 @@
         </div>
 
         <div class="mt-8 flex gap-4">
-            <a href="{{ route('admin.products') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+            <a href="{{ route('admin.products') }}" class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
                 Manage Products
             </a>
-            <a href="{{ route('admin.users') }}" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+            <a href="{{ route('admin.users') }}" class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
                 Manage Users
             </a>
-            <a href="{{ route('admin.create-product') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+            <a href="{{ route('admin.create-product') }}" class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
                 Add New Product
             </a>
         </div>

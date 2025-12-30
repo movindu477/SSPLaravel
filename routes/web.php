@@ -119,4 +119,22 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     */
     Route::get('/users', [AdminController::class, 'users'])
         ->name('users');
+
+    Route::get('/users/create', [AdminController::class, 'createUser'])
+        ->name('create-user');
+
+    Route::post('/users', [AdminController::class, 'storeUser'])
+        ->name('store-user');
+
+    Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])
+        ->name('edit-user');
+
+    Route::put('/users/{id}', [AdminController::class, 'updateUser'])
+        ->name('update-user');
+
+    Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])
+        ->name('delete-user');
+
+    Route::get('/profile', [AdminController::class, 'profile'])
+        ->name('profile');
 });

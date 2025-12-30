@@ -31,6 +31,10 @@ class ProfileController extends Controller
             'user_role' => $user->role ?? 'user',
         ]);
 
+        if (($user->role ?? 'user') === 'admin') {
+            return redirect()->route('admin.profile');
+        }
+
         return view('pages.profile', [
             'user' => $user
         ]);

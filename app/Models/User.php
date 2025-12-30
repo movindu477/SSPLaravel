@@ -38,12 +38,8 @@ class User extends Authenticatable
         'created_at',
     ];
 
-    /**
-     * Hidden fields (never expose)
-     */
     protected $hidden = [
         'password',
-        'confirm_password',
         'remember_token',
     ];
 }
