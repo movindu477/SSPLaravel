@@ -9,25 +9,41 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
+
+    /**
+     * SQL Server table name
+     */
     protected $table = 'User';
 
+    /**
+     * Primary key
+     */
     protected $primaryKey = 'id';
 
+    /**
+     * SQL Server does NOT manage updated_at automatically
+     */
     public $timestamps = false;
 
+    /**
+     * Mass assignable fields
+     */
     protected $fillable = [
         'name',
         'address',
         'phonenumber',
         'email',
         'password',
-        'confirm_password',
         'role',
-        'created_at'
+        'created_at',
     ];
 
+    /**
+     * Hidden fields (never expose)
+     */
     protected $hidden = [
         'password',
-        'confirm_password'
+        'confirm_password',
+        'remember_token',
     ];
 }

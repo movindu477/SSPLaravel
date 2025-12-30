@@ -21,9 +21,11 @@ Route::get('/about', function () {
     return view('pages.about');
 })->name('about');
 
+// Shop & Products
 Route::get('/shop', [ProductController::class, 'index'])->name('shop');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
+// Cart & Payment pages (view only)
 Route::get('/cart', function () {
     return view('pages.cart');
 })->name('cart');
@@ -38,19 +40,18 @@ Route::get('/payment', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])
-    ->middleware('guest')
-    ->name('login');
+Route::middleware('guest')->group(function () {
 
-Route::post('/login', [AuthController::class, 'login'])
-    ->middleware('guest');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])
+        ->name('login');
 
-Route::get('/register', [AuthController::class, 'showRegisterForm'])
-    ->middleware('guest')
-    ->name('register');
+    Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/register', [AuthController::class, 'register'])
-    ->middleware('guest');
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])
+        ->name('register');
+
+    Route::post('/register', [AuthController::class, 'register']);
+});
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
@@ -63,20 +64,36 @@ Route::post('/logout', [AuthController::class, 'logout'])
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+
+    Route::get('/profile', [ProfileController::class, 'index'])
+        ->name('profile');
+
+    // Cart (site)
+    Route::post('/cart/add', [CartController::class, 'add'])
+        ->name('cart.add');
 });
 
 /*
 |--------------------------------------------------------------------------
-| Admin Routes (PROTECTED)
+| Admin Routes (ADMIN ONLY 🔐)
+|--------------------------------------------------------------------------
+| NOTE:
+| We protect admin routes using:
+| - auth middleware
+| - role check inside AdminController (recommended)
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', [AdminController::class, 'index'])
         ->name('dashboard');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin - Products CRUD
+    |--------------------------------------------------------------------------
+    */
     Route::get('/products', [AdminController::class, 'products'])
         ->name('products');
 
@@ -95,10 +112,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::delete('/products/{id}', [AdminController::class, 'deleteProduct'])
         ->name('delete-product');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin - Users CRUD
+    |--------------------------------------------------------------------------
+    */
     Route::get('/users', [AdminController::class, 'users'])
         ->name('users');
 });
-
-// cart add route
-Route::middleware('auth')->post('/cart/add', [CartController::class, 'add'])
-    ->name('cart.add');

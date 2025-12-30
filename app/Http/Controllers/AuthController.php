@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User;
-use Laravel\Sanctum\PersonalAccessToken;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +11,11 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    // ================= REGISTER =================
+    /*
+    |--------------------------------------------------------------------------
+    | REGISTER
+    |--------------------------------------------------------------------------
+    */
     public function showRegisterForm()
     {
         return view('auth.register');
@@ -34,36 +37,36 @@ class AuthController extends Controller
         }
 
         // Check email exists
-        $exists = DB::selectOne(
-            "SELECT id FROM [User] WHERE email = ?",
-            [$request->email]
-        );
+        $exists = DB::table('User')->where('email', $request->email)->exists();
 
         if ($exists) {
-            return back()->with('error', 'Email already registered')->withInput();
+            return back()
+                ->with('error', 'Email already registered')
+                ->withInput();
         }
 
         $hashedPassword = Hash::make($request->password);
 
-        DB::statement("
-            INSERT INTO [User] 
-            (name, email, phonenumber, address, password, confirm_password, role)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ", [
-            $request->name,
-            $request->email,
-            $request->phonenumber,
-            $request->address,
-            $hashedPassword,
-            $hashedPassword, // keep table structure intact
-            'user'
+        DB::table('User')->insert([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phonenumber' => $request->phonenumber,
+            'address' => $request->address,
+            'password' => $hashedPassword,
+            'confirm_password' => $hashedPassword, // legacy column
+            'role' => 'user',
+            'created_at' => now(),
         ]);
 
         return redirect()->route('login')
             ->with('success', 'Registration successful. Please login.');
     }
 
-    // ================= LOGIN =================
+    /*
+    |--------------------------------------------------------------------------
+    | LOGIN
+    |--------------------------------------------------------------------------
+    */
     public function showLoginForm()
     {
         return view('auth.login');
@@ -80,26 +83,23 @@ class AuthController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $userData = DB::selectOne(
-            "SELECT TOP 1 * FROM [User] WHERE email = ?",
-            [$request->email]
-        );
+        // Fetch user manually (SQL Server safe)
+        $user = User::where('email', $request->email)->first();
 
-        if (!$userData) {
-            return back()->with('error', 'Invalid email or password')->withInput();
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return back()
+                ->with('error', 'Invalid email or password')
+                ->withInput();
         }
 
-        if (!Hash::check($request->password, $userData->password)) {
-            return back()->with('error', 'Invalid email or password')->withInput();
-        }
-
-        $user = User::find($userData->id);
-
+        // Login user
         Auth::login($user);
         $request->session()->regenerate();
 
+        // Create Sanctum token (used by mobile app)
         $token = $user->createToken('web')->plainTextToken;
 
+        // Store session data
         session([
             'user_id' => $user->id,
             'user_name' => $user->name,
@@ -108,6 +108,7 @@ class AuthController extends Controller
             'user_token' => $token,
         ]);
 
+        // Redirect based on role
         if (($user->role ?? 'user') === 'admin') {
             return redirect()->route('admin.dashboard')
                 ->with('success', 'Welcome Admin!');
@@ -117,23 +118,23 @@ class AuthController extends Controller
             ->with('success', 'Welcome back, ' . $user->name . '!');
     }
 
-    // ================= LOGOUT =================
+    /*
+    |--------------------------------------------------------------------------
+    | LOGOUT
+    |--------------------------------------------------------------------------
+    */
     public function logout(Request $request)
     {
-        // Revoke Sanctum tokens if user is authenticated
         if (Auth::check()) {
             Auth::user()->tokens()->delete();
         }
 
-        // Logout using Laravel Auth
         Auth::logout();
-        
-        // Invalidate and regenerate session
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('home')
             ->with('success', 'Logged out successfully');
     }
-
 }
