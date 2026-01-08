@@ -253,8 +253,8 @@ FOREIGN KEY (user_id)
 REFERENCES [User](id);
 
 UPDATE [User]
-SET password = '$2y$10$z2Xl5Qe8uJ8jX9YzYtB6XOgxYJH9C1uXzJt7xU9H1nq9Q3o7d9Y1G'
-WHERE email = 'movinduweerabahu314@gmail.com';
+SET password = '$2y$12$vsxsCzcATpdhDqBL8E.RguB8KUcWhHczYuejsapRCB6XT/hLowgfa'
+WHERE email = 'admin@petmart.com';
 
 
 
@@ -312,3 +312,24 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'User' AN
 BEGIN
     ALTER TABLE [User] DROP COLUMN confirm_password;
 END;
+
+
+INSERT INTO [User] (
+    name,
+    address,
+    phonenumber,
+    email,
+    password,
+    role,
+    created_at
+)
+VALUES (
+    'Admin User',
+    'Admin Address',
+    '0771234567',
+    'admin@petmart.com',
+    '$2y$10$e0NR1YF7oJk8Z6x2qR7kUO9QJkZlXJz7QmKQ5Y5M0Z6J9ZK9FzJQG', -- password: 123456
+    'admin',
+    GETDATE()
+);
+

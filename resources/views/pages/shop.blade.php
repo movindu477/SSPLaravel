@@ -21,7 +21,6 @@
     </div>
   </section>
 
-  <!-- Filter Section -->
   <section class="w-full bg-white border-b border-gray-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="flex items-center justify-between mb-4">
@@ -177,9 +176,9 @@
             $processedImageUrl = $product->image_url ?? 'N/A';
             $assetUrl = $product->getImageAssetUrl();
           @endphp
-          <div class="group relative bg-black rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-2 border border-gray-800" data-product-id="{{ $product->id }}">
-            <!-- Image Container with Gradient Overlay -->
-            <div class="relative h-72 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+          <div class="relative bg-white rounded-xl shadow-md overflow-hidden border border-gray-200" data-product-id="{{ $product->id }}">
+            <!-- Image Container -->
+            <div class="relative h-64 overflow-hidden bg-gray-100">
               <img 
                 src="{{ $assetUrl }}" 
                 alt="{{ $product->product_name }}"
@@ -188,50 +187,35 @@
                 data-raw-image-url="{{ $rawImageUrl }}"
                 data-processed-image-url="{{ $processedImageUrl }}"
                 data-asset-url="{{ $assetUrl }}"
-                class="product-image w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out" 
+                class="product-image w-full h-full object-cover" 
                 loading="lazy"
                 onerror="handleImageError(this)"
                 onload="handleImageLoad(this)">
               
-              <!-- Gradient Overlay on Hover -->
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              
               <!-- Loading Indicator -->
-              <div class="image-loading-indicator absolute inset-0 bg-gray-900 flex items-center justify-center">
+              <div class="image-loading-indicator absolute inset-0 bg-gray-100 flex items-center justify-center">
                 <div class="animate-spin rounded-full h-12 w-12 border-4 border-cyan-500 border-t-transparent"></div>
               </div>
               
               <!-- Badge -->
-              <div class="absolute top-3 left-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
+              <div class="absolute top-3 left-3 bg-cyan-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm">
                 {{ $product->pet_type }}
-              </div>
-              
-              <!-- Quick Actions -->
-              <div class="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button class="bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:bg-cyan-500 hover:text-white transition-all duration-300 transform hover:scale-110 w-9 h-9 flex items-center justify-center">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                  </svg>
-                </button>
-                <button class="bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:bg-cyan-500 hover:text-white transition-all duration-300 transform hover:scale-110 w-9 h-9 flex items-center justify-center">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                  </svg>
-                </button>
               </div>
             </div>
             
             <!-- Product Info -->
-            <div class="p-6 bg-black">
+            <div class="p-5 bg-white">
+              <!-- Category Badge -->
               <div class="mb-3">
-                <span class="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full mb-2">
+                <span class="inline-block bg-cyan-50 text-cyan-700 text-xs font-semibold px-2.5 py-1 rounded-md mb-2">
                   {{ $product->accessories_type }}
                 </span>
-                <h3 class="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-cyan-400 transition-colors duration-300">
-                  {{ $product->product_name }}
-                </h3>
               </div>
+              
+              <!-- Product Name -->
+              <h3 class="text-lg font-bold text-gray-900 mb-3 line-clamp-2 min-h-[3.5rem]">
+                {{ $product->product_name }}
+              </h3>
               
               <!-- Rating -->
               <div class="flex items-center gap-2 mb-4">
@@ -242,47 +226,45 @@
                     </svg>
                   @endfor
                 </div>
-                <span class="text-sm text-gray-300 font-medium">4.5</span>
-                <span class="text-xs text-gray-400">(128 reviews)</span>
+                <span class="text-sm text-gray-700 font-medium">4.5</span>
+                <span class="text-xs text-gray-500">(128)</span>
               </div>
               
-<div class="flex items-center justify-between pt-4 border-t border-gray-800">
+              <!-- Price and Action Buttons -->
+              <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                <!-- PRICE -->
+                <span class="text-2xl font-bold text-cyan-600">
+                  Rs. {{ number_format((float)$product->price, 2) }}
+                </span>
 
-    <!-- PRICE -->
-    <span class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-        Rs. {{ number_format((float)$product->price, 2) }}
-    </span>
+                <!-- ACTION BUTTONS -->
+                <div class="flex items-center gap-3">
+                  <!-- ❤️ FAVORITE -->
+                  <button 
+                      class="favorite-btn flex items-center justify-center"
+                      data-pet-id="{{ $product->id }}"
+                      data-favorited="{{ in_array($product->id, $favoriteIds) ? '1' : '0' }}"
+                  >
+                      <svg class="w-6 h-6 {{ in_array($product->id, $favoriteIds) ? 'text-red-500' : 'text-gray-400' }}"
+                           fill="{{ in_array($product->id, $favoriteIds) ? 'currentColor' : 'none' }}"
+                           stroke="currentColor"
+                           stroke-width="2"
+                           viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                  </button>
 
-    <!-- ACTION BUTTONS -->
-    <div class="flex items-center gap-3">
-
-        <!-- ❤️ FAVORITE -->
-        <button 
-            class="favorite-btn"
-            data-pet-id="{{ $product->id }}"
-            data-favorited="{{ in_array($product->id, $favoriteIds) ? '1' : '0' }}"
-        >
-            <svg class="w-5 h-5 {{ in_array($product->id, $favoriteIds) ? 'text-red-500' : 'text-gray-400' }}"
-                 fill="{{ in_array($product->id, $favoriteIds) ? 'currentColor' : 'none' }}"
-                 stroke="currentColor"
-                 viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
-        </button>
-
-        <!-- 🛒 ADD TO CART -->
-        <form action="{{ route('cart.add') }}" method="POST" class="inline-block">
-            @csrf
-            <input type="hidden" name="pet_id" value="{{ $product->id }}">
-            <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-                Add
-            </button>
-        </form>
-
-    </div>
-</div>
-
+                  <!-- 🛒 ADD TO CART -->
+                  <form action="{{ route('cart.add') }}" method="POST" class="inline-block">
+                      @csrf
+                      <input type="hidden" name="pet_id" value="{{ $product->id }}">
+                      <button type="submit" class="bg-cyan-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold">
+                          Add
+                      </button>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
           @endforeach
@@ -322,12 +304,15 @@ document.querySelectorAll('.favorite-btn').forEach(btn => {
             ? `/api/favorites/${petId}` 
             : `/api/favorites`;
 
+        // Get CSRF token from meta tag
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
         const options = {
             method: isFav ? "DELETE" : "POST",
             headers: {
                 "Authorization": "Bearer " + FAV_TOKEN,
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken || ""
             },
             body: isFav ? null : JSON.stringify({ pet_id: petId })
         };

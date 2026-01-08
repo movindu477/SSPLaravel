@@ -35,7 +35,7 @@ class AuthController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // Check email exists
+        // Check if email already exists
         $exists = DB::table('User')->where('email', $request->email)->exists();
 
         if ($exists) {
@@ -46,6 +46,7 @@ class AuthController extends Controller
 
         $hashedPassword = Hash::make($request->password);
 
+        // Create new user
         DB::table('User')->insert([
             'name' => $request->name,
             'email' => $request->email,
@@ -81,7 +82,7 @@ class AuthController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // Fetch user manually (SQL Server safe)
+        // Get user by email
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {

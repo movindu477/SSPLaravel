@@ -17,8 +17,10 @@ class ProductController extends Controller
         try {
             $query = Pet::query();
 
+            // Filter by search term
             if ($request->filled('search')) {
-                $query->where('product_name', 'LIKE', '%' . trim($request->search) . '%');
+                $searchTerm = trim($request->search);
+                $query->where('product_name', 'LIKE', '%' . $searchTerm . '%');
             }
 
             if ($request->filled('pet_type')) {

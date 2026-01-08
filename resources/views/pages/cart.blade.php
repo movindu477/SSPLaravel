@@ -128,11 +128,14 @@ async function loadCart() {
         return;
     }
 
+    // Get CSRF token for the request
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {
         const res = await fetch("/api/cart", {
             headers: {
                 "Authorization": "Bearer " + CART_TOKEN,
-                "Accept": "application/json"
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken || ""
             }
         });
 
@@ -205,12 +208,15 @@ async function removeFromCart(petId) {
         return;
     }
 
+    // Get CSRF token for the request
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {
         const res = await fetch(`/api/cart/${petId}`, {
             method: "DELETE",
             headers: {
                 "Authorization": "Bearer " + CART_TOKEN,
-                "Accept": "application/json"
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken || ""
             }
         });
 

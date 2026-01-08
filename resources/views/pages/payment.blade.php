@@ -20,6 +20,7 @@
         </div>
 
         <form id="payment-form">
+            @csrf
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Shipping Address -->
@@ -287,11 +288,14 @@ async function loadCartSummary() {
         return;
     }
 
+    // Get CSRF token for the request
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {
         const res = await fetch("/api/cart", {
             headers: {
                 "Authorization": "Bearer " + ORDER_TOKEN,
-                "Accept": "application/json"
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken || ""
             }
         });
 
@@ -506,15 +510,18 @@ document.getElementById('payment-form').addEventListener('submit', async functio
     }
 
     try {
-        // OrderController doesn't require shipping fields, just create order
+        // Prepare order data
         const orderData = {};
 
+        // Get CSRF token for the request
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
         const res = await fetch("/api/orders", {
             method: "POST",
             headers: {
                 "Authorization": "Bearer " + ORDER_TOKEN,
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken || ""
             },
             body: JSON.stringify(orderData)
         });
