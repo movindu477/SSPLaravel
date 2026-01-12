@@ -17,7 +17,7 @@
 
                     <!-- Loading State -->
                     <div id="cart-loading" class="text-center py-12">
-                        <div class="animate-spin rounded-full h-12 w-12 border-4 border-cyan-500 border-t-transparent mx-auto"></div>
+                        <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-700 border-t-transparent mx-auto"></div>
                         <p class="mt-4 text-gray-600">Loading cart...</p>
                     </div>
 
@@ -27,7 +27,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                         </svg>
                         <p class="text-xl text-gray-600 mb-4">Your cart is empty</p>
-                        <a href="{{ route('shop') }}" class="inline-block bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transition">
+                        <a href="{{ route('shop') }}" class="inline-block bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold transition">
                             Continue Shopping
                         </a>
                     </div>
@@ -36,7 +36,7 @@
                     <div id="cart-items" class="space-y-6 hidden"></div>
 
                     <div class="mt-6 pt-6 border-t border-gray-200">
-                        <a href="{{ route('shop') }}" class="text-cyan-600 hover:text-cyan-700 font-semibold flex items-center gap-2">
+                        <a href="{{ route('shop') }}" class="text-blue-700 hover:text-blue-800 font-semibold flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                             </svg>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="pt-4 border-t border-gray-200 flex justify-between text-xl font-bold text-gray-800">
                             <span>Total</span>
-                            <span class="text-cyan-600" id="total">Rs. 0.00</span>
+                            <span class="text-blue-700" id="total">Rs. 0.00</span>
                         </div>
                     </div>
 
@@ -73,14 +73,14 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Promo Code</label>
                         <div class="flex gap-2">
                             <input type="text" placeholder="Enter code" 
-                                   class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent">
+                                   class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent">
                             <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-semibold transition-colors">
                                 Apply
                             </button>
                         </div>
                     </div>
 
-                    <a href="{{ route('payment') }}" class="block w-full bg-cyan-600 hover:bg-cyan-700 text-white text-center py-4 rounded-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg mb-4">
+                    <a href="{{ route('payment') }}" class="block w-full bg-blue-700 hover:bg-blue-800 text-white text-center py-4 rounded-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg mb-4">
                         Proceed to Checkout
                     </a>
 
@@ -183,7 +183,7 @@ function displayCartItems(items) {
                         <div class="flex items-center border border-gray-300 rounded-lg">
                             <span class="px-4 py-1 border-x border-gray-300">${item.quantity}</span>
                         </div>
-                        <span class="text-lg font-bold text-cyan-600">Rs. ${parseFloat(item.price).toFixed(2)}</span>
+                        <span class="text-lg font-bold text-blue-700">Rs. ${parseFloat(item.price).toFixed(2)}</span>
                         <span class="text-sm text-gray-500">× ${item.quantity} = Rs. ${subtotal.toFixed(2)}</span>
                     </div>
                 </div>

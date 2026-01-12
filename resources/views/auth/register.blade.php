@@ -3,7 +3,7 @@
 @section('title', 'Register - PetMart')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
         <div class="text-center">
             <h2 class="text-4xl font-bold text-gray-900 mb-2">Create Account</h2>
@@ -16,7 +16,7 @@
                 
                 @if(session('error'))
                     <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                        <div class="font-semibold mb-1">⚠️ Registration Error</div>
+                        <div class="font-semibold mb-1">Registration Error</div>
                         <div>{{ session('error') }}</div>
                         @if(config('app.debug'))
                             <div class="mt-2 text-xs text-red-600">
@@ -38,28 +38,28 @@
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                     <input id="name" name="name" type="text" required value="{{ old('name') }}"
-                           class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent transition-all"
+                           class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all"
                            placeholder="Enter your full name">
                 </div>
 
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                     <input id="email" name="email" type="email" autocomplete="email" required value="{{ old('email') }}"
-                           class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent transition-all"
+                           class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all"
                            placeholder="john@example.com">
                 </div>
 
                 <div>
                     <label for="phonenumber" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                     <input id="phonenumber" name="phonenumber" type="tel" required value="{{ old('phonenumber') }}"
-                           class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent transition-all"
+                           class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all"
                            placeholder="+94 77 123 4567">
                 </div>
 
                 <div>
                     <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Address</label>
                     <input id="address" name="address" type="text" required value="{{ old('address') }}"
-                           class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent transition-all"
+                           class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all"
                            placeholder="Enter your address">
                 </div>
 
@@ -84,7 +84,7 @@
 
                 <div>
                     <button type="submit" 
-                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-500 to-blue-800 hover:from-blue-800 hover:to-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
                         Create Account
                     </button>
                 </div>
@@ -92,7 +92,7 @@
 
             <p class="mt-6 text-center text-sm text-gray-600">
                 Already have an account?
-                <a href="{{ route('login') }}" class="font-medium text-cyan-600 hover:text-cyan-500 transition-colors">Sign in here</a>
+                <a href="{{ route('login') }}" class="font-medium text-blue-700 hover:text-blue-600 transition-colors">Sign in here</a>
             </p>
         </div>
     </div>

@@ -46,8 +46,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 text-center mb-8 sm:mb-12">Our Mission & Values</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-        <div class="bg-gradient-to-br from-cyan-50 to-blue-50 p-8 rounded-lg shadow-md">
-          <div class="bg-cyan-500 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+        <div class="bg-gradient-to-br from-blue-50 to-blue-50 p-8 rounded-lg shadow-md">
+          <div class="bg-blue-700 w-12 h-12 rounded-full flex items-center justify-center mb-4">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
@@ -57,8 +57,8 @@
             To provide pet owners across Sri Lanka with access to premium quality pet products at affordable prices, ensuring every pet receives the care and nutrition they need to thrive.
           </p>
         </div>
-        <div class="bg-gradient-to-br from-cyan-50 to-blue-50 p-8 rounded-lg shadow-md">
-          <div class="bg-cyan-500 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+        <div class="bg-gradient-to-br from-blue-50 to-blue-50 p-8 rounded-lg shadow-md">
+          <div class="bg-blue-700 w-12 h-12 rounded-full flex items-center justify-center mb-4">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
             </svg>
@@ -66,19 +66,19 @@
           <h3 class="text-2xl font-semibold text-gray-900 mb-3">Our Values</h3>
           <ul class="text-gray-700 space-y-2">
             <li class="flex items-start">
-              <span class="text-cyan-500 mr-2">•</span>
+              <span class="text-blue-700 mr-2">•</span>
               <span>Quality first in every product we offer</span>
             </li>
             <li class="flex items-start">
-              <span class="text-cyan-500 mr-2">•</span>
+              <span class="text-blue-700 mr-2">•</span>
               <span>Customer satisfaction is our priority</span>
             </li>
             <li class="flex items-start">
-              <span class="text-cyan-500 mr-2">•</span>
+              <span class="text-blue-700 mr-2">•</span>
               <span>Transparency and honesty in all dealings</span>
             </li>
             <li class="flex items-start">
-              <span class="text-cyan-500 mr-2">•</span>
+              <span class="text-blue-700 mr-2">•</span>
               <span>Passion for pet welfare and happiness</span>
             </li>
           </ul>
@@ -88,7 +88,7 @@
   </section>
 
   <!-- Contact Section -->
-  <section class="bg-gradient-to-r from-cyan-50 to-blue-50 py-16">
+  <section class="bg-gradient-to-r from-blue-50 to-blue-50 py-16">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center mb-12">
         <h2 class="text-4xl font-bold text-gray-900 mb-4">Get in Touch</h2>
@@ -117,14 +117,14 @@
         <div class="space-y-5">
           <div class="bg-gradient-to-br from-white to-cyan-50/30 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-cyan-100/50 group">
             <div class="flex items-start">
-              <div class="bg-gradient-to-br from-cyan-500 to-cyan-600 w-14 h-14 rounded-xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <div class="bg-gradient-to-br from-blue-500 to-cyan-600 w-14 h-14 rounded-xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                 </svg>
               </div>
               <div class="flex-1">
                 <h3 class="text-xl font-bold text-gray-900 mb-2">Phone</h3>
-                <a href="tel:+94112345678" class="text-cyan-600 hover:text-cyan-700 font-semibold text-lg transition-colors duration-200">
+                <a href="tel:+94112345678" class="text-blue-700 hover:text-blue-800 font-semibold text-lg transition-colors duration-200">
                   +94 11 234 5678
                 </a>
                 <p class="text-sm text-gray-500 mt-1">Call us anytime</p>
@@ -151,7 +151,7 @@
           
           <div class="bg-gradient-to-br from-white to-cyan-50/30 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-cyan-100/50 group">
             <div class="flex items-start">
-              <div class="bg-gradient-to-br from-cyan-500 to-cyan-600 w-14 h-14 rounded-xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <div class="bg-gradient-to-br from-blue-500 to-cyan-600 w-14 h-14 rounded-xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -166,7 +166,7 @@
           </div>
           
           <div class="pt-2">
-            <a href="{{ route('shop') }}" class="group inline-flex items-center justify-center w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <a href="{{ route('shop') }}" class="group inline-flex items-center justify-center w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-800 hover:to-blue-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
               <span>Visit Our Shop</span>
               <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>

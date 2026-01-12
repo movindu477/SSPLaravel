@@ -25,17 +25,17 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center space-x-3">
-          <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
           </svg>
           <h2 class="text-lg font-bold text-gray-900">Filters</h2>
-          <span id="active-filters-count" class="bg-cyan-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full hidden">0</span>
+          <span id="active-filters-count" class="bg-blue-700 text-white text-xs font-semibold px-2 py-0.5 rounded-full hidden">0</span>
         </div>
       </div>
       <form id="filters" method="GET" action="{{ route('shop') }}#products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
         <div class="lg:col-span-1">
           <label class="block text-xs font-semibold text-gray-700 mb-1.5">Pet Type</label>
-          <select name="pet_type" id="filter-pet" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-white text-gray-900 transition text-sm min-h-[40px]">
+          <select name="pet_type" id="filter-pet" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-blue-700 bg-white text-gray-900 transition text-sm min-h-[40px]">
             <option value="">All Pets</option>
             <option value="Dog" {{ request('pet_type') == 'Dog' ? 'selected' : '' }}>Dog</option>
             <option value="Cat" {{ request('pet_type') == 'Cat' ? 'selected' : '' }}>Cat</option>
@@ -43,7 +43,7 @@
         </div>
         <div class="lg:col-span-1">
           <label class="block text-xs font-semibold text-gray-700 mb-1.5">Category</label>
-          <select name="accessories_type" id="filter-access" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-white text-gray-900 transition text-sm min-h-[40px]">
+          <select name="accessories_type" id="filter-access" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-blue-700 bg-white text-gray-900 transition text-sm min-h-[40px]">
             <option value="">All Categories</option>
             <option value="Food" {{ request('accessories_type') == 'Food' ? 'selected' : '' }}>Food</option>
             <option value="Toy" {{ request('accessories_type') == 'Toy' ? 'selected' : '' }}>Toy</option>
@@ -53,16 +53,16 @@
           <label class="block text-xs font-semibold text-gray-700 mb-1.5">Price Range</label>
           <div class="flex space-x-2">
             <input name="min_price" id="filter-min" type="number" placeholder="Min" min="0" value="{{ request('min_price') }}"
-              class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 text-gray-900 text-sm min-h-[40px]" />
+              class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-blue-700 text-gray-900 text-sm min-h-[40px]" />
             <input name="max_price" id="filter-max" type="number" placeholder="Max" min="0" value="{{ request('max_price') }}"
-              class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 text-gray-900 text-sm min-h-[40px]" />
+              class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-blue-700 text-gray-900 text-sm min-h-[40px]" />
           </div>
         </div>
         <div class="lg:col-span-2">
           <label class="block text-xs font-semibold text-gray-700 mb-1.5">Search</label>
           <div class="relative">
             <input name="search" id="filter-search" type="text" placeholder="Search products..." autocomplete="off" value="{{ request('search') }}"
-              class="w-full px-3 py-2 pl-9 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 text-gray-900 transition text-sm min-h-[40px]" />
+              class="w-full px-3 py-2 pl-9 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-blue-700 text-gray-900 transition text-sm min-h-[40px]" />
             <svg class="absolute left-2.5 top-2.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
@@ -74,7 +74,7 @@
           <button type="button" id="clear-filters" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
             Clear All
           </button>
-          <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition">
+          <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 rounded-lg transition">
             Apply Filters
           </button>
         </div>
@@ -97,7 +97,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             <div class="flex-1">
-              <h3 class="font-bold text-red-800 text-lg mb-2">⚠️ Database Connection Error</h3>
+              <h3 class="font-bold text-red-800 text-lg mb-2">Database Connection Error</h3>
               <p class="text-red-700 mb-3">{{ session('error') }}</p>
               
               @if(session('error_details') && isset(session('error_details')['troubleshooting']))
@@ -112,7 +112,7 @@
               @endif
               
               <div class="bg-white rounded p-3 mb-3 border border-red-200">
-                <h4 class="font-semibold text-red-800 mb-2">💡 Quick Fix:</h4>
+                <h4 class="font-semibold text-red-800 mb-2">Quick Fix:</h4>
                 <div class="text-sm text-red-700 space-y-2">
                   <p><strong>1. Start SQL Server Service:</strong></p>
                   <code class="block bg-gray-100 p-2 rounded text-xs">Get-Service MSSQL$SQLEXPRESS | Start-Service</code>
@@ -123,7 +123,7 @@
               
               @if(session('error_details'))
                 <details class="mt-2">
-                  <summary class="text-sm text-red-600 cursor-pointer hover:text-red-800 font-semibold">📋 Show Technical Details</summary>
+                  <summary class="text-sm text-red-600 cursor-pointer hover:text-red-800 font-semibold">Show Technical Details</summary>
                   <pre class="mt-2 p-3 bg-red-100 rounded text-xs overflow-auto max-h-60">{{ json_encode(session('error_details'), JSON_PRETTY_PRINT) }}</pre>
                 </details>
               @endif
@@ -139,7 +139,7 @@
             <svg class="w-5 h-5 text-orange-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
             </svg>
-            <h3 class="font-bold text-orange-800">⚠️ Image Validation Warnings</h3>
+            <h3 class="font-bold text-orange-800">Image Validation Warnings</h3>
           </div>
           <p class="text-orange-700 mb-2">Found {{ count(session('image_validation_errors')) }} product(s) with image issues:</p>
           <ul class="list-disc list-inside text-sm text-orange-700 space-y-1">
@@ -194,11 +194,11 @@
               
               <!-- Loading Indicator -->
               <div class="image-loading-indicator absolute inset-0 bg-gray-100 flex items-center justify-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-4 border-cyan-500 border-t-transparent"></div>
+                <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-700 border-t-transparent"></div>
               </div>
               
               <!-- Badge -->
-              <div class="absolute top-3 left-3 bg-cyan-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm">
+              <div class="absolute top-3 left-3 bg-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm">
                 {{ $product->pet_type }}
               </div>
             </div>
@@ -207,7 +207,7 @@
             <div class="p-5 bg-white">
               <!-- Category Badge -->
               <div class="mb-3">
-                <span class="inline-block bg-cyan-50 text-cyan-700 text-xs font-semibold px-2.5 py-1 rounded-md mb-2">
+                <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-md mb-2">
                   {{ $product->accessories_type }}
                 </span>
               </div>
@@ -233,7 +233,7 @@
               <!-- Price and Action Buttons -->
               <div class="flex items-center justify-between pt-4 border-t border-gray-200">
                 <!-- PRICE -->
-                <span class="text-2xl font-bold text-cyan-600">
+                <span class="text-2xl font-bold text-blue-700">
                   Rs. {{ number_format((float)$product->price, 2) }}
                 </span>
 
@@ -259,7 +259,7 @@
                   <form action="{{ route('cart.add') }}" method="POST" class="inline-block">
                       @csrf
                       <input type="hidden" name="pet_id" value="{{ $product->id }}">
-                      <button type="submit" class="bg-cyan-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold">
+                      <button type="submit" class="bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold">
                           Add
                       </button>
                   </form>
@@ -278,7 +278,7 @@
             @endif
             <p class="text-gray-600 text-lg mb-4">No products found. @if(!isset($products))Please check your database connection.@else Try adjusting your filters.@endif</p>
             @if(!empty(request()->all()))
-              <a href="{{ route('shop') }}" class="text-cyan-600 hover:text-cyan-700 font-semibold">Clear all filters</a>
+              <a href="{{ route('shop') }}" class="text-blue-700 hover:text-blue-800 font-semibold">Clear all filters</a>
             @endif
           </div>
         @endif
@@ -407,7 +407,7 @@ document.querySelectorAll('.favorite-btn').forEach(btn => {
     
     // Only log errors if debug mode is enabled
     if (window.location.search.includes('debug=1')) {
-      console.error('❌ Image Load Failed (Both Primary & Fallback)', errorInfo);
+      console.error('Image load failed', errorInfo);
     }
     updateDebugPanel();
   }
@@ -439,7 +439,7 @@ document.querySelectorAll('.favorite-btn').forEach(btn => {
     imageLoads.push(loadInfo);
     // Silent success - only log if debug mode is enabled
     if (window.location.search.includes('debug=1')) {
-      console.log('✅ Image Loaded Successfully', loadInfo);
+      console.log('Image loaded successfully', loadInfo);
     }
   }
 
@@ -451,7 +451,7 @@ document.querySelectorAll('.favorite-btn').forEach(btn => {
     
     if (imageErrors.length > 0) {
       debugPanel.classList.remove('hidden');
-      let html = `<div class="font-semibold mb-2">❌ Failed Images: ${imageErrors.length}</div>`;
+      let html = `<div class="font-semibold mb-2">Failed Images: ${imageErrors.length}</div>`;
       
       imageErrors.forEach((error, index) => {
         html += `
@@ -465,12 +465,12 @@ document.querySelectorAll('.favorite-btn').forEach(btn => {
         `;
       });
       
-      html += `<div class="mt-2 text-xs text-gray-600">✅ Successfully Loaded: ${imageLoads.length} images</div>`;
+      html += `<div class="mt-2 text-xs text-gray-600">Successfully Loaded: ${imageLoads.length} images</div>`;
       debugContent.innerHTML = html;
     } else if (imageLoads.length > 0) {
       debugPanel.classList.remove('hidden');
       debugContent.innerHTML = `
-        <div class="text-green-700">✅ All ${imageLoads.length} images loaded successfully!</div>
+        <div class="text-green-700">All ${imageLoads.length} images loaded successfully</div>
       `;
     }
   }
@@ -515,7 +515,7 @@ document.querySelectorAll('.favorite-btn').forEach(btn => {
       }
       
       if (failedCount > 0) {
-        console.warn('⚠️ Some images failed to load. Press Ctrl+D to see debug panel.');
+        console.warn('Some images failed to load. Press Ctrl+D to see debug panel.');
         updateDebugPanel();
       }
     }, 2000);
