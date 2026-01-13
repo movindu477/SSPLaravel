@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Livewire Styles -->
+    @livewireStyles
     <style>
         * {
             transition: all 0.3s ease;
@@ -342,6 +345,9 @@
             });
         });
     </script>
+    
+    <!-- Livewire Scripts -->
+    @livewireScripts
 </body>
 </html>
 

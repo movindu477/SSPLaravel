@@ -13,11 +13,11 @@ use App\Http\Controllers\API\OrderController;
 |--------------------------------------------------------------------------
 */
 
-// 🔐 Authentication
+// Public authentication endpoints
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// 🛍️ Products
+// Public product endpoints
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
 
@@ -26,22 +26,23 @@ Route::get('/products/{id}', [ProductController::class, 'show']);
 | Protected Routes (Authentication Required)
 |--------------------------------------------------------------------------
 */
+
+// Protected routes - require Sanctum token
 Route::middleware('auth:sanctum')->group(function () {
 
-    // 🔐 Logout
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // ❤️ Favorites
+    // Favorites endpoints
     Route::get('/favorites', [FavoriteController::class, 'index']);
     Route::post('/favorites', [FavoriteController::class, 'store']);
     Route::delete('/favorites/{petId}', [FavoriteController::class, 'destroy']);
 
-    // 🛒 Cart
+    // Cart endpoints
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart', [CartController::class, 'store']);
     Route::put('/cart/{petId}', [CartController::class, 'update']);
     Route::delete('/cart/{petId}', [CartController::class, 'destroy']);
 
-    // 📦 Orders (Checkout)
+    // Order endpoint
     Route::post('/orders', [OrderController::class, 'store']);
 });

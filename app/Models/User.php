@@ -8,6 +8,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    // Sanctum trait for API token authentication
     use HasApiTokens, Notifiable;
 
     /**

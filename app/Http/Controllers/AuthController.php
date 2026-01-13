@@ -91,14 +91,14 @@ class AuthController extends Controller
                 ->withInput();
         }
 
-        // Login user
+        // Login user with session
         Auth::login($user);
         $request->session()->regenerate();
 
-        // Create Sanctum token (used by mobile app)
+        // Generate Sanctum token for mobile app
         $token = $user->createToken('web')->plainTextToken;
 
-        // Store session data
+        // Store session data including token
         session([
             'user_id' => $user->id,
             'user_name' => $user->name,
@@ -124,6 +124,7 @@ class AuthController extends Controller
     */
     public function logout(Request $request)
     {
+        // Delete all Sanctum tokens for this user
         if (Auth::check()) {
             Auth::user()->tokens()->delete();
         }
