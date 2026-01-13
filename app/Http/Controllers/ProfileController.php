@@ -23,7 +23,6 @@ class ProfileController extends Controller
                 ->with('error', 'User not found. Please login again.');
         }
 
-        // Store user data in session
         session([
             'user_id' => $user->id,
             'user_name' => $user->name,

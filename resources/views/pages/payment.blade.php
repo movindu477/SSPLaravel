@@ -3,6 +3,22 @@
 @section('title', 'Payment - PetMart')
 
 @section('content')
+@if(session('success') && session('order_id'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                showSuccessModal({{ session('order_id') }});
+            }, 500);
+        });
+    </script>
+@endif
+@if(session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showErrorModal("{{ session('error') }}");
+        });
+    </script>
+@endif
 <div class="min-h-screen bg-gray-50 py-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8">
@@ -77,49 +93,25 @@
                     <!-- Payment Method -->
                     <div class="bg-white rounded-lg shadow-md p-6">
                         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Payment Method</h2>
-                        <div class="space-y-4">
-                            <div class="border-2 border-blue-700 rounded-lg p-4 bg-blue-50 payment-method-option" data-method="card">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-4">
-                                        <input type="radio" name="payment_method" id="card" value="card" checked class="w-5 h-5 text-blue-700">
-                                        <label for="card" class="font-semibold text-gray-800 cursor-pointer">Credit/Debit Card</label>
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <span class="text-xs bg-blue-600 text-white px-2 py-1 rounded">VISA</span>
-                                        <span class="text-xs bg-red-600 text-white px-2 py-1 rounded">MC</span>
+                        <div class="border-2 border-blue-700 rounded-lg p-4 bg-blue-50">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <svg class="w-8 h-8 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                    </svg>
+                                    <div>
+                                        <label class="font-semibold text-gray-800 text-lg">Credit/Debit Card</label>
+                                        <p class="text-sm text-gray-600 mt-1">Secure payment via Stripe</p>
                                     </div>
                                 </div>
-                                <div id="card-details" class="mt-4 space-y-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
-                                        <input type="text" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19"
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Expiry Date</label>
-                                            <input type="text" name="card_expiry" placeholder="MM/YY" maxlength="5"
-                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">CVV</label>
-                                            <input type="text" name="card_cvv" placeholder="123" maxlength="4"
-                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
-                                        </div>
-                                    </div>
+                                <div class="flex gap-2">
+                                    <span class="text-xs bg-blue-600 text-white px-2 py-1 rounded">VISA</span>
+                                    <span class="text-xs bg-red-600 text-white px-2 py-1 rounded">MC</span>
+                                    <span class="text-xs bg-blue-500 text-white px-2 py-1 rounded">AMEX</span>
                                 </div>
                             </div>
-
-                            <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors cursor-pointer payment-method-option" data-method="cod">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-4">
-                                        <input type="radio" name="payment_method" id="cod" value="cod" class="w-5 h-5 text-blue-700">
-                                        <label for="cod" class="font-semibold text-gray-800 cursor-pointer">Cash on Delivery</label>
-                                    </div>
-                                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                    </svg>
-                                </div>
+                            <div class="mt-4 pt-4 border-t border-blue-200">
+                                <p class="text-sm text-gray-600">You will be redirected to Stripe's secure checkout page to complete your payment.</p>
                             </div>
                         </div>
                     </div>
@@ -160,7 +152,7 @@
                         </div>
 
                         <button type="submit" id="submit-btn" class="w-full bg-blue-700 hover:bg-blue-800 text-white py-4 rounded-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed">
-                            Complete Order
+                            Proceed to Payment
                         </button>
 
                         <div class="flex items-center justify-center gap-2 text-sm text-gray-600 mb-4">
@@ -352,42 +344,7 @@ function updateSummaryTotals(items) {
     document.getElementById('summary-total').textContent = `Rs. ${total.toFixed(2)}`;
 }
 
-// Payment method selection
-document.querySelectorAll('.payment-method-option').forEach(option => {
-    option.addEventListener('click', function() {
-        const method = this.dataset.method;
-        document.querySelectorAll('.payment-method-option').forEach(opt => {
-            opt.classList.remove('border-blue-700', 'bg-blue-50');
-            opt.classList.add('border-gray-200');
-        });
-        this.classList.remove('border-gray-200');
-        this.classList.add('border-blue-700', 'bg-blue-50');
-        document.getElementById(method).checked = true;
-        
-        const cardDetails = document.getElementById('card-details');
-        if (method === 'card') {
-            cardDetails.style.display = 'block';
-        } else {
-            cardDetails.style.display = 'none';
-        }
-    });
-});
 
-// Format card number
-document.querySelector('input[name="card_number"]')?.addEventListener('input', function(e) {
-    let value = e.target.value.replace(/\s/g, '');
-    let formatted = value.match(/.{1,4}/g)?.join(' ') || value;
-    e.target.value = formatted;
-});
-
-// Format expiry date
-document.querySelector('input[name="card_expiry"]')?.addEventListener('input', function(e) {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length >= 2) {
-        value = value.substring(0, 2) + '/' + value.substring(2, 4);
-    }
-    e.target.value = value;
-});
 
 // Show success modal with animation
 function showSuccessModal(orderId) {
@@ -481,66 +438,48 @@ document.getElementById('payment-form').addEventListener('submit', async functio
     submitBtn.textContent = 'Processing...';
 
     const formData = new FormData(this);
-    const paymentMethod = formData.get('payment_method');
-
-    // Validate card details if card payment
-    if (paymentMethod === 'card') {
-        const cardNumber = formData.get('card_number');
-        const cardExpiry = formData.get('card_expiry');
-        const cardCvv = formData.get('card_cvv');
-
-        if (!cardNumber || cardNumber.replace(/\s/g, '').length < 13) {
-            showErrorModal("Please enter a valid card number");
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Complete Order';
-            return;
-        }
-        if (!cardExpiry || cardExpiry.length !== 5) {
-            showErrorModal("Please enter a valid expiry date (MM/YY)");
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Complete Order';
-            return;
-        }
-        if (!cardCvv || cardCvv.length < 3) {
-            showErrorModal("Please enter a valid CVV");
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Complete Order';
-            return;
-        }
+    
+    // Validate required fields
+    const email = formData.get('email');
+    if (!email || !email.includes('@')) {
+        showErrorModal("Please enter a valid email address");
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Complete Order';
+        return;
     }
 
+    // Create Stripe checkout session
     try {
-        // Prepare order data
-        const orderData = {};
-
-        // Get CSRF token for the request
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        const res = await fetch("/api/orders", {
+        
+        const res = await fetch("{{ route('stripe.checkout') }}", {
             method: "POST",
             headers: {
-                "Authorization": "Bearer " + ORDER_TOKEN,
                 "Content-Type": "application/json",
                 "Accept": "application/json",
                 "X-CSRF-TOKEN": csrfToken || ""
             },
-            body: JSON.stringify(orderData)
+            body: JSON.stringify({ email: email })
         });
 
         const data = await res.json();
+        console.log("Stripe Response:", data);
 
-        if (res.ok && data.success) {
-            // Show success modal with animation
-            showSuccessModal(data.order_id);
+        if (res.ok && data.url) {
+            // Redirect to Stripe Checkout
+            window.location.href = data.url;
         } else {
-            showErrorModal(data.message || "Failed to place order. Please try again.");
+            const errorMessage = data.error || data.message || "Failed to create checkout session. Please try again.";
+            console.error("Stripe API Error:", data);
+            showErrorModal(errorMessage);
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Complete Order';
+            submitBtn.textContent = 'Proceed to Payment';
         }
     } catch (error) {
-        console.error("Order error:", error);
-        showErrorModal("Error placing order. Please try again.");
+        console.error("Stripe error:", error);
+        showErrorModal("Network error. Please check your connection and try again.");
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Complete Order';
+        submitBtn.textContent = 'Proceed to Payment';
     }
 });
 

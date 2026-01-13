@@ -52,35 +52,44 @@
   <br>
 
   <!-- Shop Section -->
-  <section class="bg-gray-100 py-16 relative overflow-hidden">
+  <section class="bg-gray-100 py-12 sm:py-16 relative overflow-hidden">
     <div class="relative flex flex-col md:flex-row items-center">
       <div class="w-full md:w-1/2 px-4 sm:px-6 lg:px-16 xl:px-20 order-2 md:order-1">
         <div id="shop-text" class="text-center md:text-left transform opacity-0 -translate-x-10 transition-all duration-1000 ease-out max-w-2xl mx-auto md:ml-auto md:mr-0">
-          <h2 class="text-4xl font-bold text-gray-900 mb-6">Explore Our Products</h2>
-          <p class="text-gray-700 mb-4 leading-relaxed text-lg">
+          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">Explore Our Products</h2>
+          <p class="text-gray-700 mb-4 leading-relaxed text-base sm:text-lg">
             Browse our extensive collection of pet products designed for dogs and cats. Whether you're looking for nutritious food, fun toys, or essential accessories, we have something for every pet.
           </p>
-          <ul class="text-gray-600 mb-6 space-y-2">
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-blue-700 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <p class="text-gray-600 mb-6 leading-relaxed text-sm sm:text-base">
+            Our products are carefully selected to meet the highest standards of quality and safety. We work with trusted brands to bring you the best options for your furry companions.
+          </p>
+          <ul class="text-gray-600 mb-6 space-y-3">
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-blue-700 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              Premium quality pet food for all life stages
+              <span>Premium quality pet food for all life stages with balanced nutrition</span>
             </li>
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-blue-700 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-blue-700 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              Interactive toys to keep pets entertained
+              <span>Interactive toys to keep pets entertained and mentally stimulated</span>
             </li>
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-blue-700 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-blue-700 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              Essential accessories for daily care
+              <span>Essential accessories for daily care and comfort</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-blue-700 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>Wide variety of brands and products to suit every need and budget</span>
             </li>
           </ul>
-          <a href="{{ route('shop') }}" class="inline-block bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300">
+          <a href="{{ route('shop') }}" class="inline-block bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 min-h-[44px] flex items-center justify-center">
             Browse Products
           </a>
         </div>
@@ -210,8 +219,24 @@
     const shopText = document.getElementById('shop-text');
     const shopImage = document.getElementById('shop-image');
     
-    if (shopText) observer.observe(shopText);
-    if (shopImage) observer.observe(shopImage);
+    const shopObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('opacity-0');
+          if (entry.target.id === 'shop-text') {
+            entry.target.classList.remove('-translate-x-10');
+            entry.target.classList.add('translate-x-0');
+          } else if (entry.target.id === 'shop-image') {
+            entry.target.classList.remove('translate-x-10');
+            entry.target.classList.add('translate-x-0');
+          }
+          entry.target.classList.add('opacity-100');
+        }
+      });
+    }, observerOptions);
+    
+    if (shopText) shopObserver.observe(shopText);
+    if (shopImage) shopObserver.observe(shopImage);
 
     // Fallback: Show content if still hidden after page load
     window.addEventListener('load', function() {

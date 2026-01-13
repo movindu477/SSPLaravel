@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class ShopFilter extends Component
 {
-    // Filter properties that sync with URL
     #[Url]
     public $search = '';
 
@@ -25,27 +24,22 @@ class ShopFilter extends Component
     #[Url]
     public $max_price = '';
 
-    // Computed property for filtered products
     public function getProductsProperty()
     {
         $query = Pet::query();
 
-        // Apply search filter
         if (!empty($this->search)) {
             $query->where('product_name', 'LIKE', '%' . trim($this->search) . '%');
         }
 
-        // Apply pet type filter
         if (!empty($this->pet_type)) {
             $query->where('pet_type', $this->pet_type);
         }
 
-        // Apply category filter
         if (!empty($this->accessories_type)) {
             $query->where('accessories_type', $this->accessories_type);
         }
 
-        // Apply price range filters
         if (!empty($this->min_price)) {
             $query->where('price', '>=', (float) $this->min_price);
         }
@@ -57,19 +51,17 @@ class ShopFilter extends Component
         return $query->orderBy('id')->get();
     }
 
-    // Get favorite IDs for current user
     public function getFavoriteIdsProperty()
     {
-        if (session()->has('user_id')) {
+        if (auth()->check()) {
             return DB::table('favorites')
-                ->where('user_id', session('user_id'))
+                ->where('user_id', auth()->id())
                 ->pluck('pet_id')
                 ->toArray();
         }
         return [];
     }
 
-    // Clear all filters
     public function clearFilters()
     {
         $this->search = '';
@@ -79,7 +71,6 @@ class ShopFilter extends Component
         $this->max_price = '';
     }
 
-    // Count active filters
     public function getActiveFiltersCountProperty()
     {
         $count = 0;

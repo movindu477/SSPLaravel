@@ -13,7 +13,15 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: [
-            'api/*',
+            'api/logout',
+            'api/cart',
+            'api/orders',
+        ]);
+        
+        // Register middleware aliases
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'redirect.admin' => \App\Http\Middleware\RedirectIfAdmin::class,
         ]);
     })
 

@@ -17,7 +17,6 @@ class ProductController extends Controller
         try {
             $query = Pet::query();
 
-            // Filter by search term
             if ($request->filled('search')) {
                 $searchTerm = trim($request->search);
                 $query->where('product_name', 'LIKE', '%' . $searchTerm . '%');
@@ -69,6 +68,37 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Pet::findOrFail($id);
-        return view('product-detail', compact('product'));
+        $favoriteIds = [];
+        $inCart = false;
+        $cartQuantity = 0;
+        
+        if (auth()->check()) {
+            $userId = auth()->id();
+            
+            $favoriteIds = DB::table('favorites')
+                ->where('user_id', $userId)
+                ->pluck('pet_id')
+                ->toArray();
+            
+            $cart = DB::table('cart')->where('user_id', $userId)->first();
+            if ($cart) {
+                $cartItem = DB::table('cart_items')
+                    ->where('cart_id', $cart->id)
+                    ->where('pet_id', $product->id)
+                    ->first();
+                
+                if ($cartItem) {
+                    $inCart = true;
+                    $cartQuantity = $cartItem->quantity;
+                }
+            }
+        } elseif (session()->has('user_id')) {
+            $favoriteIds = DB::table('favorites')
+                ->where('user_id', session('user_id'))
+                ->pluck('pet_id')
+                ->toArray();
+        }
+        
+        return view('pages.product-detail', compact('product', 'favoriteIds', 'inCart', 'cartQuantity'));
     }
 }

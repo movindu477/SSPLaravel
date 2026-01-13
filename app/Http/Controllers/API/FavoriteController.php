@@ -5,17 +5,23 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
-    /**
-     * GET /api/favorites
-     * Return all favorite pet_ids for logged-in user
-     */
     public function index(Request $request)
     {
+        $user = Auth::user() ?? $request->user();
+        
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated'
+            ], 401);
+        }
+
         $favorites = DB::table('favorites')
-            ->where('user_id', $request->user()->id)
+            ->where('user_id', $user->id)
             ->pluck('pet_id');
 
         return response()->json([
@@ -24,24 +30,28 @@ class FavoriteController extends Controller
         ], 200);
     }
 
-    /**
-     * POST /api/favorites
-     * Add pet to favorites
-     */
     public function store(Request $request)
     {
+        $user = Auth::user() ?? $request->user();
+        
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated'
+            ], 401);
+        }
+
         $request->validate([
             'pet_id' => 'required|integer|exists:Pets,id'
         ]);
 
         DB::table('favorites')->updateOrInsert(
             [
-                'user_id' => $request->user()->id,
+                'user_id' => $user->id,
                 'pet_id' => $request->pet_id,
             ],
             [
                 'created_at' => now(),
-                'updated_at' => now(),
             ]
         );
 
@@ -51,14 +61,19 @@ class FavoriteController extends Controller
         ], 200);
     }
 
-    /**
-     * DELETE /api/favorites/{petId}
-     * Remove pet from favorites
-     */
     public function destroy(Request $request, $petId)
     {
+        $user = Auth::user() ?? $request->user();
+        
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated'
+            ], 401);
+        }
+
         DB::table('favorites')
-            ->where('user_id', $request->user()->id)
+            ->where('user_id', $user->id)
             ->where('pet_id', $petId)
             ->delete();
 

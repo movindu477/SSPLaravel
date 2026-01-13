@@ -1,99 +1,85 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\API\FavoriteController;
 
-/*
-|--------------------------------------------------------------------------
-| Public Pages (No Login Required)
-|--------------------------------------------------------------------------
-*/
+Route::get('/test-db', function () {
+    try {
+        $dbName = DB::connection()->getDatabaseName();
+        $tables = DB::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG = ?", [$dbName]);
+        return response()->json([
+            'database' => $dbName,
+            'tables' => array_column($tables, 'TABLE_NAME'),
+            'user_table_exists' => DB::select("SELECT COUNT(*) as count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'User' AND TABLE_CATALOG = ?", [$dbName])[0]->count > 0
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+})->name('test-db');
 
 Route::get('/', function () {
     return view('pages.home');
-})->name('home');
+})->middleware('redirect.admin')->name('home');
 
 Route::get('/about', function () {
     return view('pages.about');
-})->name('about');
+})->middleware('redirect.admin')->name('about');
 
-// Shop & Products
-Route::get('/shop', [ProductController::class, 'index'])->name('shop');
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/shop', [ProductController::class, 'index'])->middleware('redirect.admin')->name('shop');
+Route::get('/product/{id}', [ProductController::class, 'show'])->middleware('redirect.admin')->name('product.show');
 
-// Cart & Payment pages (view only)
 Route::get('/cart', function () {
     return view('pages.cart');
-})->name('cart');
+})->middleware('redirect.admin')->name('cart');
 
 Route::get('/payment', function () {
     return view('pages.payment');
-})->name('payment');
+})->middleware(['auth', 'redirect.admin'])->name('payment');
 
-/*
-|--------------------------------------------------------------------------
-| Authentication (WEB SESSION BASED)
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware('guest')->group(function () {
-
-    Route::get('/login', [AuthController::class, 'showLoginForm'])
-        ->name('login');
-
-    Route::post('/login', [AuthController::class, 'login']);
-
-    Route::get('/register', [AuthController::class, 'showRegisterForm'])
-        ->name('register');
-
-    Route::post('/register', [AuthController::class, 'register']);
-});
-
-Route::post('/logout', [AuthController::class, 'logout'])
+Route::post('/stripe/checkout', [App\Http\Controllers\StripeController::class, 'createCheckoutSession'])
     ->middleware('auth')
-    ->name('logout');
+    ->name('stripe.checkout');
 
-/*
-|--------------------------------------------------------------------------
-| Authenticated User Pages
-|--------------------------------------------------------------------------
-*/
+Route::get('/stripe/success', [App\Http\Controllers\StripeController::class, 'success'])
+    ->middleware('auth')
+    ->name('stripe.success');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        if (Auth::user()->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('home');
+    })->name('dashboard');
 
-    Route::get('/profile', [ProfileController::class, 'index'])
-        ->name('profile');
+    Route::get('/profile', function () {
+        if (Auth::user()->isAdmin()) {
+            return redirect()->route('admin.profile');
+        }
+        return app(ProfileController::class)->index();
+    })->name('profile');
 
-    // Cart (site)
     Route::post('/cart/add', [CartController::class, 'add'])
         ->name('cart.add');
+
+    // Favorites routes for web (using web session auth)
+    Route::get('/api/favorites', [FavoriteController::class, 'index']);
+    Route::post('/api/favorites', [FavoriteController::class, 'store']);
+    Route::delete('/api/favorites/{petId}', [FavoriteController::class, 'destroy']);
 });
 
-/*
-|--------------------------------------------------------------------------
-| Admin Routes (ADMIN ONLY 🔐)
-|--------------------------------------------------------------------------
-| NOTE:
-| We protect admin routes using:
-| - auth middleware
-| - role check inside AdminController (recommended)
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', [AdminController::class, 'index'])
         ->name('dashboard');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Admin - Products CRUD
-    |--------------------------------------------------------------------------
-    */
     Route::get('/products', [AdminController::class, 'products'])
         ->name('products');
 
@@ -112,11 +98,6 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::delete('/products/{id}', [AdminController::class, 'deleteProduct'])
         ->name('delete-product');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Admin - Users CRUD
-    |--------------------------------------------------------------------------
-    */
     Route::get('/users', [AdminController::class, 'users'])
         ->name('users');
 

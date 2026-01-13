@@ -34,13 +34,13 @@
                         </button>
                     </div>
                     <div class="flex-1">
-                        <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ session('user_name', $user->name ?? 'Guest User') }}</h1>
-                        <p class="text-gray-600 mb-4">{{ session('user_email', $user->email ?? 'No email') }}</p>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-6">{{ session('user_name', $user->name ?? 'Guest User') }}</h1>
+                        <p class="text-gray-900 mb-6 font-semibold text-lg">{{ session('user_email', $user->email ?? 'No email') }}</p>
                         <div class="flex flex-wrap gap-4">
-                            <span class="bg-cyan-100 text-cyan-700 px-4 py-1 rounded-full text-sm font-medium">
+                            <span class="bg-blue-100 text-blue-800 px-4 py-1 rounded-full text-sm font-semibold">
                                 {{ ucfirst(session('user_role', $user->role ?? 'user')) }}
                             </span>
-                            <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-medium">Verified</span>
+                            <span class="bg-green-100 text-green-800 px-4 py-1 rounded-full text-sm font-semibold">Verified</span>
                         </div>
                     </div>
                     <button class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg">
@@ -88,35 +88,35 @@
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800">
+                                <label class="block text-sm font-semibold text-gray-900 mb-2">Full Name</label>
+                                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 font-medium">
                                     {{ session('user_name', $user->name ?? 'N/A') }}
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800">
+                                <label class="block text-sm font-semibold text-gray-900 mb-2">Email Address</label>
+                                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 font-medium">
                                     {{ session('user_email', $user->email ?? 'N/A') }}
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800">
+                                <label class="block text-sm font-semibold text-gray-900 mb-2">Phone Number</label>
+                                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 font-medium">
                                     {{ session('user_phone', $user->phonenumber ?? 'N/A') }}
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800">
-                                    <span class="inline-block bg-cyan-100 text-cyan-700 px-3 py-1 rounded-full text-sm font-medium">
+                                <label class="block text-sm font-semibold text-gray-900 mb-2">Role</label>
+                                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg">
+                                    <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
                                         {{ ucfirst(session('user_role', $user->role ?? 'user')) }}
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                            <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 min-h-[80px]">
+                            <label class="block text-sm font-semibold text-gray-900 mb-2">Address</label>
+                            <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 font-medium min-h-[80px]">
                                 {{ session('user_address', $user->address ?? 'No address provided') }}
                             </div>
                         </div>

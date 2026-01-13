@@ -314,6 +314,10 @@ BEGIN
 END;
 
 
+-- Delete user with id 2
+DELETE FROM [User] WHERE id = 2;
+
+-- Insert admin user
 INSERT INTO [User] (
     name,
     address,
@@ -328,7 +332,7 @@ VALUES (
     'Admin Address',
     '0771234567',
     'admin@petmart.com',
-    '$2y$10$e0NR1YF7oJk8Z6x2qR7kUO9QJkZlXJz7QmKQ5Y5M0Z6J9ZK9FzJQG', -- password: 123456
+    '$2y$12$nBE0osBLTm8/8Vlov0MgF.IaiyZveriXh1KcWDNz5.Ep5IyC5voBC', -- password: 123456
     'admin',
     GETDATE()
 );

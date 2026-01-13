@@ -72,16 +72,16 @@
       @if($products->count() > 0)
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
           @foreach($products as $product)
-            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow duration-300">
-              <!-- Product Image -->
-              <div class="relative h-48 sm:h-56 bg-gray-100 overflow-hidden">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+              <!-- Product Image - Clickable -->
+              <a href="{{ route('product.show', $product->id) }}" class="block relative h-48 sm:h-56 bg-gray-100 overflow-hidden">
                 <img src="{{ $product->getImageAssetUrl() }}" alt="{{ $product->product_name }}" class="w-full h-full object-cover" onerror="this.src='{{ asset('images/Petmart.png') }}'">
                 
                 <!-- Badge -->
                 <div class="absolute top-3 left-3 bg-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm">
                   {{ $product->pet_type }}
                 </div>
-              </div>
+              </a>
               
               <!-- Product Info -->
               <div class="p-5 bg-white">
@@ -92,10 +92,12 @@
                   </span>
                 </div>
                 
-                <!-- Product Name -->
-                <h3 class="text-lg font-bold text-gray-900 mb-3 line-clamp-2 min-h-[3.5rem]">
-                  {{ $product->product_name }}
-                </h3>
+                <!-- Product Name - Clickable -->
+                <a href="{{ route('product.show', $product->id) }}" class="block">
+                  <h3 class="text-lg font-bold text-gray-900 mb-3 line-clamp-2 min-h-[3.5rem] hover:text-blue-700 transition">
+                    {{ $product->product_name }}
+                  </h3>
+                </a>
                 
                 <!-- Rating -->
                 <div class="flex items-center gap-2 mb-4">
@@ -118,7 +120,7 @@
                   </span>
 
                   <!-- Action Buttons -->
-                  <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-3" onclick="event.stopPropagation()">
                     <!-- Favorite -->
                     <button 
                         class="favorite-btn flex items-center justify-center"

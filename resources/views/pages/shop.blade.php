@@ -26,46 +26,62 @@
 
   <!-- Favorite Button JavaScript -->
   <script>
-    const FAV_TOKEN = "{{ session('user_token') }}";
+    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
 
-    // Handle favorite button clicks
-    document.addEventListener('click', async function(e) {
-      if (e.target.closest('.favorite-btn')) {
-        const btn = e.target.closest('.favorite-btn');
-        
-        if (!FAV_TOKEN) {
-          alert("Please login first");
-          return;
+    // Handle favorite button clicks - works with Livewire updates
+    function initFavoriteButtons() {
+      document.querySelectorAll('.favorite-btn').forEach(btn => {
+        if (!btn.hasAttribute('data-listener-attached')) {
+          btn.setAttribute('data-listener-attached', 'true');
+          btn.addEventListener('click', handleFavoriteClick);
         }
+      });
+    }
 
-        const petId = btn.dataset.petId;
-        const isFav = btn.dataset.favorited === "1";
+    async function handleFavoriteClick(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (!isAuthenticated) {
+        alert("Please login first");
+        window.location.href = "{{ route('login') }}";
+        return;
+      }
 
-        const url = isFav 
-          ? `/api/favorites/${petId}` 
-          : `/api/favorites`;
+      const btn = e.currentTarget;
+      const petId = btn.dataset.petId;
+      const isFav = btn.dataset.favorited === "1";
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        const options = {
-          method: isFav ? "DELETE" : "POST",
-          headers: {
-            "Authorization": "Bearer " + FAV_TOKEN,
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "X-CSRF-TOKEN": csrfToken || ""
-          },
-          body: isFav ? null : JSON.stringify({ pet_id: petId })
-        };
+      const url = isFav 
+        ? `/api/favorites/${petId}` 
+        : `/api/favorites`;
 
-        try {
-          const res = await fetch(url, options);
-          const data = await res.json();
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+      const options = {
+        method: isFav ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "X-CSRF-TOKEN": csrfToken || "",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        credentials: 'same-origin',
+        body: isFav ? null : JSON.stringify({ pet_id: petId })
+      };
 
-          if (res.ok || res.status === 200 || res.status === 201) {
-            btn.dataset.favorited = isFav ? "0" : "1";
+      // Disable button during request
+      btn.disabled = true;
+      const svg = btn.querySelector('svg');
+      if (svg) svg.classList.add('opacity-50');
 
-            const svg = btn.querySelector('svg');
+      try {
+        const res = await fetch(url, options);
+        const data = await res.json();
 
+        if (res.ok || res.status === 200 || res.status === 201) {
+          btn.dataset.favorited = isFav ? "0" : "1";
+
+          if (svg) {
             if (isFav) {
               svg.classList.remove("text-red-500");
               svg.classList.add("text-gray-400");
@@ -75,16 +91,45 @@
               svg.classList.add("text-red-500");
               svg.setAttribute("fill", "currentColor");
             }
-          } else {
-            console.error("Error:", data);
-            alert("Failed to update favorite: " + (data.message || "Unknown error"));
           }
-        } catch (error) {
-          console.error("Fetch error:", error);
-          alert("Network error. Please try again.");
+        } else {
+          console.error("Error:", data);
+          alert("Failed to update favorite: " + (data.message || "Unknown error"));
         }
+      } catch (error) {
+        console.error("Fetch error:", error);
+        alert("Network error. Please try again.");
+      } finally {
+        btn.disabled = false;
+        if (svg) svg.classList.remove('opacity-50');
+      }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      initFavoriteButtons();
+      
+      // Re-initialize after Livewire updates
+      document.addEventListener('livewire:load', initFavoriteButtons);
+      document.addEventListener('livewire:update', initFavoriteButtons);
+      
+      // Hero content animation
+      const heroContent = document.getElementById('hero-content');
+      if (heroContent) {
+        setTimeout(function() {
+          heroContent.classList.remove('opacity-0', '-translate-x-10');
+          heroContent.classList.add('opacity-100', 'translate-x-0');
+        }, 100);
       }
     });
+
+    // Also initialize immediately if DOM is already loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFavoriteButtons);
+    } else {
+      initFavoriteButtons();
+    }
+  </script>
 
     // Hero content animation
     document.addEventListener('DOMContentLoaded', function() {

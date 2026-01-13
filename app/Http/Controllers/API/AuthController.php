@@ -14,7 +14,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:100',
-            'email' => 'required|email|unique:User,email',
+            'email' => 'required|email|unique:[User],email',
             'password' => 'required|min:6',
         ]);
 
@@ -28,7 +28,6 @@ class AuthController extends Controller
             'created_at' => now(),
         ]);
 
-        // Generate Sanctum token for mobile app
         $token = $user->createToken('mobile-token')->plainTextToken;
 
         return response()->json([
@@ -58,7 +57,6 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Generate Sanctum token for mobile app
         $token = $user->createToken('mobile-token')->plainTextToken;
 
         return response()->json([
@@ -74,7 +72,6 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     {
-        // Delete current Sanctum token
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([

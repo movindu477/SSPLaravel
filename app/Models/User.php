@@ -4,43 +4,52 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    // Sanctum trait for API token authentication
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, HasProfilePhoto, HasTeams, TwoFactorAuthenticatable;
 
-    /**
-     * SQL Server table name
-     */
     protected $table = 'User';
-
-    /**
-     * Primary key
-     */
     protected $primaryKey = 'id';
-
-    /**
-     * SQL Server does NOT manage updated_at automatically
-     */
     public $timestamps = false;
 
-    /**
-     * Mass assignable fields
-     */
     protected $fillable = [
         'name',
-        'address',
-        'phonenumber',
         'email',
         'password',
+        'address',
+        'phonenumber',
         'role',
         'created_at',
+        'current_team_id',
+        'profile_photo_path',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
     ];
+
+    protected $appends = [
+        'profile_photo_url',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    public function isAdmin()
+    {
+        return ($this->role ?? 'user') === 'admin';
+    }
 }

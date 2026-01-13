@@ -11,11 +11,6 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | REGISTER
-    |--------------------------------------------------------------------------
-    */
     public function showRegisterForm()
     {
         return view('auth.register');
@@ -35,8 +30,7 @@ class AuthController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // Check if email already exists
-        $exists = DB::table('User')->where('email', $request->email)->exists();
+        $exists = DB::table('[User]')->where('email', $request->email)->exists();
 
         if ($exists) {
             return back()
@@ -45,9 +39,7 @@ class AuthController extends Controller
         }
 
         $hashedPassword = Hash::make($request->password);
-
-        // Create new user
-        DB::table('User')->insert([
+        DB::table('[User]')->insert([
             'name' => $request->name,
             'email' => $request->email,
             'phonenumber' => $request->phonenumber,
@@ -61,11 +53,6 @@ class AuthController extends Controller
             ->with('success', 'Registration successful. Please login.');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | LOGIN
-    |--------------------------------------------------------------------------
-    */
     public function showLoginForm()
     {
         return view('auth.login');
@@ -82,7 +69,6 @@ class AuthController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // Get user by email
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -91,14 +77,11 @@ class AuthController extends Controller
                 ->withInput();
         }
 
-        // Login user with session
         Auth::login($user);
         $request->session()->regenerate();
 
-        // Generate Sanctum token for mobile app
         $token = $user->createToken('web')->plainTextToken;
 
-        // Store session data including token
         session([
             'user_id' => $user->id,
             'user_name' => $user->name,
@@ -106,8 +89,6 @@ class AuthController extends Controller
             'user_role' => $user->role ?? 'user',
             'user_token' => $token,
         ]);
-
-        // Redirect based on role
         if (($user->role ?? 'user') === 'admin') {
             return redirect()->route('admin.dashboard')
                 ->with('success', 'Welcome Admin!');
@@ -117,14 +98,8 @@ class AuthController extends Controller
             ->with('success', 'Welcome back, ' . $user->name . '!');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | LOGOUT
-    |--------------------------------------------------------------------------
-    */
     public function logout(Request $request)
     {
-        // Delete all Sanctum tokens for this user
         if (Auth::check()) {
             Auth::user()->tokens()->delete();
         }

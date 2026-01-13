@@ -24,7 +24,6 @@ class AdminController extends Controller
         $totalProducts = Pet::count();
         $totalUsers = User::count();
 
-        // Calculate total revenue (sum of all product prices)
         $totalRevenue = Pet::sum('price');
 
         $recentProducts = Pet::orderBy('id', 'desc')->take(5)->get();
@@ -150,7 +149,7 @@ class AdminController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'email' => 'required|email|max:100|unique:User,email',
+            'email' => 'required|email|max:100|unique:[User],email',
             'phonenumber' => 'required|string|max:15',
             'address' => 'required|string|max:255',
             'password' => 'required|string|min:6',
@@ -187,7 +186,7 @@ class AdminController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'email' => 'required|email|max:100|unique:User,email,' . (int)$id,
+            'email' => 'required|email|max:100|unique:[User],email,' . (int)$id,
             'phonenumber' => 'required|string|max:15',
             'address' => 'required|string|max:255',
             'password' => 'nullable|string|min:6',

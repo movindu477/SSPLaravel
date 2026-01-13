@@ -10,11 +10,13 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'pet_id' => 'required|integer'
+            'pet_id' => 'required|integer',
+            'quantity' => 'sometimes|integer|min:1|max:99'
         ]);
 
         $userId = auth()->id();
         $petId = $request->pet_id;
+        $quantity = $request->input('quantity', 1);
 
         $cart = DB::table('cart')
             ->where('user_id', $userId)
@@ -39,16 +41,23 @@ class CartController extends Controller
             DB::table('cart_items')
                 ->where('id', $exists->id)
                 ->update([
-                    'quantity' => $exists->quantity + 1,
+                    'quantity' => $quantity,
                     'updated_at' => now(),
                 ]);
         } else {
             DB::table('cart_items')->insert([
                 'cart_id' => $cartId,
                 'pet_id' => $petId,
-                'quantity' => 1,
+                'quantity' => $quantity,
                 'created_at' => now(),
                 'updated_at' => now(),
+            ]);
+        }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Added to cart successfully!'
             ]);
         }
 
