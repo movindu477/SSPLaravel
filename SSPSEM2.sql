@@ -337,3 +337,5 @@ VALUES (
     GETDATE()
 );
 
+DELETE FROM [User]
+WHERE id = 2;
