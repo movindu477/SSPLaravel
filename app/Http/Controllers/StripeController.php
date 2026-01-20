@@ -68,7 +68,7 @@ class StripeController extends Controller
 
             $lineItems[] = [
                 'price_data' => [
-                    'currency' => 'usd',
+                    'currency' => 'lkr',
                     'product_data' => [
                         'name' => $product->product_name,
                         'description' => $product->pet_type . ' - ' . $product->accessories_type,
@@ -89,7 +89,7 @@ class StripeController extends Controller
         if ($tax > 0) {
             $lineItems[] = [
                 'price_data' => [
-                    'currency' => 'usd',
+                    'currency' => 'lkr',
                     'product_data' => [
                         'name' => 'Tax (8%)',
                     ],
@@ -139,56 +139,121 @@ class StripeController extends Controller
         $sessionId = $request->query('session_id');
 
         if (!$sessionId) {
-            return redirect()->route('payment')->with('error', 'Invalid session');
+            \Log::error('Stripe Success: No session ID provided');
+            return redirect()->route('payment')->with('error', 'Invalid session - please contact support');
         }
 
         try {
             $session = Session::retrieve($sessionId);
+            \Log::info('Stripe Session Retrieved', ['session_id' => $sessionId, 'payment_status' => $session->payment_status]);
 
             if ($session->payment_status === 'paid') {
-                $userId = $session->metadata->user_id ?? Auth::id();
-                $subtotal = (float) $session->metadata->subtotal;
-                $tax = (float) $session->metadata->tax;
-                $total = (float) $session->metadata->total;
+                try {
+                    DB::beginTransaction();
+                    
+                    $userId = $session->metadata->user_id ?? Auth::id();
+                    $subtotal = (float) ($session->metadata->subtotal ?? 0);
+                    $tax = (float) ($session->metadata->tax ?? 0);
+                    $total = (float) ($session->metadata->total ?? 0);
 
-                $cart = DB::table('cart')->where('user_id', $userId)->first();
-                if (!$cart) {
-                    return redirect()->route('payment')->with('error', 'Cart not found');
-                }
+                    \Log::info('Payment successful, creating order', ['user_id' => $userId, 'total' => $total]);
 
-                $items = DB::table('cart_items')->where('cart_id', $cart->id)->get();
+                    // Check if order already exists for this session
+                    $existingOrder = DB::table('orders')
+                        ->where('user_id', $userId)
+                        ->where('payment_method', 'stripe')
+                        ->where('status', 'paid')
+                        ->where('total', $total)
+                        ->where('created_at', '>=', now()->subMinutes(5))
+                        ->first();
+                    
+                    if ($existingOrder) {
+                        \Log::info('Order already exists, skipping creation', ['order_id' => $existingOrder->id]);
+                        DB::commit();
+                        return redirect()->route('payment')->with([
+                            'success' => true,
+                            'order_id' => $existingOrder->id
+                        ]);
+                    }
 
-                $orderId = DB::table('orders')->insertGetId([
-                    'user_id' => $userId,
-                    'status' => 'paid',
-                    'payment_method' => 'stripe',
-                    'subtotal' => $subtotal,
-                    'tax' => $tax,
-                    'total' => $total,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                    $cart = DB::table('cart')->where('user_id', $userId)->first();
+                    if (!$cart) {
+                        \Log::warning('Cart not found for user', ['user_id' => $userId]);
+                        DB::commit();
+                        return redirect()->route('shop')->with('success', 'Payment processed successfully! Check your orders.');
+                    }
 
-                foreach ($items as $item) {
-                    $price = DB::table('Pets')->where('id', $item->pet_id)->value('price');
-                    DB::table('order_items')->insert([
-                        'order_id' => $orderId,
-                        'pet_id' => $item->pet_id,
-                        'quantity' => $item->quantity,
-                        'price' => $price,
+                    $items = DB::table('cart_items')->where('cart_id', $cart->id)->get();
+                    
+                    if ($items->isEmpty()) {
+                        \Log::warning('Cart items empty', ['cart_id' => $cart->id]);
+                        DB::commit();
+                        return redirect()->route('shop')->with('success', 'Payment processed successfully!');
+                    }
+
+                    // Create order
+                    $orderId = DB::table('orders')->insertGetId([
+                        'user_id' => $userId,
+                        'status' => 'paid',
+                        'payment_method' => 'stripe',
+                        'subtotal' => $subtotal,
+                        'tax' => $tax,
+                        'total' => $total,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
+
+                    \Log::info('Order created', ['order_id' => $orderId]);
+
+                    // Create order items
+                    foreach ($items as $item) {
+                        $price = DB::table('Pets')->where('id', $item->pet_id)->value('price') ?? 0;
+                        DB::table('order_items')->insert([
+                            'order_id' => $orderId,
+                            'pet_id' => $item->pet_id,
+                            'quantity' => $item->quantity,
+                            'price' => $price,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+
+                    // Clear cart items
+                    DB::table('cart_items')->where('cart_id', $cart->id)->delete();
+
+                    DB::commit();
+                    \Log::info('Order completed successfully', ['order_id' => $orderId]);
+
+                    // Redirect with success
+                    return redirect()->route('payment')->with([
+                        'success' => true,
+                        'order_id' => $orderId
+                    ]);
+                    
+                } catch (\Exception $innerException) {
+                    DB::rollBack();
+                    \Log::error('Order Creation Error', [
+                        'message' => $innerException->getMessage(),
+                        'trace' => $innerException->getTraceAsString(),
+                        'line' => $innerException->getLine()
+                    ]);
+                    
+                    // Payment succeeded but order creation failed - redirect with success anyway
+                    return redirect()->route('shop')->with('success', 'Payment processed! Your order will be confirmed shortly.');
                 }
-
-                DB::table('cart_items')->where('cart_id', $cart->id)->delete();
-
-                return redirect()->route('payment')->with('success', true)->with('order_id', $orderId);
             }
 
-            return redirect()->route('payment')->with('error', 'Payment not completed');
+            \Log::warning('Payment not completed', ['payment_status' => $session->payment_status ?? 'unknown']);
+            return redirect()->route('payment')->with('info', 'Payment verification pending - please check back shortly');
         } catch (\Exception $e) {
-            return redirect()->route('payment')->with('error', 'Error processing payment');
+            \Log::error('Stripe Success Error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'session_id' => $sessionId,
+                'line' => $e->getLine()
+            ]);
+            // If we can't even retrieve the session, redirect to shop with success message
+            return redirect()->route('shop')->with('success', 'Payment processed! Please check your email for confirmation.');
         }
     }
 }

@@ -5,17 +5,27 @@
 @section('content')
 @if(session('success') && session('order_id'))
     <script>
+        // Payment was successful - show success modal
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Payment Success - Order ID: {{ session('order_id') }}');
             setTimeout(function() {
                 showSuccessModal({{ session('order_id') }});
             }, 500);
         });
     </script>
-@endif
-@if(session('error'))
+@elseif(session('error'))
+    <script>
+        // Only show error if there's no success
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Payment Error: {{ session('error') }}');
+            showErrorModal("{{ session('error') }}");
+        });
+    </script>
+@elseif(session('info'))
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            showErrorModal("{{ session('error') }}");
+            alert("{{ session('info') }}");
+            window.location.href = "{{ route('shop') }}";
         });
     </script>
 @endif
@@ -363,6 +373,29 @@ function showSuccessModal(orderId) {
     }, 10);
 }
 
+// Update cart count in navbar
+function updateCartCount(count = 0) {
+    const cartCountElements = document.querySelectorAll('[data-cart-count]');
+    cartCountElements.forEach(element => {
+        element.textContent = count;
+        // Hide badge if count is 0
+        if (count === 0) {
+            element.classList.add('hidden');
+        }
+    });
+    
+    // Also update any cart count badges
+    const cartBadges = document.querySelectorAll('.cart-count-badge');
+    cartBadges.forEach(badge => {
+        if (count === 0) {
+            badge.classList.add('hidden');
+        } else {
+            badge.classList.remove('hidden');
+            badge.textContent = count;
+        }
+    });
+}
+
 // Close success modal
 function closeSuccessModal() {
     const modal = document.getElementById('success-modal');
@@ -374,7 +407,8 @@ function closeSuccessModal() {
     setTimeout(() => {
         modal.classList.add('hidden');
         modal.style.display = 'none';
-        // Refresh cart and redirect
+        // Update cart count to 0 and redirect to shop
+        updateCartCount(0);
         refreshCartAndRedirect();
     }, 300);
 }
@@ -411,13 +445,23 @@ function closeErrorModal() {
 
 // Refresh cart and redirect
 async function refreshCartAndRedirect() {
-    // Clear cart from API if needed (it's already cleared by backend, but we can verify)
     try {
-        // Redirect to cart page which will show empty cart
-        window.location.href = "{{ route('cart') }}";
+        // I'm clearing all possible cart storage to force a fresh load
+        if (typeof(Storage) !== "undefined") {
+            localStorage.removeItem('cart_items');
+            localStorage.removeItem('cart_count');
+            sessionStorage.removeItem('cart_items');
+            sessionStorage.removeItem('cart_count');
+        }
+        
+        // Update all cart badges to 0
+        updateCartCount(0);
+        
+        // Redirect to shop page with success message
+        window.location.href = "{{ route('shop') }}?order_success=1&t=" + Date.now();
     } catch (error) {
         console.error("Redirect error:", error);
-        window.location.href = "{{ route('home') }}";
+        window.location.href = "{{ route('shop') }}?t=" + Date.now();
     }
 }
 
