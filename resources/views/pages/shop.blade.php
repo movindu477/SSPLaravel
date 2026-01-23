@@ -116,14 +116,13 @@
           btn.dataset.favorited = isFav ? "0" : "1";
 
           if (svg) {
+            // Keep icon visible even if Tailwind classes/styles clash:
+            // - Favorited: filled red
+            // - Not favorited: gray outline
             if (isFav) {
-              svg.classList.remove("text-red-500");
-              svg.classList.add("text-gray-400");
-              svg.setAttribute("fill", "none");
+              svg.setAttribute("style", "stroke:#6b7280;fill:none;");
             } else {
-              svg.classList.remove("text-gray-400");
-              svg.classList.add("text-red-500");
-              svg.setAttribute("fill", "currentColor");
+              svg.setAttribute("style", "stroke:#ef4444;fill:#ef4444;");
             }
           }
         } else {

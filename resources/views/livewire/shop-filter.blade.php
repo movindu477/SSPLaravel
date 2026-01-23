@@ -78,51 +78,56 @@
       </div>
 
       @if($products->count() > 0)
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 items-stretch">
           @foreach($products as $product)
-            <div class="group bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer backdrop-blur-sm">
-              <!-- Product Image - Clickable -->
-              <a href="{{ route('product.show', $product->id) }}" class="block relative h-64 sm:h-72 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
-                <img src="{{ $product->getImageAssetUrl() }}" alt="{{ $product->product_name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='{{ asset('images/Petmart.png') }}'">
-                
-                <!-- Gradient Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                
-                <!-- Pet Type Badge -->
-                <div class="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg backdrop-blur-sm">
-                  {{ $product->pet_type }}
-                </div>
+            <div class="group bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer backdrop-blur-sm flex flex-col h-full">
+              <!-- Product Image Area -->
+              <div class="relative h-64 sm:h-72 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                <!-- Product Image - Clickable -->
+                <a href="{{ route('product.show', $product->id) }}" class="block relative h-full">
+                  <img src="{{ $product->getImageAssetUrl() }}" alt="{{ $product->product_name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='{{ asset('images/Petmart.png') }}'">
+                  
+                  <!-- Gradient Overlay -->
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  <!-- Pet Type Badge -->
+                  <div class="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg backdrop-blur-sm">
+                    {{ $product->pet_type }}
+                  </div>
 
-                <!-- Category Badge -->
-                <div class="absolute top-4 right-4">
-                  <span class="inline-block bg-white/90 backdrop-blur-sm text-blue-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-md border border-blue-100">
-                    {{ $product->accessories_type }}
-                  </span>
-                </div>
+                  <!-- Category Badge -->
+                  <div class="absolute top-4 right-4">
+                    <span class="inline-block bg-white/90 backdrop-blur-sm text-blue-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-md border border-blue-100">
+                      {{ $product->accessories_type }}
+                    </span>
+                  </div>
+                </a>
 
-                <!-- Favorite Button - On Image -->
+                <!-- Favorite Button (on image) -->
                 <button 
-                    class="favorite-btn absolute bottom-4 right-4 w-11 h-11 bg-white/95 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-all duration-300 border border-gray-100"
+                    type="button"
+                    class="favorite-btn absolute bottom-4 right-4 z-10 w-11 h-11 bg-white rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-all duration-300 border border-gray-100"
                     data-pet-id="{{ $product->id }}"
                     data-favorited="{{ in_array($product->id, $favoriteIds) ? '1' : '0' }}"
                     onclick="event.preventDefault(); event.stopPropagation();"
+                    aria-label="Toggle favorite"
                 >
-                    <svg class="w-6 h-6 {{ in_array($product->id, $favoriteIds) ? 'text-red-500' : 'text-gray-400' }}"
-                         fill="{{ in_array($product->id, $favoriteIds) ? 'currentColor' : 'none' }}"
-                         stroke="currentColor"
+                    <svg class="w-6 h-6"
+                         viewBox="0 0 24 24"
                          stroke-width="2"
-                         viewBox="0 0 24 24">
+                         style="{{ in_array($product->id, $favoriteIds) ? 'stroke:#ef4444;fill:#ef4444;' : 'stroke:#6b7280;fill:none;' }}"
+                         aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                 </button>
-              </a>
+              </div>
               
               <!-- Product Info -->
-              <div class="p-6 bg-gradient-to-b from-white to-gray-50/50">
+              <div class="relative flex flex-col flex-1 p-6 bg-gradient-to-b from-white to-gray-50/50">
                 <!-- Product Name - Clickable -->
                 <a href="{{ route('product.show', $product->id) }}" class="block mb-3">
-                  <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 min-h-[3.5rem] group-hover:text-blue-700 transition-colors duration-300">
+                  <h3 class="text-lg font-bold text-gray-900 mb-2 h-[3.5rem] overflow-hidden leading-snug group-hover:text-blue-700 transition-colors duration-300">
                     {{ $product->product_name }}
                   </h3>
                 </a>
@@ -141,7 +146,7 @@
                 </div>
                 
                 <!-- Price and Add Button -->
-                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                <div class="mt-auto grid grid-cols-[1fr_auto] items-end gap-4 pt-4 border-t border-gray-200/50">
                   <!-- Price -->
                   <div class="flex flex-col">
                     <span class="text-xs text-gray-500 font-medium">Price</span>
@@ -151,10 +156,10 @@
                   </div>
 
                   <!-- Add to Cart Button -->
-                  <form action="{{ route('cart.add') }}" method="POST" class="inline-block" onclick="event.stopPropagation()">
+                  <form action="{{ route('cart.add') }}" method="POST" class="inline-block justify-self-end" onclick="event.stopPropagation()">
                       @csrf
                       <input type="hidden" name="pet_id" value="{{ $product->id }}">
-                      <button type="submit" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                      <button type="submit" class="bg-blue-700 bg-gradient-to-r from-blue-600 to-blue-700 hover:bg-blue-800 hover:from-blue-700 hover:to-blue-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 whitespace-nowrap">
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                           </svg>
