@@ -83,6 +83,7 @@
           The principles that guide everything we do at PetMart
         </p>
       </div>
+      <br>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         <div class="group relative bg-white rounded-2xl p-8 lg:p-10 border border-gray-100 hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-2">
@@ -142,7 +143,7 @@
       </div>
     </div>
   </section>
-
+<br><br>
   <section class="bg-gradient-to-b from-blue-50 via-white to-gray-50 py-20 sm:py-24 relative overflow-hidden">
     <div class="absolute top-1/2 left-0 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-10 -translate-x-1/2 -translate-y-1/2"></div>
     <div class="absolute top-1/2 right-0 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10 translate-x-1/2 -translate-y-1/2"></div>
@@ -159,6 +160,7 @@
           Discover what makes us the preferred choice for pet owners across Sri Lanka
         </p>
       </div>
+      <br>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
         <div class="group relative text-center p-8 rounded-2xl bg-white border border-gray-100 hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-2">
@@ -205,9 +207,9 @@
       </div>
     </div>
   </section>
-
-  <section class="bg-gradient-to-r from-blue-50 to-blue-100 py-20 sm:py-24 relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-transparent"></div>
+<br><br>
+  <section class="bg-gradient-to-br from-blue-100 via-blue-50 to-white py-20 sm:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-200/30 via-blue-100/20 to-transparent"></div>
     
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
@@ -221,7 +223,7 @@
           Have questions or need assistance? We're here to help! Reach out to us through any of the following ways.
         </p>
       </div>
-
+<br><br>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-12">
         <div class="group relative bg-white rounded-2xl p-8 text-center border border-gray-100 hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-2">
           <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -285,7 +287,7 @@
     </div>
   </section>
 </div>
-
+<br><br>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('js-enabled');
