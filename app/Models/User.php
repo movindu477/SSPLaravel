@@ -27,6 +27,9 @@ class User extends Authenticatable
         'created_at',
         'current_team_id',
         'profile_photo_path',
+        'latitude',
+        'longitude',
+        'city',
     ];
 
     protected $hidden = [

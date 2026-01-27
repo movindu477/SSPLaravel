@@ -6,6 +6,8 @@ use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\FavoriteController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\OrderController;
+use App\Http\Controllers\API\LocationController;
+
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -23,3 +25,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/orders', [OrderController::class, 'store']);
 });
+Route::middleware('auth:sanctum')->post('/location', [LocationController::class, 'store']);
