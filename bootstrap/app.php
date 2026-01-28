@@ -12,10 +12,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->statefulApi();
+        
         $middleware->validateCsrfTokens(except: [
             'api/logout',
             'api/cart',
             'api/orders',
+            'api/location', // Also exclude location if it comes from mobile app potentially without csrf
+            'stripe/*', 
         ]);
         
         // Register middleware aliases

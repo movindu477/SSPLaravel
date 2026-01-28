@@ -8,7 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\API\FavoriteController;
+
 
 Route::get('/test-db', function () {
     try {
@@ -47,9 +47,13 @@ Route::post('/stripe/checkout', [App\Http\Controllers\StripeController::class, '
     ->middleware('auth')
     ->name('stripe.checkout');
 
-Route::get('/stripe/success', [App\Http\Controllers\StripeController::class, 'success'])
+Route::get('/payment/success', [App\Http\Controllers\StripeController::class, 'paymentSuccess'])
     ->middleware('auth')
-    ->name('stripe.success');
+    ->name('payment.success');
+
+Route::get('/payment/cancel', function () {
+    return view('payment-cancel');
+})->name('payment.cancel');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
@@ -69,10 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/add', [CartController::class, 'add'])
         ->name('cart.add');
 
-    // Favorites routes for web (using web session auth)
-    Route::get('/api/favorites', [FavoriteController::class, 'index']);
-    Route::post('/api/favorites', [FavoriteController::class, 'store']);
-    Route::delete('/api/favorites/{petId}', [FavoriteController::class, 'destroy']);
+
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

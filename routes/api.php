@@ -24,5 +24,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/cart/{petId}', [CartController::class, 'destroy']);
 
     Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/orders', [OrderController::class, 'index']);
+
+    Route::get('/favorites', [FavoriteController::class, 'index']);
+    Route::post('/favorites', [FavoriteController::class, 'store']);
+    Route::delete('/favorites/{petId}', [FavoriteController::class, 'destroy']);
+
+    Route::post('/payment/checkout', [App\Http\Controllers\StripeController::class, 'createCheckoutSessionAPI']);
 });
 Route::middleware('auth:sanctum')->post('/location', [LocationController::class, 'store']);

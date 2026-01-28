@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,51 +12,61 @@ class OrderController extends Controller
 {
     public function store(Request $request)
     {
-        $userId = $request->user()->id;
+        $user = $request->user();
 
-        $cart = DB::table('cart')->where('user_id', $userId)->first();
+        // Retrieve the user's active cart
+        $cart = DB::table('cart')
+            ->where('user_id', $user->id)
+            ->first();
+
         if (!$cart) {
-            return response()->json(['message' => 'Cart empty'], 400);
+            return response()->json(['message' => 'Cart not found'], 400);
         }
 
-        $items = DB::table('cart_items')->where('cart_id', $cart->id)->get();
-        if ($items->isEmpty()) {
-            return response()->json(['message' => 'Cart empty'], 400);
+        // Fetch all items from the cart, joining with Pets table for price verification
+        $cartItems = DB::table('cart_items')
+            ->join('Pets', 'cart_items.pet_id', '=', 'Pets.id')
+            ->where('cart_items.cart_id', $cart->id)
+            ->select(
+                'cart_items.pet_id',
+                'cart_items.quantity',
+                'Pets.price'
+            )
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return response()->json(['message' => 'Cart is empty'], 400);
         }
 
-        $subtotal = 0;
-        foreach ($items as $item) {
-            $price = DB::table('Pets')->where('id', $item->pet_id)->value('price');
-            $subtotal += ($price * $item->quantity);
-        }
-
-        $tax = 0;
-        $total = $subtotal + $tax;
-
-        $orderId = DB::table('orders')->insertGetId([
-            'user_id' => $userId,
+        // Create a new pending order
+        $order = Order::create([
+            'user_id' => $user->id,
             'status' => 'pending',
-            'subtotal' => $subtotal,
-            'tax' => $tax,
-            'total' => $total,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
-        foreach ($items as $item) {
-            DB::table('order_items')->insert([
-                'order_id' => $orderId,
+        // Transfer cart items to order items
+        foreach ($cartItems as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
                 'pet_id' => $item->pet_id,
                 'quantity' => $item->quantity,
-                'price' => DB::table('Pets')->where('id', $item->pet_id)->value('price'),
+                'price' => $item->price,
             ]);
         }
 
+        // Clear the user's cart after successful order creation
         DB::table('cart_items')->where('cart_id', $cart->id)->delete();
 
         return response()->json([
-            'success' => true,
-            'order_id' => $orderId
+            'message' => 'Order created successfully',
+            'order_id' => $order->id,
         ]);
+    }
+
+    public function index(Request $request)
+    {
+        return Order::with('items')
+            ->where('user_id', $request->user()->id)
+            ->get();
     }
 }
