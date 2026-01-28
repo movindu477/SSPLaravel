@@ -180,6 +180,7 @@ SELECT * FROM favorites;
 select * from cart;
 select * from cart_items;
 select * from orders;
+select * from order_items;
 
 SELECT * FROM cart_items WHERE user_id = 1;
 SELECT * FROM favorites WHERE user_id = 1;

@@ -7,6 +7,7 @@ use App\Http\Controllers\API\FavoriteController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\LocationController;
+use Illuminate\Http\Request;
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -16,6 +17,10 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/cart', [CartController::class, 'index']);

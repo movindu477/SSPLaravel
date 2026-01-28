@@ -9,11 +9,13 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, HasProfilePhoto, HasTeams, TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, Notifiable, HasProfilePhoto, HasTeams, TwoFactorAuthenticatable;
 
-    protected $table = 'User';
+    protected $table = 'users';
     protected $primaryKey = 'id';
     public $timestamps = false;
 

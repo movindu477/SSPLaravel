@@ -18,63 +18,9 @@
             <p class="text-gray-600">Add a new product to your store</p>
         </div>
 
-        <div class="bg-white rounded-lg shadow-md p-8">
-            <form method="POST" action="{{ route('admin.store-product') }}" class="space-y-6">
-                @csrf
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
-                    <input type="text" name="product_name" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent transition-all"
-                           placeholder="Enter product name">
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Pet Type</label>
-                        <select name="pet_type" required 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent transition-all">
-                            <option value="">Select Pet Type</option>
-                            <option value="Dog">Dog</option>
-                            <option value="Cat">Cat</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                        <select name="accessories_type" required 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent transition-all">
-                            <option value="">Select Category</option>
-                            <option value="Food">Food</option>
-                            <option value="Toy">Toy</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Price (Rs.)</label>
-                    <input type="number" name="price" step="0.01" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent transition-all"
-                           placeholder="0.00">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
-                    <input type="text" name="image_url" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:border-transparent transition-all"
-                           placeholder="images/product.jpg">
-                    <p class="mt-2 text-sm text-gray-500">Enter the path relative to public folder (e.g., images/dog_food1.jpg)</p>
-                </div>
-
-                <div class="flex gap-4">
-                    <button type="submit" class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
-                        Create Product
-                    </button>
-                    <a href="{{ route('admin.products') }}" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold text-center transition-all duration-300">
-                        Cancel
-                    </a>
-                </div>
-            </form>
-        </div>
+        <livewire:admin.product-form />
     </div>
 </div>
 @endsection
+
 

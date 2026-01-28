@@ -26,6 +26,8 @@ class CartController extends Controller
                 'Pets.product_name',
                 'Pets.price',
                 'Pets.image_url',
+                'Pets.pet_type',
+                'Pets.accessories_type',
                 'cart_items.quantity'
             )
             ->get();
