@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Auth;
 
 class CartManager extends Component
 {
-    public $cartItems = [];
+    public $cartItems;
     public $subtotal = 0;
     public $tax = 0;
     public $total = 0;
 
     public function mount()
     {
+        $this->cartItems = collect();
         $this->loadCart();
     }
 
@@ -24,7 +25,7 @@ class CartManager extends Component
     {
         $user = Auth::user();
         if (!$user) {
-            $this->cartItems = [];
+            $this->cartItems = collect();
             return;
         }
 
@@ -53,6 +54,11 @@ class CartManager extends Component
             $this->subtotal = $this->cartItems->sum('subtotal');
             $this->tax = $this->subtotal * 0.08; // 8% Tax
             $this->total = $this->subtotal + $this->tax;
+        } else {
+            $this->cartItems = collect();
+            $this->subtotal = 0;
+            $this->tax = 0;
+            $this->total = 0;
         }
     }
 
