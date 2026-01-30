@@ -19,15 +19,15 @@ class CartController extends Controller
         }
 
         $items = DB::table('cart_items')
-            ->join('Pets', 'cart_items.pet_id', '=', 'Pets.id')
+            ->join('pets', 'cart_items.pet_id', '=', 'pets.id')
             ->where('cart_items.cart_id', $cart->id)
             ->select(
-                'Pets.id as pet_id',
-                'Pets.product_name',
-                'Pets.price',
-                'Pets.image_url',
-                'Pets.pet_type',
-                'Pets.accessories_type',
+                'pets.id as pet_id',
+                'pets.product_name',
+                'pets.price',
+                'pets.image_url',
+                'pets.pet_type',
+                'pets.accessories_type',
                 'cart_items.quantity'
             )
             ->get();
@@ -41,7 +41,7 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'pet_id' => 'required|integer|exists:Pets,id'
+            'pet_id' => 'required|integer|exists:pets,id'
         ]);
 
         $userId = $request->user()->id;

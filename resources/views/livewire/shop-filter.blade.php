@@ -22,8 +22,8 @@
           <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Pet Type</label>
           <select wire:model.live="pet_type" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-white text-gray-900 transition-all text-sm font-medium shadow-sm hover:border-blue-400">
             <option value="">All Pets</option>
-            <option value="Dog">🐕 Dog</option>
-            <option value="Cat">🐱 Cat</option>
+            <option value="Dog">Dog</option>
+            <option value="Cat">Cat</option>
           </select>
         </div>
         
@@ -31,8 +31,8 @@
           <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Category</label>
           <select wire:model.live="accessories_type" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-white text-gray-900 transition-all text-sm font-medium shadow-sm hover:border-blue-400">
             <option value="">All Categories</option>
-            <option value="Food">🍖 Food</option>
-            <option value="Toy">🎾 Toy</option>
+            <option value="Food">Food</option>
+            <option value="Toy">Toy</option>
           </select>
         </div>
         

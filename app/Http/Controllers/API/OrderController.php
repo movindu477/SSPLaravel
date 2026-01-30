@@ -25,12 +25,12 @@ class OrderController extends Controller
 
         // Fetch all items from the cart, joining with Pets table for price verification
         $cartItems = DB::table('cart_items')
-            ->join('Pets', 'cart_items.pet_id', '=', 'Pets.id')
+            ->join('pets', 'cart_items.pet_id', '=', 'pets.id')
             ->where('cart_items.cart_id', $cart->id)
             ->select(
                 'cart_items.pet_id',
                 'cart_items.quantity',
-                'Pets.price'
+                'pets.price'
             )
             ->get();
 

@@ -19,12 +19,12 @@ class StripeController extends Controller
 
         // Join cart items with Pets to get product details
         $cartItems = DB::table('cart_items')
-            ->join('Pets', 'cart_items.pet_id', '=', 'Pets.id')
+            ->join('pets', 'cart_items.pet_id', '=', 'pets.id')
             ->where('cart_items.cart_id', function ($q) use ($user) {
                 // Ensure we get the cart ID for the user
                 $q->select('id')->from('cart')->where('user_id', $user->id);
             })
-            ->select('Pets.product_name as name', 'Pets.price', 'cart_items.quantity') // Assuming product_name used in table
+            ->select('pets.product_name as name', 'pets.price', 'cart_items.quantity') // Assuming product_name used in table
             ->get();
 
 
@@ -69,9 +69,9 @@ class StripeController extends Controller
 
         // Fetch cart items with product details and current pricing
         $cartItems = DB::table('cart_items')
-            ->join('Pets', 'cart_items.pet_id', '=', 'Pets.id')
+            ->join('pets', 'cart_items.pet_id', '=', 'pets.id')
             ->where('cart_items.cart_id', $cart->id)
-            ->select('cart_items.pet_id', 'cart_items.quantity', 'Pets.price')
+            ->select('cart_items.pet_id', 'cart_items.quantity', 'pets.price')
             ->get();
 
         if ($cartItems->isEmpty()) {
@@ -114,9 +114,9 @@ class StripeController extends Controller
 
         // Fetch cart items for the checkout session
         $cartItems = DB::table('cart_items')
-            ->join('Pets', 'cart_items.pet_id', '=', 'Pets.id')
+            ->join('pets', 'cart_items.pet_id', '=', 'pets.id')
             ->where('cart_items.cart_id', $cart->id)
-            ->select('Pets.product_name as name', 'Pets.price', 'cart_items.quantity')
+            ->select('pets.product_name as name', 'pets.price', 'cart_items.quantity')
             ->get();
 
         if ($cartItems->isEmpty()) {

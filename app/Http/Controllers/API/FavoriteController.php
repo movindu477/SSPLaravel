@@ -42,7 +42,7 @@ class FavoriteController extends Controller
         }
 
         $request->validate([
-            'pet_id' => 'required|integer|exists:Pets,id'
+            'pet_id' => 'required|integer|exists:pets,id'
         ]);
 
         DB::table('favorites')->updateOrInsert(
