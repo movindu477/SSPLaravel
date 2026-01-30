@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Pets table
-        if (!Schema::hasTable('Pets')) {
-            Schema::create('Pets', function (Blueprint $table) {
+        // 1. Pets table
+        if (!Schema::hasTable('pets')) {
+            Schema::create('pets', function (Blueprint $table) {
                 $table->id();
                 $table->string('pet_type', 50);
                 $table->string('accessories_type', 50);
@@ -31,7 +32,7 @@ return new class extends Migration
             Schema::create('favorites', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-                $table->foreignId('pet_id')->constrained('Pets')->onDelete('cascade'); // Assumes Pets table exists from above
+                $table->foreignId('pet_id')->constrained('pets')->onDelete('cascade'); // Assumes pets table exists from above
                 $table->timestamps();
             });
         }
@@ -50,7 +51,7 @@ return new class extends Migration
             Schema::create('cart_items', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('cart_id')->constrained('cart')->onDelete('cascade');
-                $table->foreignId('pet_id')->constrained('Pets')->onDelete('cascade');
+                $table->foreignId('pet_id')->constrained('pets')->onDelete('cascade');
                 $table->integer('quantity')->default(1);
                 $table->timestamps();
                 
@@ -86,7 +87,7 @@ return new class extends Migration
             Schema::create('order_items', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-                $table->foreignId('pet_id')->constrained('Pets')->onDelete('cascade');
+                $table->foreignId('pet_id')->constrained('pets')->onDelete('cascade');
                 $table->integer('quantity');
                 $table->decimal('price', 10, 2);
                 $table->timestamps();
@@ -104,6 +105,6 @@ return new class extends Migration
         Schema::dropIfExists('cart_items');
         Schema::dropIfExists('cart');
         Schema::dropIfExists('favorites');
-        Schema::dropIfExists('Pets');
+        Schema::dropIfExists('pets');
     }
 };

@@ -32,18 +32,18 @@ class CartManager extends Component
         $cart = DB::table('cart')->where('user_id', $user->id)->first();
         
         if ($cart) {
-             $this->cartItems = DB::table('cart_items')
-                ->join('Pets', 'cart_items.pet_id', '=', 'Pets.id')
+            $this->cartItems = DB::table('cart_items')
+                ->join('pets', 'cart_items.pet_id', '=', 'pets.id')
                 ->where('cart_items.cart_id', $cart->id)
                 ->select(
                     'cart_items.id as item_id',
                     'cart_items.quantity',
-                    'Pets.id as pet_id',
-                    'Pets.product_name',
-                    'Pets.pet_type',
-                    'Pets.accessories_type',
-                    'Pets.price',
-                    'Pets.image_url'
+                    'pets.id as pet_id',
+                    'pets.product_name',
+                    'pets.pet_type',
+                    'pets.accessories_type',
+                    'pets.price',
+                    'pets.image_url'
                 )
                 ->get()
                 ->map(function($item) {

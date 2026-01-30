@@ -7,7 +7,7 @@ use App\Models\Favorite;
 
 class Pet extends Model
 {
-    protected $table = 'Pets';
+    protected $table = 'pets';
 
     protected $primaryKey = 'id';
 
