@@ -13,7 +13,13 @@ class StripeController extends Controller
 {
     public function createCheckoutSession(Request $request)
     {
-        Stripe::setApiKey(config('services.stripe.secret'));
+        $secretKey = config('services.stripe.secret');
+        if (!$secretKey) {
+            return response()->json([
+                'error' => 'Stripe API key is not configured in environment variables.'
+            ], 500);
+        }
+        Stripe::setApiKey($secretKey);
 
         $user = auth()->user();
 
@@ -102,7 +108,13 @@ class StripeController extends Controller
 
     public function createCheckoutSessionAPI(Request $request)
     {
-        Stripe::setApiKey(config('services.stripe.secret'));
+        $secretKey = config('services.stripe.secret');
+        if (!$secretKey) {
+            return response()->json([
+                'error' => 'Stripe API key is not configured in environment variables.'
+            ], 500);
+        }
+        Stripe::setApiKey($secretKey);
 
         $user = $request->user();
 
