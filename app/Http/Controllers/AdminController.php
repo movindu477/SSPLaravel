@@ -149,7 +149,7 @@ class AdminController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'email' => 'required|email|max:100|unique:[User],email',
+            'email' => 'required|email|max:100|unique:users,email',
             'phonenumber' => 'required|string|max:15',
             'address' => 'required|string|max:255',
             'password' => 'required|string|min:6',
@@ -186,7 +186,7 @@ class AdminController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'email' => 'required|email|max:100|unique:[User],email,' . (int)$id,
+            'email' => 'required|email|max:100|unique:users,email,' . (int)$id,
             'phonenumber' => 'required|string|max:15',
             'address' => 'required|string|max:255',
             'password' => 'nullable|string|min:6',
