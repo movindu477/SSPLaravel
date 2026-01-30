@@ -11,6 +11,11 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'status',
+        'shipping_address',
+        'shipping_city',
+        'shipping_phone',
+        'payment_method',
+        'total',
     ];
 
     public function items()

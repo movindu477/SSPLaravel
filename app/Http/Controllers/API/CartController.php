@@ -5,9 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
+    /**
+     * GET /api/cart
+     */
     public function index(Request $request)
     {
         $userId = $request->user()->id;
@@ -15,38 +19,60 @@ class CartController extends Controller
         $cart = DB::table('cart')->where('user_id', $userId)->first();
 
         if (!$cart) {
-            return response()->json([], 200);
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'items' => [],
+                    'subtotal' => 0,
+                    'total' => 0
+                ]
+            ], 200);
         }
 
         $items = DB::table('cart_items')
             ->join('pets', 'cart_items.pet_id', '=', 'pets.id')
             ->where('cart_items.cart_id', $cart->id)
-            ->select(
-                'pets.id as pet_id',
-                'pets.product_name',
-                'pets.price',
-                'pets.image_url',
-                'pets.pet_type',
-                'pets.accessories_type',
-                'cart_items.quantity'
-            )
-            ->get();
+            ->select('pets.*', 'cart_items.quantity', 'cart_items.id as item_id')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'pet_id' => $item->id,
+                    'product_name' => $item->product_name,
+                    'price' => (float) $item->price,
+                    'quantity' => $item->quantity,
+                    'image_url' => asset($item->image_url),
+                    'subtotal' => (float) ($item->price * $item->quantity)
+                ];
+            });
+
+        $subtotal = $items->sum('subtotal');
 
         return response()->json([
             'success' => true,
-            'data' => $items
-        ]);
+            'data' => [
+                'items' => $items,
+                'subtotal' => (float) $subtotal,
+                'total' => (float) $subtotal // Assuming no tax/shipping for simple calculation
+            ]
+        ], 200);
     }
 
-    public function store(Request $request)
+    /**
+     * POST /api/cart/add
+     */
+    public function add(Request $request)
     {
-        $request->validate([
-            'pet_id' => 'required|integer|exists:pets,id'
+        $validator = Validator::make($request->all(), [
+            'pet_id' => 'required|exists:pets,id',
+            'quantity' => 'required|integer|min:1'
         ]);
 
-        $userId = $request->user()->id;
-        $petId = $request->pet_id;
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
 
+        $userId = $request->user()->id;
+        
         $cart = DB::table('cart')->where('user_id', $userId)->first();
 
         if (!$cart) {
@@ -61,77 +87,52 @@ class CartController extends Controller
 
         $item = DB::table('cart_items')
             ->where('cart_id', $cartId)
-            ->where('pet_id', $petId)
+            ->where('pet_id', $request->pet_id)
             ->first();
 
         if ($item) {
             DB::table('cart_items')
                 ->where('id', $item->id)
                 ->update([
-                    'quantity' => $item->quantity + 1,
+                    'quantity' => $item->quantity + $request->quantity,
                     'updated_at' => now(),
                 ]);
         } else {
             DB::table('cart_items')->insert([
                 'cart_id' => $cartId,
-                'pet_id' => $petId,
-                'quantity' => 1,
+                'pet_id' => $request->pet_id,
+                'quantity' => $request->quantity,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Added to cart'
-        ]);
+        return response()->json(['success' => true, 'message' => 'Added to cart'], 200);
     }
 
-    public function destroy(Request $request, $petId)
+    /**
+     * POST /api/cart/remove
+     */
+    public function remove(Request $request)
     {
-        $userId = $request->user()->id;
+        $validator = Validator::make($request->all(), [
+            'pet_id' => 'required|exists:pets,id'
+        ]);
 
-        $cart = DB::table('cart')->where('user_id', $userId)->first();
-
-        if (!$cart) {
-            return response()->json(['message' => 'Cart not found'], 404);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
 
-        DB::table('cart_items')
-            ->where('cart_id', $cart->id)
-            ->where('pet_id', $petId)
-            ->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Removed from cart'
-        ]);
-    }
-    public function update(Request $request, $petId)
-    {
-        $request->validate([
-            'quantity' => 'required|integer|min:1'
-        ]);
-
         $userId = $request->user()->id;
-
         $cart = DB::table('cart')->where('user_id', $userId)->first();
-        if (!$cart) {
-            return response()->json(['message' => 'Cart not found'], 404);
+
+        if ($cart) {
+            DB::table('cart_items')
+                ->where('cart_id', $cart->id)
+                ->where('pet_id', $request->pet_id)
+                ->delete();
         }
 
-        DB::table('cart_items')
-            ->where('cart_id', $cart->id)
-            ->where('pet_id', $petId)
-            ->update([
-                'quantity' => $request->quantity,
-                'updated_at' => now(),
-            ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Quantity updated'
-        ]);
+        return response()->json(['success' => true, 'message' => 'Removed from cart'], 200);
     }
-
 }

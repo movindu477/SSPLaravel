@@ -2,39 +2,41 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\PetController;
 use App\Http\Controllers\API\FavoriteController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\OrderController;
-use App\Http\Controllers\API\LocationController;
-use Illuminate\Http\Request;
 
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+*/
 
+// 1. Auth Routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{id}', [ProductController::class, 'show']);
+// 2. Public Pet Routes
+Route::get('/pets', [PetController::class, 'index']);
+Route::get('/pets/{id}', [PetController::class, 'show']);
 
+// 3. Protected Routes
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
+    
+    // Auth
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/cart', [CartController::class, 'index']);
-    Route::post('/cart', [CartController::class, 'store']);
-    Route::put('/cart/{petId}', [CartController::class, 'update']);
-    Route::delete('/cart/{petId}', [CartController::class, 'destroy']);
-
-    Route::post('/orders', [OrderController::class, 'store']);
-    Route::get('/orders', [OrderController::class, 'index']);
-
+    // Favorites
     Route::get('/favorites', [FavoriteController::class, 'index']);
-    Route::post('/favorites', [FavoriteController::class, 'store']);
-    Route::delete('/favorites/{petId}', [FavoriteController::class, 'destroy']);
+    Route::post('/favorites/toggle', [FavoriteController::class, 'toggle']);
 
-    Route::post('/payment/checkout', [App\Http\Controllers\StripeController::class, 'createCheckoutSessionAPI']);
+    // Cart
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::post('/cart/add', [CartController::class, 'add']);
+    Route::post('/cart/remove', [CartController::class, 'remove']);
+
+    // Checkout
+    Route::post('/checkout', [OrderController::class, 'checkout']);
+    Route::get('/orders', [OrderController::class, 'index']);
 });
-Route::middleware('auth:sanctum')->post('/location', [LocationController::class, 'store']);
