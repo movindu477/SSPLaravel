@@ -6,6 +6,7 @@ use App\Http\Controllers\API\PetController;
 use App\Http\Controllers\API\FavoriteController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\OrderController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +40,5 @@ Route::middleware('auth:sanctum')->group(function () {
     // Checkout
     Route::post('/checkout', [OrderController::class, 'checkout']);
     Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/create-payment-intent', [PaymentController::class, 'createIntent']);
 });
