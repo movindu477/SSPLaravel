@@ -73,6 +73,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/add', [CartController::class, 'add'])
         ->name('cart.add');
 
+    Route::post('/cart/buy-now', [CartController::class, 'buyNow'])
+        ->name('cart.buy-now');
+
 
 });
 

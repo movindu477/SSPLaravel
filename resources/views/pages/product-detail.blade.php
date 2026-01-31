@@ -154,14 +154,29 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Add to Cart Button -->
-                                <button type="button" id="add-to-cart-btn" 
-                                    class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                    </svg>
-                                    Add to Cart
-                                </button>
+                                <!-- Add to Cart & Buy Now Buttons -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <button type="button" id="add-to-cart-btn" 
+                                        class="w-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-xl font-bold text-lg shadow-sm hover:shadow-md transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                        </svg>
+                                        Add to Cart
+                                    </button>
+
+                                    <form action="{{ route('cart.buy-now') }}" method="POST" id="buy-now-form">
+                                        @csrf
+                                        <input type="hidden" name="pet_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" id="buy-now-quantity" value="1">
+                                        <button type="submit" 
+                                            class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                            </svg>
+                                            Buy Now
+                                        </button>
+                                    </form>
+                                </div>
 
                                 <!-- Additional Info -->
                                 <div class="flex items-center justify-center gap-6 text-sm text-gray-600 pt-4">
@@ -230,6 +245,20 @@
                 currentQuantity = value;
                 this.value = value;
                 decreaseBtn.disabled = value <= 1;
+                
+                // Sync with Buy Now form
+                const buyNowQty = document.getElementById('buy-now-quantity');
+                if (buyNowQty) buyNowQty.value = value;
+            });
+            
+            // Also sync on button clicks
+            decreaseBtn.addEventListener('click', () => {
+                const buyNowQty = document.getElementById('buy-now-quantity');
+                if (buyNowQty) buyNowQty.value = quantityInput.value;
+            });
+            increaseBtn.addEventListener('click', () => {
+                const buyNowQty = document.getElementById('buy-now-quantity');
+                if (buyNowQty) buyNowQty.value = quantityInput.value;
             });
 
             // Show success notification
