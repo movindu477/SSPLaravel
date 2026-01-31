@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->statefulApi();
         
+        // Trust Railway proxies for proper HTTPS detection
+        $middleware->trustProxies(at: '*');
+        
         $middleware->validateCsrfTokens(except: [
             'api/logout',
             'api/cart',
