@@ -17,16 +17,19 @@ class CartManager extends Component
 
     public function mount()
     {
-        $this->cartItems = collect();
-        $this->loadCart();
+        // No need to initialize here if we load in render
     }
 
     public function loadCart()
     {
         $user = Auth::user();
         if (!$user) {
-            $this->cartItems = [];
-            return;
+            return [
+                'items' => [],
+                'subtotal' => 0,
+                'tax' => 0,
+                'total' => 0
+            ];
         }
 
         $cart = DB::table('cart')->where('user_id', $user->id)->first();
@@ -52,42 +55,78 @@ class CartManager extends Component
                 })
                 ->toArray();
             
-            $this->cartItems = $items;
-            $this->subtotal = array_sum(array_column($items, 'subtotal'));
-            $this->tax = $this->subtotal * 0.08; // 8% Tax
-            $this->total = $this->subtotal + $this->tax;
-        } else {
-            $this->cartItems = [];
-            $this->subtotal = 0;
-            $this->tax = 0;
-            $this->total = 0;
+            $subtotal = array_sum(array_column($items, 'subtotal'));
+            $tax = $subtotal * 0.08;
+            $total = $subtotal + $tax;
+
+            return [
+                'cartItems' => $items,
+                'subtotal' => $subtotal,
+                'tax' => $tax,
+                'total' => $total
+            ];
         }
+
+        return [
+            'cartItems' => [],
+            'subtotal' => 0,
+            'tax' => 0,
+            'total' => 0
+        ];
     }
 
     public function updateQuantity($itemId, $change)
     {
-        $item = DB::table('cart_items')->where('id', $itemId)->first();
+        $userId = Auth::id();
+        if (!$userId) return;
+
+        // Verify the item belongs to the user via the cart
+        $item = DB::table('cart_items')
+            ->join('cart', 'cart_items.cart_id', '=', 'cart.id')
+            ->where('cart.user_id', $userId)
+            ->where('cart_items.id', $itemId)
+            ->select('cart_items.*')
+            ->first();
+
         if ($item) {
-            $newQuantity = $item->quantity + $change;
-            if ($newQuantity > 0) {
-                DB::table('cart_items')->where('id', $itemId)->update(['quantity' => $newQuantity]);
-            } else {
+            $newQty = (int)$item->quantity + $change;
+            if ($newQty > 0 && $newQty <= 99) {
+                DB::table('cart_items')->where('id', $itemId)->update(['quantity' => $newQty]);
+            } elseif ($newQty <= 0) {
                 DB::table('cart_items')->where('id', $itemId)->delete();
             }
-            $this->loadCart();
             $this->dispatch('cart-updated');
         }
     }
 
     public function removeItem($itemId)
     {
-        DB::table('cart_items')->where('id', $itemId)->delete();
-        $this->loadCart();
-        $this->dispatch('cart-updated');
+        $userId = Auth::id();
+        if (!$userId) return;
+
+        // Verify ownership
+        $item = DB::table('cart_items')
+            ->join('cart', 'cart_items.cart_id', '=', 'cart.id')
+            ->where('cart.user_id', $userId)
+            ->where('cart_items.id', $itemId)
+            ->select('cart_items.id')
+            ->first();
+
+        if ($item) {
+            DB::table('cart_items')->where('id', $itemId)->delete();
+            $this->dispatch('cart-updated');
+        }
     }
 
     public function render()
     {
-        return view('livewire.cart.cart-manager');
+        $cartData = $this->loadCart();
+        
+        $this->cartItems = $cartData['cartItems'];
+        $this->subtotal = $cartData['subtotal'];
+        $this->tax = $cartData['tax'];
+        $this->total = $cartData['total'];
+
+        return view('livewire.cart.cart-manager', $cartData);
     }
 }
