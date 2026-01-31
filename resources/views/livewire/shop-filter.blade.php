@@ -92,25 +92,6 @@
                     {{ $product->pet_type }}
                   </div>
                 </a>
-
-                <!-- Favorite Button (top-right corner) - Perfectly Round -->
-                <button 
-                    type="button"
-                    class="favorite-btn absolute top-2.5 right-2.5 z-10 w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg hover:scale-110 transition-all duration-200"
-                    data-pet-id="{{ $product->id }}"
-                    data-favorited="{{ in_array($product->id, $favoriteIds) ? '1' : '0' }}"
-                    onclick="event.preventDefault(); event.stopPropagation();"
-                    aria-label="Toggle favorite"
-                >
-                    <svg class="w-4.5 h-4.5"
-                         viewBox="0 0 24 24"
-                         stroke-width="2"
-                         style="{{ in_array($product->id, $favoriteIds) ? 'stroke:#ef4444;fill:#ef4444;' : 'stroke:#6b7280;fill:none;' }}"
-                         aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                </button>
               </div>
               
               <!-- Product Info - Flexible Section with Fixed Bottom -->

@@ -86,13 +86,11 @@
       const petId = btn.dataset.petId;
       const isFav = btn.dataset.favorited === "1";
 
-      const url = isFav 
-        ? `/api/favorites/${petId}` 
-        : `/api/favorites`;
+      const url = `/api/favorites/toggle`;
 
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
       const options = {
-        method: isFav ? "DELETE" : "POST",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
@@ -100,7 +98,7 @@
           "X-Requested-With": "XMLHttpRequest"
         },
         credentials: 'same-origin',
-        body: isFav ? null : JSON.stringify({ pet_id: petId })
+        body: JSON.stringify({ pet_id: petId })
       };
 
       // I'm disabling the button while the request is happening so users don't click it multiple times
@@ -113,13 +111,11 @@
         const data = await res.json();
 
         if (res.ok || res.status === 200 || res.status === 201) {
-          btn.dataset.favorited = isFav ? "0" : "1";
+          const newFavState = data.is_favorited;
+          btn.dataset.favorited = newFavState ? "1" : "0";
 
           if (svg) {
-            // Keep icon visible even if Tailwind classes/styles clash:
-            // - Favorited: filled red
-            // - Not favorited: gray outline
-            if (isFav) {
+            if (!newFavState) {
               svg.setAttribute("style", "stroke:#6b7280;fill:none;");
             } else {
               svg.setAttribute("style", "stroke:#ef4444;fill:#ef4444;");
