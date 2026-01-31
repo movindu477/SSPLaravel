@@ -7,6 +7,7 @@ use App\Http\Controllers\API\FavoriteController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cart/remove', [CartController::class, 'remove']);
 
     // Checkout
-    Route::post('/checkout', [OrderController::class, 'checkout']);
+    Route::post('/checkout', [CheckoutController::class, 'checkout']);
     Route::get('/orders', [OrderController::class, 'index']);
     Route::post('/create-payment-intent', [PaymentController::class, 'createIntent']);
 });

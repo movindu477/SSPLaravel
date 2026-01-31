@@ -36,7 +36,7 @@
         <div id="about-image" class="relative h-[400px] sm:h-[500px] md:h-[600px] w-full md:w-1/2 transform opacity-0 -translate-x-10 scale-95 transition-all duration-1000 ease-out order-1 md:order-1">
           <div class="absolute inset-0 bg-cover bg-center bg-no-repeat rounded-2xl lg:rounded-3xl shadow-2xl overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-tr from-blue-900/20 to-transparent"></div>
-            <img src="{{ asset('images/about1.avif') }}" alt="Our Story" class="w-full h-full object-cover object-right">
+            <img src="{{ asset('images/about1.jpg') }}" alt="Our Story" class="w-full h-full object-cover object-right">
           </div>
         </div>
 
