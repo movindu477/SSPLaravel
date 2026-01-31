@@ -16,27 +16,28 @@ class OrderController extends Controller
      */
     public function checkout(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'payment_method' => 'required|string',
-            'shipping_address' => 'required|string',
-            'shipping_city' => 'required|string',
-            'shipping_phone' => 'required|string',
+        // 1. Validate only the essential payment field
+        $request->validate([
+            'payment_intent_id' => 'required|string',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
         }
 
-        $userId = $request->user()->id;
+        // 2. Auto-fill shipping with fallback logic
+        $shipping_address = $request->shipping_address ?? $user->address ?? 'Not provided';
+        $shipping_city    = $request->shipping_city ?? $user->city ?? 'Not provided';
+        $shipping_phone   = $request->shipping_phone ?? $user->phonenumber ?? '0000000000';
 
-        // Get user's cart
-        $cart = DB::table('cart')->where('user_id', $userId)->first();
-
+        // 3. Get user's cart
+        $cart = DB::table('cart')->where('user_id', $user->id)->first();
         if (!$cart) {
             return response()->json(['success' => false, 'message' => 'Cart not found'], 404);
         }
 
-        // Get items
+        // 4. Get items and calculate total
         $cartItems = DB::table('cart_items')
             ->join('pets', 'cart_items.pet_id', '=', 'pets.id')
             ->where('cart_items.cart_id', $cart->id)
@@ -47,21 +48,27 @@ class OrderController extends Controller
             return response()->json(['success' => false, 'message' => 'Cart is empty'], 400);
         }
 
-        return DB::transaction(function () use ($request, $userId, $cartItems, $cart) {
-            $subtotal = 0;
+        return DB::transaction(function () use ($user, $cartItems, $cart, $shipping_address, $shipping_city, $shipping_phone) {
+            $totalAmount = 0;
             foreach ($cartItems as $item) {
-                $subtotal += ($item->price * $item->quantity);
+                $totalAmount += ($item->price * $item->quantity);
             }
+            
+            // Add tax if needed (keeping it consistent with previous web logic)
+            $tax = $totalAmount * 0.08;
+            $finalTotal = $totalAmount + $tax;
 
-            // Create Order
+            // 5. Create Order
             $order = Order::create([
-                'user_id' => $userId,
-                'status' => 'paid', // Assuming payment happened on mobile
-                'shipping_address' => $request->shipping_address,
-                'shipping_city' => $request->shipping_city,
-                'shipping_phone' => $request->shipping_phone,
-                'payment_method' => $request->payment_method,
-                'total' => $subtotal,
+                'user_id' => $user->id,
+                'status' => 'paid',
+                'shipping_address' => $shipping_address,
+                'shipping_city' => $shipping_city,
+                'shipping_phone' => $shipping_phone,
+                'payment_method' => 'stripe',
+                'subtotal' => $totalAmount,
+                'tax' => $tax,
+                'total' => $finalTotal,
                 'created_at' => now(),
             ]);
 

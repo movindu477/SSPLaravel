@@ -245,8 +245,9 @@ const ORDER_TOKEN = "{{ session('user_token') }}";
 const userData = {
     name: "{{ auth()->user()->name ?? '' }}",
     email: "{{ auth()->user()->email ?? '' }}",
-    phone: "{{ auth()->user()->phone ?? '' }}", // Assuming phone exists on User model
-    address: "{{ auth()->user()->address ?? '' }}" // Assuming address exists on User model
+    phone: "{{ auth()->user()->phonenumber ?? '' }}",
+    address: "{{ auth()->user()->address ?? '' }}",
+    city: "{{ auth()->user()->city ?? '' }}"
 };
 
 // Helper function to format image URL
@@ -281,6 +282,9 @@ function prefillUserData() {
     }
     if (userData.address) {
         document.getElementById('shipping_address').value = userData.address;
+    }
+    if (userData.city) {
+        document.getElementById('shipping_city').value = userData.city;
     }
 }
 
