@@ -25,7 +25,7 @@ class CartManager extends Component
         $user = Auth::user();
         if (!$user) {
             return [
-                'items' => [],
+                'cartItems' => [],
                 'subtotal' => 0,
                 'tax' => 0,
                 'total' => 0
