@@ -29,25 +29,25 @@
         });
     </script>
 @endif
-<div class="min-h-screen bg-gray-50 py-12">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2">Checkout</h1>
-            <div class="flex items-center gap-2 text-gray-600">
-                <span class="bg-blue-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold">1</span>
-                <span class="text-blue-700 font-semibold">Cart</span>
+<div class="min-h-screen bg-gray-50 py-6 sm:py-8 md:py-12">
+    <div class="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+        <div class="mb-6 sm:mb-8">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-2">Checkout</h1>
+            <div class="flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base text-gray-600">
+                <span class="bg-blue-700 text-white rounded-full w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center text-xs sm:text-sm font-semibold">1</span>
+                <span class="text-blue-700 font-semibold text-xs sm:text-base">Cart</span>
                 <span class="text-gray-400">→</span>
-                <span class="bg-blue-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold">2</span>
-                <span class="text-blue-700 font-semibold">Payment</span>
+                <span class="bg-blue-700 text-white rounded-full w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center text-xs sm:text-sm font-semibold">2</span>
+                <span class="text-blue-700 font-semibold text-xs sm:text-base">Payment</span>
                 <span class="text-gray-400">→</span>
-                <span class="bg-gray-300 text-gray-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold">3</span>
-                <span class="text-gray-400">Confirmation</span>
+                <span class="bg-gray-300 text-gray-600 rounded-full w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center text-xs sm:text-sm font-semibold">3</span>
+                <span class="text-gray-400 text-xs sm:text-base">Confirmation</span>
             </div>
         </div>
 
         <form id="payment-form">
             @csrf
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Shipping Address -->
                     <div class="bg-white rounded-lg shadow-md p-6">

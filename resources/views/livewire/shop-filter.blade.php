@@ -67,83 +67,82 @@
   </section>
 
   <!-- Products Section -->
-  <section id="products" class="py-8 sm:py-12 px-4 sm:px-6 bg-gradient-to-b from-gray-50 to-white scroll-mt-20">
+  <section id="products" class="py-6 sm:py-10 px-3 sm:px-4 lg:px-6 bg-gradient-to-b from-gray-50 to-white scroll-mt-20">
     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-8 sm:mb-12">
-        <div class="inline-block mb-4">
-          <span class="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-bold px-6 py-2.5 rounded-full shadow-xl uppercase tracking-wider">Premium Collection</span>
+      <div class="text-center mb-6 sm:mb-10">
+        <div class="inline-block mb-3">
+          <span class="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs sm:text-sm font-bold px-4 sm:px-6 py-2 rounded-full shadow-xl uppercase tracking-wider">Premium Collection</span>
         </div>
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-transparent mb-3 sm:mb-4">Our Products</h2>
-        <p class="text-gray-600 text-base sm:text-lg font-medium max-w-2xl mx-auto">Discover our handpicked collection of premium pet products designed for your furry friends</p>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-transparent mb-2 sm:mb-3">Our Products</h2>
+        <p class="text-gray-600 text-sm sm:text-base font-medium max-w-2xl mx-auto px-4">Discover our handpicked collection of premium pet products designed for your furry friends</p>
       </div>
 
       @if($products->count() > 0)
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
           @foreach($products as $product)
             <div wire:key="product-{{ $product->id }}" class="group bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
-              <!-- Product Image Area - Fixed Height -->
-              <div class="relative h-56 bg-gray-50 overflow-hidden flex-shrink-0">
+              <!-- Product Image Area - Compact Height -->
+              <div class="relative h-36 sm:h-40 md:h-44 bg-gray-50 overflow-hidden flex-shrink-0">
                 <!-- Product Image - Clickable -->
                 <a href="{{ route('product.show', $product->id) }}" class="block relative h-full">
                   <img src="{{ $product->getImageAssetUrl() }}" alt="{{ $product->product_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='{{ asset('images/Petmart.png') }}'">
                   
                   <!-- Pet Type Badge -->
-                  <div class="absolute top-2.5 left-2.5 bg-blue-600 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-sm">
+                  <div class="absolute top-1.5 left-1.5 bg-blue-600 text-white text-[10px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-sm">
                     {{ $product->pet_type }}
                   </div>
                 </a>
               </div>
               
-              <!-- Product Info - Flexible Section with Fixed Bottom -->
-              <div class="flex flex-col flex-1 p-4">
-                <!-- Category Badge - Fixed Height -->
-                <div class="h-6 mb-2 flex items-start">
-                  <span class="inline-block bg-gray-100 text-gray-700 text-xs font-medium px-2.5 py-1 rounded">
+              <!-- Product Info - Compact Section -->
+              <div class="flex flex-col flex-1 p-2 sm:p-3">
+                <!-- Category Badge -->
+                <div class="mb-1.5">
+                  <span class="inline-block bg-gray-100 text-gray-700 text-[10px] sm:text-xs font-medium px-1.5 sm:px-2 py-0.5 rounded">
                     {{ $product->accessories_type }}
                   </span>
                 </div>
 
-                <!-- Product Name - Fixed 2-line Height -->
-                <a href="{{ route('product.show', $product->id) }}" class="block mb-2.5">
-                  <h3 class="text-sm font-semibold text-gray-900 line-clamp-2 leading-tight group-hover:text-blue-600 transition-colors duration-200 h-10">
+                <!-- Product Name - Compact -->
+                <a href="{{ route('product.show', $product->id) }}" class="block mb-1.5 sm:mb-2">
+                  <h3 class="text-xs sm:text-sm font-semibold text-gray-900 line-clamp-2 leading-tight group-hover:text-blue-600 transition-colors duration-200">
                     {{ $product->product_name }}
                   </h3>
                 </a>
                 
-                <!-- Rating - Fixed Height -->
-                <div class="flex items-center gap-1.5 h-5 mb-3">
+                <!-- Rating - Compact -->
+                <div class="flex items-center gap-1 mb-2 sm:mb-2.5">
                   <div class="flex text-amber-400">
                     @for($i = 0; $i < 5; $i++)
-                      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                      <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                       </svg>
                     @endfor
                   </div>
-                  <span class="text-xs text-gray-600 font-medium">4.5</span>
-                  <span class="text-xs text-gray-400">(128)</span>
+                  <span class="text-[10px] sm:text-xs text-gray-600 font-medium">4.5</span>
                 </div>
                 
-                <!-- Price and Button Section - Pushed to Bottom -->
+                <!-- Price and Button Section - Compact -->
                 <div class="mt-auto">
-                  <!-- Price - Fixed Height -->
-                  <div class="h-8 mb-3 flex items-center">
-                    <span class="text-xl font-bold text-gray-900">
+                  <!-- Price -->
+                  <div class="mb-2 flex items-center">
+                    <span class="text-sm sm:text-base md:text-lg font-bold text-gray-900">
                       Rs. {{ number_format((float)$product->price, 2) }}
                     </span>
                   </div>
 
-                  <!-- Buttons Row - Favorite and Add to Cart -->
-                  <div class="flex gap-2">
-                    <!-- Favorite Button - Wider and More Rounded -->
+                  <!-- Buttons Row - Compact -->
+                  <div class="flex gap-1.5 sm:gap-2">
+                    <!-- Favorite Button - Compact -->
                     <button 
                         type="button"
-                        class="favorite-btn flex-shrink-0 w-14 h-11 bg-white border-2 border-gray-300 hover:border-red-400 rounded-xl flex items-center justify-center hover:bg-red-50 transition-all duration-200"
+                        class="favorite-btn flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-gray-300 hover:border-red-400 rounded-lg flex items-center justify-center hover:bg-red-50 transition-all duration-200"
                         data-pet-id="{{ $product->id }}"
                         data-favorited="{{ in_array($product->id, $favoriteIds) ? '1' : '0' }}"
                         onclick="event.preventDefault(); event.stopPropagation();"
                         aria-label="Toggle favorite"
                     >
-                        <svg class="w-5 h-5"
+                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4"
                              viewBox="0 0 24 24"
                              stroke-width="2"
                              style="{{ in_array($product->id, $favoriteIds) ? 'stroke:#ef4444;fill:#ef4444;' : 'stroke:#6b7280;fill:none;' }}"
@@ -153,15 +152,15 @@
                         </svg>
                     </button>
 
-                    <!-- Add to Cart Button - Flexible Width -->
+                    <!-- Add to Cart Button - Compact -->
                     <form action="{{ route('cart.add') }}" method="POST" class="flex-1" onclick="event.stopPropagation()">
                         @csrf
                         <input type="hidden" name="pet_id" value="{{ $product->id }}">
-                        <button type="submit" class="w-full h-11 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-4 rounded-xl text-sm font-semibold shadow-sm hover:shadow-md active:shadow-sm transition-all duration-200 flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button type="submit" class="w-full h-8 sm:h-10 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-2 sm:px-3 rounded-lg text-[10px] sm:text-xs font-semibold shadow-sm hover:shadow-md active:shadow-sm transition-all duration-200 flex items-center justify-center gap-1">
+                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                             </svg>
-                            Add to Cart
+                            <span class="hidden sm:inline">Add</span>
                         </button>
                     </form>
                   </div>

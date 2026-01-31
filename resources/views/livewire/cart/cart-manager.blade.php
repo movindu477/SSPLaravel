@@ -1,4 +1,4 @@
-<div class="bg-gray-50 p-6 rounded-lg min-h-[50vh]">
+<div class="bg-gray-50 p-3 sm:p-4 md:p-6 rounded-lg min-h-[50vh]">
     <h2 class="text-3xl font-bold mb-6 text-gray-800">Your Cart</h2>
 
     @if(count($cartItems) === 0)
