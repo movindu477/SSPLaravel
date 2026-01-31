@@ -13,8 +13,12 @@ class Order extends Model
         'status',
         'shipping_address',
         'shipping_city',
+        'shipping_province',
+        'shipping_zip',
         'shipping_phone',
         'payment_method',
+        'subtotal',
+        'tax',
         'total',
     ];
 

@@ -18,7 +18,20 @@
                 Payment Successful!
             </h2>
             
-            <p class="mt-2 text-sm text-gray-600">
+            @if(isset($order))
+                <div class="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                    <p class="text-blue-700 font-bold">Order #{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</p>
+                    <p class="text-xs text-gray-500 mt-1">Confirmed & Paid via Card</p>
+                </div>
+                
+                <div class="mt-6 text-left border-t border-gray-100 pt-6">
+                    <h4 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-3">Shipping to:</h4>
+                    <p class="text-sm text-gray-600">{{ $order->shipping_address }}</p>
+                    <p class="text-sm text-gray-600">{{ $order->shipping_city }}, {{ $order->shipping_province }} {{ $order->shipping_zip }}</p>
+                </div>
+            @endif
+            
+            <p class="mt-6 text-sm text-gray-600">
                 Thank you for your purchase. Your order has been placed successfully and is being processed.
             </p>
 

@@ -53,50 +53,56 @@
                     <div class="bg-white rounded-lg shadow-md p-6">
                         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Shipping Address</h2>
                         <div class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
-                                    <input type="text" name="first_name" id="first_name" required
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
+                                <!-- Modern Inputs -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="relative group">
+                                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 transition-colors group-focus-within:text-blue-600">First Name</label>
+                                        <input type="text" name="first_name" id="first_name" required placeholder="John"
+                                               class="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition-all duration-300 outline-none shadow-sm">
+                                    </div>
+                                    <div class="relative group">
+                                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 transition-colors group-focus-within:text-blue-600">Last Name</label>
+                                        <input type="text" name="last_name" id="last_name" required placeholder="Doe"
+                                               class="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition-all duration-300 outline-none shadow-sm">
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
-                                    <input type="text" name="last_name" id="last_name" required
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="relative group">
+                                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 transition-colors group-focus-within:text-blue-600">Email Address</label>
+                                        <input type="email" name="email" id="email" required placeholder="john@example.com"
+                                               class="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition-all duration-300 outline-none shadow-sm">
+                                    </div>
+                                    <div class="relative group">
+                                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 transition-colors group-focus-within:text-blue-600">Phone Number</label>
+                                        <input type="tel" name="shipping_phone" id="shipping_phone" required placeholder="+1 (555) 000-0000"
+                                               class="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition-all duration-300 outline-none shadow-sm">
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
-                                <input type="email" name="email" id="email" required
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
-                                <input type="tel" name="shipping_phone" id="shipping_phone" required
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
-                                <input type="text" name="shipping_address" id="shipping_address" required
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
-                            </div>
-                            <div class="grid grid-cols-3 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
-                                    <input type="text" name="shipping_city" id="shipping_city" required
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
+
+                                <div class="relative group">
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 transition-colors group-focus-within:text-blue-600">Shipping Address</label>
+                                    <input type="text" name="shipping_address" id="shipping_address" required placeholder="123 Luxury Lane"
+                                           class="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition-all duration-300 outline-none shadow-sm">
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Province *</label>
-                                    <input type="text" name="shipping_province" id="shipping_province" required
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="relative group">
+                                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 transition-colors group-focus-within:text-blue-600">City</label>
+                                        <input type="text" name="shipping_city" id="shipping_city" required placeholder="Colombo"
+                                               class="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition-all duration-300 outline-none shadow-sm">
+                                    </div>
+                                    <div class="relative group">
+                                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 transition-colors group-focus-within:text-blue-600">Province</label>
+                                        <input type="text" name="shipping_province" id="shipping_province" required placeholder="Western"
+                                               class="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition-all duration-300 outline-none shadow-sm">
+                                    </div>
+                                    <div class="relative group">
+                                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 transition-colors group-focus-within:text-blue-600">ZIP Code</label>
+                                        <input type="text" name="shipping_zip" id="shipping_zip" required placeholder="10100"
+                                               class="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition-all duration-300 outline-none shadow-sm">
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code *</label>
-                                    <input type="text" name="shipping_zip" id="shipping_zip" required
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition-all">
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -141,23 +147,23 @@
                         <!-- Cart Items -->
                         <div id="summary-items" class="space-y-4 mb-6 hidden"></div>
 
-                        <!-- Totals -->
-                        <div class="space-y-3 mb-6">
-                            <div class="flex justify-between text-gray-600">
-                                <span>Subtotal</span>
-                                <span id="summary-subtotal">Rs. 0.00</span>
+                        <!-- Totals Section -->
+                        <div class="space-y-4 mb-8 bg-gray-50 rounded-2xl p-6 border border-gray-100 shadow-inner">
+                            <div class="flex justify-between items-center text-gray-500">
+                                <span class="text-sm font-medium">Subtotal</span>
+                                <span id="summary-subtotal" class="font-bold text-gray-800">Rs. 0.00</span>
                             </div>
-                            <div class="flex justify-between text-gray-600">
-                                <span>Shipping</span>
-                                <span class="text-green-600">Free</span>
+                            <div class="flex justify-between items-center text-gray-500">
+                                <span class="text-sm font-medium">Delivery</span>
+                                <span class="text-green-600 font-bold uppercase text-xs tracking-widest">Free</span>
                             </div>
-                            <div class="flex justify-between text-gray-600">
-                                <span>Tax (8%)</span>
-                                <span id="summary-tax">Rs. 0.00</span>
+                            <div class="flex justify-between items-center text-gray-500 pb-4 border-b border-gray-200">
+                                <span class="text-sm font-medium">Service Tax (8%)</span>
+                                <span id="summary-tax" class="font-bold text-gray-800">Rs. 0.00</span>
                             </div>
-                            <div class="pt-4 border-t border-gray-200 flex justify-between text-xl font-bold text-gray-800">
-                                <span>Total</span>
-                                <span class="text-blue-700" id="summary-total">Rs. 0.00</span>
+                            <div class="flex justify-between items-center pt-2">
+                                <span class="text-lg font-extrabold text-gray-900">Amount Due</span>
+                                <span class="text-2xl font-black text-blue-700" id="summary-total">Rs. 0.00</span>
                             </div>
                         </div>
 
@@ -237,10 +243,10 @@
 <script>
 const ORDER_TOKEN = "{{ session('user_token') }}";
 const userData = {
-    name: "{{ session('user_name', '') }}",
-    email: "{{ session('user_email', '') }}",
-    phone: "{{ session('user_phone', '') }}",
-    address: "{{ session('user_address', '') }}"
+    name: "{{ auth()->user()->name ?? '' }}",
+    email: "{{ auth()->user()->email ?? '' }}",
+    phone: "{{ auth()->user()->phone ?? '' }}", // Assuming phone exists on User model
+    address: "{{ auth()->user()->address ?? '' }}" // Assuming address exists on User model
 };
 
 // Helper function to format image URL
@@ -482,15 +488,26 @@ document.getElementById('payment-form').addEventListener('submit', async functio
     submitBtn.textContent = 'Processing...';
 
     const formData = new FormData(this);
-    
-    // Validate required fields
-    const email = formData.get('email');
-    if (!email || !email.includes('@')) {
-        showErrorModal("Please enter a valid email address");
+
+    // Basic Validation
+    if (!formData.get('email') || !formData.get('email').includes('@')) {
+        showErrorModal("Please enter a valid email address.");
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Complete Order';
+        submitBtn.textContent = 'Proceed to Payment';
         return;
     }
+
+    // Prepare all shipping data from form
+    const shippingData = {
+        first_name: formData.get('first_name'),
+        last_name: formData.get('last_name'),
+        email: formData.get('email'),
+        shipping_phone: formData.get('shipping_phone'),
+        shipping_address: formData.get('shipping_address'),
+        shipping_city: formData.get('shipping_city'),
+        shipping_province: formData.get('shipping_province'),
+        shipping_zip: formData.get('shipping_zip')
+    };
 
     // Create Stripe checkout session
     try {
@@ -503,15 +520,18 @@ document.getElementById('payment-form').addEventListener('submit', async functio
                 "Accept": "application/json",
                 "X-CSRF-TOKEN": csrfToken || ""
             },
-            body: JSON.stringify({ email: email })
+            body: JSON.stringify(shippingData)
         });
 
         const data = await res.json();
-        console.log("Stripe Response:", data);
-
+        
         if (res.ok && data.url) {
-            // Redirect to Stripe Checkout
-            window.location.href = data.url;
+            // Success animation before redirect
+            submitBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-3 inline" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Redirecting to Secure Payment...';
+            
+            setTimeout(() => {
+                window.location.href = data.url;
+            }, 800);
         } else {
             const errorMessage = data.error || data.message || "Failed to create checkout session. Please try again.";
             console.error("Stripe API Error:", data);

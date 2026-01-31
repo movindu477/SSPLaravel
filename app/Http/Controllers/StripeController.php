@@ -39,6 +39,19 @@ class StripeController extends Controller
             return redirect()->route('cart')->with('error', 'Your cart is empty.');
         }
 
+        // Store shipping details in session for recovery on success
+        session([
+            'checkout_shipping' => [
+                'address' => $request->shipping_address,
+                'city' => $request->shipping_city,
+                'province' => $request->shipping_province,
+                'zip' => $request->shipping_zip,
+                'phone' => $request->shipping_phone,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+            ]
+        ]);
+
         $lineItems = [];
         foreach ($cartItems as $item) {
             $lineItems[] = [
@@ -59,6 +72,7 @@ class StripeController extends Controller
             'mode' => 'payment',
             'success_url' => route('payment.success'),
             'cancel_url' => route('payment.cancel'),
+            'customer_email' => $request->email ?? $user->email,
         ]);
 
         if ($request->expectsJson()) {
@@ -71,6 +85,7 @@ class StripeController extends Controller
     public function paymentSuccess()
     {
         $user = auth()->user();
+        $shipping = session('checkout_shipping', []);
 
         // Retrieve user's cart
         $cart = DB::table('cart')->where('user_id', $user->id)->first();
@@ -90,10 +105,23 @@ class StripeController extends Controller
             return redirect('/')->with('error', 'Cart is empty');
         }
 
-        // Create a new paid order
+        $subtotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
+        $tax = $subtotal * 0.08;
+        $total = $subtotal + $tax;
+
+        // Create a new paid order with shipping details
         $order = Order::create([
             'user_id' => $user->id,
             'status' => 'paid',
+            'shipping_address' => $shipping['address'] ?? null,
+            'shipping_city' => $shipping['city'] ?? null,
+            'shipping_province' => $shipping['province'] ?? null,
+            'shipping_zip' => $shipping['zip'] ?? null,
+            'shipping_phone' => $shipping['phone'] ?? null,
+            'payment_method' => 'card',
+            'subtotal' => $subtotal,
+            'tax' => $tax,
+            'total' => $total,
         ]);
 
         // Record order items
@@ -108,8 +136,11 @@ class StripeController extends Controller
 
         // Clear the cart after successful payment
         DB::table('cart_items')->where('cart_id', $cart->id)->delete();
+        
+        // Clear session data
+        session()->forget('checkout_shipping');
 
-        return view('payment-success');
+        return view('payment-success', compact('order'));
     }
 
     public function createCheckoutSessionAPI(Request $request)
