@@ -33,17 +33,33 @@
                         </div>
 
                         <!-- Quantity -->
-                        <div class="flex items-center border border-gray-300 rounded-lg">
-                            <button wire:click="updateQuantity({{ $item['item_id'] }}, -1)" class="px-3 py-1 hover:bg-gray-100 text-gray-600 font-bold">-</button>
-                            <span class="px-3 py-1 border-l border-r border-gray-300 font-bold w-12 text-center text-blue-700 bg-gray-50">{{ $item['quantity'] }}</span>
-                            <button wire:click="updateQuantity({{ $item['item_id'] }}, 1)" class="px-3 py-1 hover:bg-gray-100 text-gray-600 font-bold">+</button>
+                        <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                            <button type="button" 
+                                    wire:click="updateQuantity({{ $item['item_id'] }}, -1)" 
+                                    wire:loading.attr="disabled"
+                                    class="px-4 py-2 hover:bg-gray-100 text-gray-600 font-bold transition-colors disabled:opacity-50">
+                                -
+                            </button>
+                            <span class="px-3 py-2 border-l border-r border-gray-300 font-bold w-12 text-center text-blue-700 bg-gray-50">
+                                {{ $item['quantity'] }}
+                            </span>
+                            <button type="button" 
+                                    wire:click="updateQuantity({{ $item['item_id'] }}, 1)" 
+                                    wire:loading.attr="disabled"
+                                    class="px-4 py-2 hover:bg-gray-100 text-gray-600 font-bold transition-colors disabled:opacity-50">
+                                +
+                            </button>
                         </div>
 
                         <!-- Subtotal & Remove -->
                         <div class="flex flex-col items-end gap-2 w-full sm:w-auto">
                             <span class="font-bold text-gray-800">Rs. {{ number_format($item['subtotal'], 2) }}</span>
-                            <button wire:click="removeItem({{ $item['item_id'] }})" class="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all duration-200" title="Remove Item">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button type="button" 
+                                    wire:click="removeItem({{ $item['item_id'] }})" 
+                                    wire:loading.attr="disabled"
+                                    class="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all duration-200 disabled:opacity-50" 
+                                    title="Remove Item">
+                                <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                 </svg>
                             </button>
