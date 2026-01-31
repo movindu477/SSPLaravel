@@ -5,10 +5,12 @@ namespace App\Livewire;
 use App\Models\Pet;
 use Livewire\Component;
 use Livewire\Attributes\Url;
+use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 
 class ShopFilter extends Component
 {
+    use WithPagination;
     #[Url]
     public $search = '';
 
@@ -23,6 +25,12 @@ class ShopFilter extends Component
 
     #[Url]
     public $max_price = '';
+
+    public function updatedSearch() { $this->resetPage(); }
+    public function updatedPetType() { $this->resetPage(); }
+    public function updatedAccessoriesType() { $this->resetPage(); }
+    public function updatedMinPrice() { $this->resetPage(); }
+    public function updatedMaxPrice() { $this->resetPage(); }
 
     public function getProductsProperty()
     {

@@ -80,7 +80,7 @@
       @if($products->count() > 0)
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           @foreach($products as $product)
-            <div class="group bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+            <div wire:key="product-{{ $product->id }}" class="group bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
               <!-- Product Image Area - Fixed Height -->
               <div class="relative h-56 bg-gray-50 overflow-hidden flex-shrink-0">
                 <!-- Product Image - Clickable -->
