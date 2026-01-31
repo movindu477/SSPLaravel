@@ -25,14 +25,14 @@ class CartManager extends Component
     {
         $user = Auth::user();
         if (!$user) {
-            $this->cartItems = collect();
+            $this->cartItems = [];
             return;
         }
 
         $cart = DB::table('cart')->where('user_id', $user->id)->first();
         
         if ($cart) {
-            $this->cartItems = DB::table('cart_items')
+            $items = DB::table('cart_items')
                 ->join('pets', 'cart_items.pet_id', '=', 'pets.id')
                 ->where('cart_items.cart_id', $cart->id)
                 ->select(
@@ -47,15 +47,17 @@ class CartManager extends Component
                 )
                 ->get()
                 ->map(function($item) {
-                    $item->subtotal = $item->price * $item->quantity;
-                    return $item;
-                });
+                    $item->subtotal = (float)$item->price * $item->quantity;
+                    return (array)$item;
+                })
+                ->toArray();
             
-            $this->subtotal = $this->cartItems->sum('subtotal');
+            $this->cartItems = $items;
+            $this->subtotal = array_sum(array_column($items, 'subtotal'));
             $this->tax = $this->subtotal * 0.08; // 8% Tax
             $this->total = $this->subtotal + $this->tax;
         } else {
-            $this->cartItems = collect();
+            $this->cartItems = [];
             $this->subtotal = 0;
             $this->tax = 0;
             $this->total = 0;
