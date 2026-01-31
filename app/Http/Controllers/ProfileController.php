@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -36,8 +37,15 @@ class ProfileController extends Controller
             return redirect()->route('admin.profile');
         }
 
+        $favorites = DB::table('favorites')
+            ->join('pets', 'favorites.pet_id', '=', 'pets.id')
+            ->where('favorites.user_id', $user->id)
+            ->select('pets.*')
+            ->get();
+
         return view('pages.profile', [
-            'user' => $user
+            'user' => $user,
+            'favorites' => $favorites
         ]);
     }
 }

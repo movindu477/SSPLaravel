@@ -133,6 +133,52 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Favorites Section -->
+                <div class="bg-white rounded-lg border border-gray-200 p-6 mt-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">My Favorites</h2>
+                        <a href="{{ route('shop') }}" class="text-cyan-600 hover:text-cyan-700 font-semibold text-sm">View Shop</a>
+                    </div>
+
+                    @if($favorites->count() > 0)
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            @foreach($favorites as $favorite)
+                                <div class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden group">
+                                    <div class="relative h-48 overflow-hidden">
+                                        <img src="{{ Str::startsWith($favorite->image_url, ['http', '/']) ? $favorite->image_url : asset($favorite->image_url) }}" 
+                                             alt="{{ $favorite->product_name }}" 
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                             onerror="this.src='{{ asset('images/Petmart.png') }}'">
+                                        <div class="absolute top-3 right-3">
+                                            <span class="bg-white/90 backdrop-blur-sm text-cyan-700 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                                                {{ $favorite->pet_type }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <h3 class="font-bold text-gray-900 mb-1 truncate">{{ $favorite->product_name }}</h3>
+                                        <p class="text-sm text-gray-500 mb-3">{{ $favorite->accessories_type }}</p>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-lg font-bold text-cyan-600">Rs. {{ number_format($favorite->price, 2) }}</span>
+                                            <a href="{{ route('product.show', $favorite->id) }}" class="text-sm font-semibold text-gray-700 hover:text-cyan-600 transition-colors">
+                                                Details →
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            <p class="text-gray-500 font-medium">You haven't favorited anything yet.</p>
+                            <a href="{{ route('shop') }}" class="mt-4 inline-block text-cyan-600 font-bold hover:underline">Start Exploring</a>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
