@@ -78,84 +78,95 @@
       </div>
 
       @if($products->count() > 0)
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           @foreach($products as $product)
-            <div wire:key="product-{{ $product->id }}" class="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
-              <!-- Product Image - Full Card -->
-              <a href="{{ route('product.show', $product->id) }}" class="block relative aspect-square overflow-hidden bg-gray-100">
-                <img src="{{ $product->getImageAssetUrl() }}" 
-                     alt="{{ $product->product_name }}" 
-                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                     onerror="this.src='{{ asset('images/Petmart.png') }}'">
-                
-                <!-- Gradient Overlay on Hover -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                <!-- Fixed Favorite Icon - Top Right -->
-                <button 
-                    type="button"
-                    class="favorite-btn absolute top-2 right-2 z-20 w-9 h-9 sm:w-10 sm:h-10 bg-white/90 backdrop-blur-sm border border-gray-200 hover:border-red-400 rounded-full flex items-center justify-center hover:bg-white shadow-lg transition-all duration-300 hover:scale-110"
-                    data-pet-id="{{ $product->id }}"
-                    data-favorited="{{ in_array($product->id, $favoriteIds) ? '1' : '0' }}"
-                    onclick="event.preventDefault(); event.stopPropagation();"
-                    aria-label="Toggle favorite"
-                >
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5"
-                         viewBox="0 0 24 24"
-                         stroke-width="2"
-                         style="{{ in_array($product->id, $favoriteIds) ? 'stroke:#ef4444;fill:#ef4444;' : 'stroke:#6b7280;fill:none;' }}"
-                         aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                </button>
-
-                <!-- Pet Type Badge - Top Left -->
-                <div class="absolute top-2 left-2 bg-blue-600/90 backdrop-blur-sm text-white text-[10px] sm:text-xs font-bold px-2 sm:px-2.5 py-1 rounded-full shadow-lg">
-                  {{ $product->pet_type }}
+            <div wire:key="product-{{ $product->id }}" class="group bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+              <!-- Product Image Area - Fixed Height -->
+              <div class="relative h-56 bg-gray-50 overflow-hidden flex-shrink-0">
+                <!-- Product Image - Clickable -->
+                <a href="{{ route('product.show', $product->id) }}" class="block relative h-full">
+                  <img src="{{ $product->getImageAssetUrl() }}" alt="{{ $product->product_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='{{ asset('images/Petmart.png') }}'">
+                  
+                  <!-- Pet Type Badge -->
+                  <div class="absolute top-2.5 left-2.5 bg-blue-600 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-sm">
+                    {{ $product->pet_type }}
+                  </div>
+                </a>
+              </div>
+              
+              <!-- Product Info - Flexible Section with Fixed Bottom -->
+              <div class="flex flex-col flex-1 p-4">
+                <!-- Category Badge - Fixed Height -->
+                <div class="h-6 mb-2 flex items-start">
+                  <span class="inline-block bg-gray-100 text-gray-700 text-xs font-medium px-2.5 py-1 rounded">
+                    {{ $product->accessories_type }}
+                  </span>
                 </div>
 
-                <!-- Hover Details Overlay - Bottom -->
-                <div class="absolute inset-x-0 bottom-0 p-3 sm:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                  <!-- Product Name -->
-                  <h3 class="text-white font-bold text-sm sm:text-base mb-1 sm:mb-2 line-clamp-2 drop-shadow-lg">
+                <!-- Product Name - Fixed 2-line Height -->
+                <a href="{{ route('product.show', $product->id) }}" class="block mb-2.5">
+                  <h3 class="text-sm font-semibold text-gray-900 line-clamp-2 leading-tight group-hover:text-blue-600 transition-colors duration-200 h-10">
                     {{ $product->product_name }}
                   </h3>
-                  
-                  <!-- Category Badge -->
-                  <div class="mb-2 sm:mb-3">
-                    <span class="inline-block bg-white/20 backdrop-blur-sm text-white text-[10px] sm:text-xs font-medium px-2 py-0.5 rounded-full border border-white/30">
-                      {{ $product->accessories_type }}
-                    </span>
-                  </div>
-
-                  <!-- Price and Rating -->
-                  <div class="flex items-center justify-between mb-2 sm:mb-3">
-                    <span class="text-white font-bold text-base sm:text-xl drop-shadow-lg">
-                      Rs. {{ number_format((float)$product->price, 2) }}
-                    </span>
-                    <div class="flex items-center gap-1">
-                      <svg class="w-3 h-3 sm:w-4 sm:h-4 text-amber-400 drop-shadow" fill="currentColor" viewBox="0 0 20 20">
+                </a>
+                
+                <!-- Rating - Fixed Height -->
+                <div class="flex items-center gap-1.5 h-5 mb-3">
+                  <div class="flex text-amber-400">
+                    @for($i = 0; $i < 5; $i++)
+                      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                       </svg>
-                      <span class="text-white text-xs sm:text-sm font-medium drop-shadow">4.5</span>
-                    </div>
+                    @endfor
+                  </div>
+                  <span class="text-xs text-gray-600 font-medium">4.5</span>
+                  <span class="text-xs text-gray-400">(128)</span>
+                </div>
+                
+                <!-- Price and Button Section - Pushed to Bottom -->
+                <div class="mt-auto">
+                  <!-- Price - Fixed Height -->
+                  <div class="h-8 mb-3 flex items-center">
+                    <span class="text-xl font-bold text-gray-900">
+                      Rs. {{ number_format((float)$product->price, 2) }}
+                    </span>
                   </div>
 
-                  <!-- Add to Cart Button -->
-                  <form action="{{ route('cart.add') }}" method="POST" onclick="event.stopPropagation()">
-                    @csrf
-                    <input type="hidden" name="pet_id" value="{{ $product->id }}">
-                    <button type="submit" class="w-full bg-white hover:bg-blue-600 text-blue-600 hover:text-white font-bold py-2 sm:py-2.5 px-3 rounded-lg text-xs sm:text-sm shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
-                      <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                      </svg>
-                      <span class="hidden sm:inline">Add to Cart</span>
-                      <span class="sm:hidden">Add</span>
+                  <!-- Buttons Row - Favorite and Add to Cart -->
+                  <div class="flex gap-2">
+                    <!-- Favorite Button - Wider and More Rounded -->
+                    <button 
+                        type="button"
+                        class="favorite-btn flex-shrink-0 w-14 h-11 bg-white border-2 border-gray-300 hover:border-red-400 rounded-xl flex items-center justify-center hover:bg-red-50 transition-all duration-200"
+                        data-pet-id="{{ $product->id }}"
+                        data-favorited="{{ in_array($product->id, $favoriteIds) ? '1' : '0' }}"
+                        onclick="event.preventDefault(); event.stopPropagation();"
+                        aria-label="Toggle favorite"
+                    >
+                        <svg class="w-5 h-5"
+                             viewBox="0 0 24 24"
+                             stroke-width="2"
+                             style="{{ in_array($product->id, $favoriteIds) ? 'stroke:#ef4444;fill:#ef4444;' : 'stroke:#6b7280;fill:none;' }}"
+                             aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
                     </button>
-                  </form>
+
+                    <!-- Add to Cart Button - Flexible Width -->
+                    <form action="{{ route('cart.add') }}" method="POST" class="flex-1" onclick="event.stopPropagation()">
+                        @csrf
+                        <input type="hidden" name="pet_id" value="{{ $product->id }}">
+                        <button type="submit" class="w-full h-11 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-4 rounded-xl text-sm font-semibold shadow-sm hover:shadow-md active:shadow-sm transition-all duration-200 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                            </svg>
+                            Add to Cart
+                        </button>
+                    </form>
+                  </div>
                 </div>
-              </a>
+              </div>
             </div>
           @endforeach
         </div>
