@@ -15,27 +15,31 @@ class StripeController extends Controller
     {
         $secretKey = config('services.stripe.secret');
         if (!$secretKey) {
-            return response()->json([
-                'error' => 'Stripe API key is not configured in environment variables.'
-            ], 500);
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Stripe API key not configured'], 500);
+            }
+            return back()->with('error', 'Stripe API key is not configured.');
         }
+        
         Stripe::setApiKey($secretKey);
-
         $user = auth()->user();
 
-        // Join cart items with Pets to get product details
+        // Join cart items with Pets
         $cartItems = DB::table('cart_items')
             ->join('pets', 'cart_items.pet_id', '=', 'pets.id')
-            ->where('cart_items.cart_id', function ($q) use ($user) {
-                // Ensure we get the cart ID for the user
-                $q->select('id')->from('cart')->where('user_id', $user->id);
-            })
-            ->select('pets.product_name as name', 'pets.price', 'cart_items.quantity') // Assuming product_name used in table
+            ->join('cart', 'cart_items.cart_id', '=', 'cart.id')
+            ->where('cart.user_id', $user->id)
+            ->select('pets.product_name as name', 'pets.price', 'cart_items.quantity')
             ->get();
 
+        if ($cartItems->isEmpty()) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Cart is empty'], 400);
+            }
+            return redirect()->route('cart')->with('error', 'Your cart is empty.');
+        }
 
         $lineItems = [];
-
         foreach ($cartItems as $item) {
             $lineItems[] = [
                 'price_data' => [
@@ -43,7 +47,7 @@ class StripeController extends Controller
                     'product_data' => [
                         'name' => $item->name,
                     ],
-                    'unit_amount' => $item->price * 100, // Stripe expects amount in cents
+                    'unit_amount' => (int)($item->price * 100),
                 ],
                 'quantity' => $item->quantity,
             ];
@@ -57,9 +61,11 @@ class StripeController extends Controller
             'cancel_url' => route('payment.cancel'),
         ]);
 
-        return response()->json([
-            'url' => $session->url
-        ]);
+        if ($request->expectsJson()) {
+            return response()->json(['url' => $session->url]);
+        }
+
+        return redirect()->away($session->url);
     }
 
     public function paymentSuccess()
