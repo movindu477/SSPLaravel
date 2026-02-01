@@ -41,23 +41,53 @@
 
 <div class="bg-gray-50">
   <!-- Hero Section -->
-  <section class="relative h-screen flex items-center pt-16">
-    <img src="{{ asset('images/shop1.jpg') }}" alt="PetMart" class="absolute inset-0 w-full h-full object-cover">
-    <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-    <div class="relative z-10 flex items-center h-full px-4 sm:px-6 md:px-20">
-      <div class="max-w-xl text-left transform opacity-0 -translate-x-10 transition-all duration-1000 ease-out" id="hero-content">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold text-white mb-4 sm:mb-6 drop-shadow-lg leading-tight">
-          Shop Pet Products
-        </h1>
-        <p class="text-sm sm:text-base md:text-lg lg:text-xl text-gray-100 leading-relaxed drop-shadow-md">
-          Discover our wide range of premium pet food, toys, and accessories. Find everything your pet needs in one convenient place.
-        </p>
+  <!-- Hero Section -->
+  <section class="relative pt-10 lg:pt-20 pb-0 overflow-hidden bg-white" style="position: relative; top: 0px; left: 0px; bottom: 50px; right: 0px;">
+    <!-- Decorative Yellow Shape -->
+    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 lg:opacity-40 animate-blob pointer-events-none hidden md:block"></div>
+    <div class="absolute bottom-0 right-10 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 pointer-events-none hidden md:block"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+      <div class="flex flex-col md:flex-row items-end justify-between gap-8 lg:gap-16">
+        
+        <!-- Text Content (Vertically Centered) -->
+        <div class="w-full md:w-1/2 text-center md:text-left order-2 md:order-1 self-center pb-8 md:pb-12" style="position: relative; top: -90px; left: 0px; right: 0px; bottom: 0px;">
+          <div class="inline-block mb-3">
+               <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Premium Selection</span>
+          </div>
+          <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-gray-900 leading-tight mb-4">
+            Quality <br>
+            <span class="text-blue-600">Pet Products</span>
+          </h1>
+          <p class="text-lg text-gray-600 mb-6 leading-relaxed max-w-lg mx-auto md:mx-0">
+            Discover our wide range of premium pet food, toys, and accessories. Find everything your pet needs in one convenient place.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-8 md:mb-0">
+            <a href="#shop-filter" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-center min-w-[160px] transform hover:-translate-y-1">
+              Start Shopping
+            </a>
+          </div>
+        </div>
+
+        <!-- Image Content (Bottom Aligned) -->
+        <div class="w-full md:w-1/2 relative order-1 md:order-2 flex justify-center md:justify-end items-end" style="position: relative; top: 0px; left: 0px; right: 0px; bottom: 0px;">
+          <!-- Abstract Background for Image -->
+          <svg class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] z-0" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#2563eb" d="M44.7,-76.4C58.9,-69.2,71.8,-59.1,81.6,-46.6C91.4,-34.1,98.1,-19.2,95.8,-4.9C93.5,9.4,82.2,23.1,70.8,34.3C59.4,45.5,47.9,54.2,35.6,63.2C23.3,72.2,10.2,81.5,-1.9,84.8C-14,88.1,-26.1,85.4,-37.2,78.2C-48.3,71,-58.4,59.3,-67.4,46.7C-76.4,34.1,-84.3,20.6,-86.3,6.2C-88.3,-8.2,-84.4,-23.5,-75.4,-36.2C-66.4,-48.9,-52.3,-59,-38.7,-66.4C-25.1,-73.8,-11.9,-78.5,2.3,-82.5C16.5,-86.5,30.5,-101,44.7,-76.4Z" transform="translate(100 100) scale(1.1)" opacity="0.15" />
+          </svg>
+          
+          <img src="{{ asset('images/shop.png') }}" alt="Shop PetMart" class="relative z-10 w-full max-w-sm md:max-w-md lg:max-w-xl object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500 top-10 md:-top-[150px]" style="position: relative; left: 0px; right: 0px; bottom: 0px; -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%); mask-image: linear-gradient(to bottom, black 80%, transparent 100%);">
+        </div>
+
       </div>
     </div>
   </section>
 
   <!-- Livewire Shop Filter Component -->
-  @livewire('shop-filter')
+  <div id="shop-filter" class="scroll-mt-24">
+    @livewire('shop-filter')
+  </div>
 
   <script>
     const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
@@ -86,48 +116,64 @@
       const petId = btn.dataset.petId;
       const isFav = btn.dataset.favorited === "1";
 
-      const url = `/api/favorites/toggle`;
-
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+      
+      let url, method, body;
+
+      if (isFav) {
+          // Remove from favorites: DELETE /api/favorites/{pet_id}
+          url = `/api/favorites/${petId}`;
+          method = 'DELETE';
+      } else {
+          // Add to favorites: POST /api/favorites
+          url = `/api/favorites`;
+          method = 'POST';
+          body = JSON.stringify({ pet_id: petId });
+      }
+
       const options = {
-        method: "POST",
+        method: method,
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
           "X-CSRF-TOKEN": csrfToken || "",
           "X-Requested-With": "XMLHttpRequest"
         },
-        credentials: 'same-origin',
-        body: JSON.stringify({ pet_id: petId })
+        credentials: 'same-origin'
       };
 
-      // I'm disabling the button while the request is happening so users don't click it multiple times
+      if (body) {
+          options.body = body;
+      }
+
+      // Disable button
       btn.disabled = true;
       const svg = btn.querySelector('svg');
       if (svg) svg.classList.add('opacity-50');
 
       try {
-        const res = await fetch(url, options);
-        const data = await res.json();
-
-        if (res.ok || res.status === 200 || res.status === 201) {
-          const newFavState = data.is_favorited;
-          btn.dataset.favorited = newFavState ? "1" : "0";
-
+        const response = await fetch(url, options);
+        
+        if (response.ok) {
+          const newStatus = isFav ? "0" : "1";
+          btn.setAttribute('data-favorited', newStatus);
+          
           if (svg) {
-            if (!newFavState) {
-              svg.setAttribute("style", "stroke:#6b7280;fill:none;");
+            if (newStatus === "1") {
+              svg.style.stroke = "#ef4444";
+              svg.style.fill = "#ef4444";
             } else {
-              svg.setAttribute("style", "stroke:#ef4444;fill:#ef4444;");
+              svg.style.stroke = "#6b7280";
+              svg.style.fill = "none";
             }
           }
         } else {
-          console.error("Error:", data);
-          alert("Failed to update favorite: " + (data.message || "Unknown error"));
+            console.error('Favorite action failed', response.status);
+            alert("Something went wrong. Please try again.");
         }
       } catch (error) {
-        console.error("Fetch error:", error);
-        alert("Network error. Please try again.");
+        console.error("Error toggling favorite:", error);
+        alert("Network error.");
       } finally {
         btn.disabled = false;
         if (svg) svg.classList.remove('opacity-50');
@@ -234,6 +280,12 @@
             e.preventDefault();
             e.stopPropagation();
             
+            if (!isAuthenticated) {
+                alert("Please login first");
+                window.location.href = "{{ route('login') }}";
+                return;
+            }
+            
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
             
@@ -256,6 +308,11 @@
                 credentials: 'same-origin'
               });
               
+              if (response.redirected) {
+                  window.location.href = response.url;
+                  return;
+              }
+
               const data = await response.json();
               
               if (response.ok && data.success) {
@@ -266,7 +323,7 @@
               }
             } catch (error) {
               console.error('Add to cart error:', error);
-              alert('Error adding to cart. Please try again.');
+              alert('Error adding to cart. Please ensure you are logged in.');
             } finally {
               submitBtn.disabled = false;
               submitBtn.textContent = originalText;
@@ -283,6 +340,20 @@
       // Need to re-setup after Livewire changes the product list
       document.addEventListener('livewire:load', initAddToCartForms);
       document.addEventListener('livewire:update', initAddToCartForms);
+      
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
     });
 
     // If the page is already loaded, set it up now

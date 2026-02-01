@@ -4,30 +4,50 @@
 
 @section('content')
 <div class="min-h-screen">
-  <section class="relative h-screen flex items-center pt-16">
-    <img src="{{ asset('images/mainback2.avif') }}" alt="PetMart" class="absolute inset-0 w-full h-full object-cover">
-    <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-    <div class="relative z-10 flex items-center h-full px-4 sm:px-6 md:px-20">
-      <div class="max-w-xl text-left transform opacity-0 -translate-x-10 transition-all duration-1000 ease-out" id="hero-content">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold text-white mb-4 sm:mb-6 drop-shadow-lg leading-tight">
-          About PetMart
-        </h1>
-        <p class="text-sm sm:text-base md:text-lg lg:text-xl text-gray-100 leading-relaxed drop-shadow-md mb-6 sm:mb-8">
-          We are passionate about providing the best care for your pets. Our mission is to make quality pet products accessible to every pet owner in Sri Lanka.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <a href="{{ route('shop') }}" class="bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white font-semibold px-6 sm:px-8 py-3 rounded-lg shadow-lg transition duration-300 text-center min-h-[44px] flex items-center justify-center">
-            Shop Now
-          </a>
-          <a href="{{ route('home') }}" class="bg-white hover:bg-gray-100 active:bg-gray-200 text-blue-700 font-semibold px-6 sm:px-8 py-3 rounded-lg shadow-lg transition duration-300 text-center min-h-[44px] flex items-center justify-center">
-            Back to Home
-          </a>
+  <section class="relative pt-10 lg:pt-20 pb-0 overflow-hidden bg-white" style="position: relative; top: 0px; left: 0px; bottom: 50px; right: 0px;">
+    <!-- Decorative Yellow Shape -->
+    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 lg:opacity-40 animate-blob pointer-events-none hidden md:block"></div>
+    <div class="absolute bottom-0 right-10 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 pointer-events-none hidden md:block"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+      <div class="flex flex-col md:flex-row items-end justify-between gap-8 lg:gap-16">
+        
+        <!-- Text Content (Vertically Centered) -->
+        <div class="w-full md:w-1/2 text-center md:text-left order-2 md:order-1 self-center pb-8 md:pb-12" style="position: relative; top: -90px; left: 0px; right: 0px; bottom: 0px;">
+          <div class="inline-block mb-3">
+               <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Who We Are</span>
+          </div>
+          <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-gray-900 leading-tight mb-4">
+            Your Trusted <br>
+            <span class="text-blue-600">Partner in Pet Care</span>
+          </h1>
+          <p class="text-lg text-gray-600 mb-6 leading-relaxed max-w-lg mx-auto md:mx-0">
+            At PetMart, we are more than just a pet store. We are a community of animal lovers dedicated to providing the best for your furry friends.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-8 md:mb-0">
+            <a href="{{ route('shop') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-center min-w-[160px] transform hover:-translate-y-1">
+              Explore Shop
+            </a>
+
+          </div>
         </div>
+
+        <!-- Image Content (Bottom Aligned) -->
+        <div class="w-full md:w-1/2 relative order-1 md:order-2 flex justify-center md:justify-end items-end" style="position: relative; top: 0px; left: 0px; right: 0px; bottom: 0px;">
+          <!-- Abstract Background for Image -->
+          <svg class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] z-0" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#2563eb" d="M44.7,-76.4C58.9,-69.2,71.8,-59.1,81.6,-46.6C91.4,-34.1,98.1,-19.2,95.8,-4.9C93.5,9.4,82.2,23.1,70.8,34.3C59.4,45.5,47.9,54.2,35.6,63.2C23.3,72.2,10.2,81.5,-1.9,84.8C-14,88.1,-26.1,85.4,-37.2,78.2C-48.3,71,-58.4,59.3,-67.4,46.7C-76.4,34.1,-84.3,20.6,-86.3,6.2C-88.3,-8.2,-84.4,-23.5,-75.4,-36.2C-66.4,-48.9,-52.3,-59,-38.7,-66.4C-25.1,-73.8,-11.9,-78.5,2.3,-82.5C16.5,-86.5,30.5,-101,44.7,-76.4Z" transform="translate(100 100) scale(1.1)" opacity="0.15" />
+          </svg>
+          
+          <img src="{{ asset('images/abouthero.png') }}" alt="About PetMart" class="relative z-10 w-full max-w-sm md:max-w-md lg:max-w-xl object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500 top-10 md:-top-[150px]" style="position: relative; left: 0px; right: 0px; bottom: 0px; -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%); mask-image: linear-gradient(to bottom, black 80%, transparent 100%);">
+        </div>
+
       </div>
     </div>
   </section>
 
-  <section class="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-16 sm:py-20 lg:py-24 relative overflow-hidden">
+  <section id="about-story" class="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-0 pb-16 pt-0 sm:py-20 lg:py-24 relative overflow-hidden">
     <div class="absolute top-0 left-0 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
     <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 translate-x-1/2 translate-y-1/2"></div>
     
@@ -143,70 +163,7 @@
       </div>
     </div>
   </section>
-<br><br>
-  <section class="bg-gradient-to-b from-blue-50 via-white to-gray-50 py-20 sm:py-24 relative overflow-hidden">
-    <div class="absolute top-1/2 left-0 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-10 -translate-x-1/2 -translate-y-1/2"></div>
-    <div class="absolute top-1/2 right-0 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10 translate-x-1/2 -translate-y-1/2"></div>
-    
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 lg:mb-24">
-        <div class="inline-block mb-3">
-          <span class="text-sm font-semibold text-blue-700 uppercase tracking-wider">Why Choose Us</span>
-        </div>
-        <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
-          Why Choose <span class="bg-gradient-to-r from-blue-700 to-blue-600 bg-clip-text text-transparent">PetMart?</span>
-        </h2>
-        <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto mt-4">
-          Discover what makes us the preferred choice for pet owners across Sri Lanka
-        </p>
-      </div>
-      <br>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-        <div class="group relative text-center p-8 rounded-2xl bg-white border border-gray-100 hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <div class="relative">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 mb-6 transform group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-10 h-10 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-700 transition-colors duration-300">Quality Products</h3>
-            <p class="text-gray-600 leading-relaxed">We source only the best products from trusted brands to ensure your pet's health and happiness.</p>
-          </div>
-          <div class="absolute inset-0 rounded-2xl shadow-sm group-hover:shadow-md transition-shadow duration-300 -z-10"></div>
-        </div>
-
-        <div class="group relative text-center p-8 rounded-2xl bg-white border border-gray-100 hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <div class="relative">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 mb-6 transform group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-10 h-10 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-700 transition-colors duration-300">Affordable Prices</h3>
-            <p class="text-gray-600 leading-relaxed">Competitive pricing without compromising on quality. Great value for your money.</p>
-          </div>
-          <div class="absolute inset-0 rounded-2xl shadow-sm group-hover:shadow-md transition-shadow duration-300 -z-10"></div>
-        </div>
-
-        <div class="group relative text-center p-8 rounded-2xl bg-white border border-gray-100 hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <div class="relative">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 mb-6 transform group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-10 h-10 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-700 transition-colors duration-300">Expert Support</h3>
-            <p class="text-gray-600 leading-relaxed">Our knowledgeable team is always ready to help you find the perfect products for your pet.</p>
-          </div>
-          <div class="absolute inset-0 rounded-2xl shadow-sm group-hover:shadow-md transition-shadow duration-300 -z-10"></div>
-        </div>
-      </div>
-    </div>
-  </section>
 <br><br>
   <section class="bg-gradient-to-br from-blue-100 via-blue-50 to-white py-20 sm:py-24 relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-br from-blue-200/30 via-blue-100/20 to-transparent"></div>
