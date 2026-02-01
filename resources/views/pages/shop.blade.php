@@ -112,39 +112,24 @@
         return;
       }
 
-      const btn = e.currentTarget;
       const petId = btn.dataset.petId;
-      const isFav = btn.dataset.favorited === "1";
+      // No need to check isFav for URL selection anymore, we always hit toggle
+      // const isFav = btn.dataset.favorited === "1";
+
+      const url = `/api/favorites/toggle`;
 
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-      
-      let url, method, body;
-
-      if (isFav) {
-          // Remove from favorites: DELETE /api/favorites/{pet_id}
-          url = `/api/favorites/${petId}`;
-          method = 'DELETE';
-      } else {
-          // Add to favorites: POST /api/favorites
-          url = `/api/favorites`;
-          method = 'POST';
-          body = JSON.stringify({ pet_id: petId });
-      }
-
       const options = {
-        method: method,
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
           "X-CSRF-TOKEN": csrfToken || "",
           "X-Requested-With": "XMLHttpRequest"
         },
-        credentials: 'same-origin'
+        credentials: 'same-origin',
+        body: JSON.stringify({ pet_id: petId })
       };
-
-      if (body) {
-          options.body = body;
-      }
 
       // Disable button
       btn.disabled = true;
@@ -153,13 +138,15 @@
 
       try {
         const response = await fetch(url, options);
+        const data = await response.json();
         
-        if (response.ok) {
-          const newStatus = isFav ? "0" : "1";
-          btn.setAttribute('data-favorited', newStatus);
+        if (response.ok && data.success) {
+          const newFavState = data.favorited; // Boolean from backend
+          
+          btn.setAttribute('data-favorited', newFavState ? "1" : "0");
           
           if (svg) {
-            if (newStatus === "1") {
+            if (newFavState) {
               svg.style.stroke = "#ef4444";
               svg.style.fill = "#ef4444";
             } else {
@@ -169,7 +156,7 @@
           }
         } else {
             console.error('Favorite action failed', response.status);
-            alert("Something went wrong. Please try again.");
+            alert(data.message || "Something went wrong.");
         }
       } catch (error) {
         console.error("Error toggling favorite:", error);
