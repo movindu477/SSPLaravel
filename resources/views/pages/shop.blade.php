@@ -112,6 +112,7 @@
         return;
       }
 
+      const btn = e.currentTarget;
       const petId = btn.dataset.petId;
       // No need to check isFav for URL selection anymore, we always hit toggle
       // const isFav = btn.dataset.favorited === "1";
