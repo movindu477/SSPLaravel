@@ -22,7 +22,7 @@
               @foreach(['Dog', 'Cat'] as $type)
               <label class="flex items-center group cursor-pointer">
                 <div class="relative flex items-center">
-                  <input type="checkbox" wire:model.live="pet_type" value="{{ $type }}" class="peer h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                  <input type="radio" wire:model.live="pet_type" value="{{ $type }}" class="peer h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                 </div>
                 <span class="ml-3 text-gray-600 group-hover:text-blue-600 transition-colors text-sm font-medium">{{ $type }}</span>
               </label>
@@ -37,7 +37,7 @@
               @foreach(['Food', 'Toy'] as $category)
               <label class="flex items-center group cursor-pointer">
                 <div class="relative flex items-center">
-                  <input type="checkbox" wire:model.live="accessories_type" value="{{ $category }}" class="peer h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                  <input type="radio" wire:model.live="accessories_type" value="{{ $category }}" class="peer h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                 </div>
                 <span class="ml-3 text-gray-600 group-hover:text-blue-600 transition-colors text-sm font-medium">{{ $category }}</span>
               </label>
@@ -147,8 +147,6 @@
                   
                   <!-- Original Price (Strike) & Current Price -->
                   <div class="flex items-center gap-2 mb-4">
-                     <!-- Assuming a higher original price for demo visual effect if needed, but sticking to real data -->
-                     <span class="text-sm text-gray-400 line-through">Rs. {{ number_format((float)$product->price * 1.1, 2) }}</span>
                      <span class="text-xl font-bold text-gray-900">Rs. {{ number_format((float)$product->price, 2) }}</span>
                   </div>
 
