@@ -31,10 +31,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Favorites
     // Favorites
+    Route::post('/favorites/toggle', [FavoriteController::class, 'toggle']);
     Route::get('/favorites', [FavoriteController::class, 'index']);
     Route::post('/favorites', [FavoriteController::class, 'store']);
     Route::delete('/favorites/{pet_id}', [FavoriteController::class, 'destroy']);
-    Route::post('/favorites/toggle', [FavoriteController::class, 'toggle']);
 
     // Cart
     Route::get('/cart', [CartController::class, 'index']);
