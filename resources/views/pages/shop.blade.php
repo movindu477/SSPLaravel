@@ -141,7 +141,7 @@
         const data = await response.json();
         
         if (response.ok && data.success) {
-          const newFavState = data.favorited; // Boolean from backend
+          const newFavState = data.is_favorited; // Boolean from backend
           
           btn.setAttribute('data-favorited', newFavState ? "1" : "0");
           

@@ -65,7 +65,7 @@ class FavoriteController extends Controller
 
             return response()->json([
                 'success' => true,
-                'favorited' => false,
+                'is_favorited' => false,
                 'message' => 'Removed from favorites',
             ]);
         }
@@ -77,7 +77,7 @@ class FavoriteController extends Controller
 
         return response()->json([
             'success' => true,
-            'favorited' => true,
+            'is_favorited' => true,
             'message' => 'Added to favorites',
         ]);
     }
