@@ -1,6 +1,337 @@
 @extends('layouts.app')
 
-@section('title', 'Payment - PetMart')
+@section('title', 'Checkout - PetMart')
+
+@section('content')
+<!-- Stripe JS -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<div class="min-h-screen bg-gray-100 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Main Container -->
+    <div class="w-full max-w-7xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[600px]">
+        
+        <!-- Left Side: Order Summary (Dark Theme) -->
+        <div class="w-full lg:w-5/12 bg-gray-900 p-8 lg:p-12 text-white flex flex-col relative">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold tracking-wide">Order Summary</h2>
+                <span class="bg-gray-800 text-gray-300 text-xs py-1 px-3 rounded-full uppercase tracking-wider font-semibold" id="item-count-badge">0 items</span>
+            </div>
+
+            <!-- Items List -->
+            <div class="flex-1 overflow-y-auto pr-2 space-y-6 custom-scrollbar" id="order-items-container">
+                <!-- Skeleton Loader -->
+                <div class="animate-pulse space-y-4">
+                    <div class="flex gap-4">
+                        <div class="w-16 h-16 bg-gray-800 rounded-lg"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-4 bg-gray-800 rounded w-3/4"></div>
+                            <div class="h-3 bg-gray-800 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-16 h-16 bg-gray-800 rounded-lg"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-4 bg-gray-800 rounded w-3/4"></div>
+                            <div class="h-3 bg-gray-800 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Totals -->
+            <div class="mt-8 pt-8 border-t border-gray-800 space-y-3">
+                <div class="flex justify-between text-gray-400">
+                    <span>Subtotal</span>
+                    <span class="text-white font-medium" id="summary-subtotal">Rs. 0.00</span>
+                </div>
+                <!-- <div class="flex justify-between text-gray-400">
+                    <span>Discount</span>
+                    <span class="text-green-400 font-medium">-$0.00</span>
+                </div> -->
+                <div class="flex justify-between text-gray-400">
+                    <span>Shipping</span>
+                    <span class="text-white font-medium">Free</span>
+                </div>
+                <div class="flex justify-between text-gray-400">
+                    <span>Tax (8%)</span>
+                    <span class="text-white font-medium" id="summary-tax">Rs. 0.00</span>
+                </div>
+                
+                <div class="flex justify-between items-center pt-4 mt-2 border-t border-gray-800">
+                    <span class="text-xl font-bold">Total</span>
+                    <span class="text-3xl font-bold text-blue-400" id="summary-total">Rs. 0.00</span>
+                </div>
+            </div>
+            
+            <!-- Back to Shop -->
+            <div class="mt-8 text-center lg:text-left">
+                <a href="{{ route('shop') }}" class="text-gray-500 hover:text-white text-sm transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Shop
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Side: Stripe Payment (Light Theme) -->
+        <div class="w-full lg:w-7/12 bg-gray-50 p-8 lg:p-12 relative">
+            <div class="max-w-md mx-auto h-full flex flex-col justify-center">
+                
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Payment Details</h2>
+                    <p class="text-gray-500 text-sm">Complete your purchase securely.</p>
+                </div>
+
+                <form id="payment-form" class="space-y-6">
+                    @csrf
+                    <!-- Contact Info (Pre-filled if auth) -->
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium text-gray-700">Email Address</label>
+                        <input type="email" id="email" value="{{ auth()->user()->email ?? '' }}" class="block w-full rounded-lg border-gray-300 bg-white py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="you@example.com" required>
+                    </div>
+
+                     <!-- Stripe Element Placeholder -->
+                    <div id="payment-element" class="min-h-[290px]">
+                        <!-- Stripe Elements will be inserted here -->
+                        <div class="animate-pulse space-y-4 mt-4">
+                           <div class="h-10 bg-gray-200 rounded"></div>
+                           <div class="h-10 bg-gray-200 rounded"></div>
+                           <div class="h-40 bg-gray-200 rounded"></div>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="payment-message" class="hidden text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200"></div>
+
+                    <!-- Pay Button -->
+                    <button id="submit" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.01]">
+                        <span id="button-text">Pay Now</span>
+                        <div class="spinner hidden ml-2" id="spinner">
+                            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <div class="flex items-center justify-center gap-2 text-xs text-gray-400 mt-4">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        Encrypted & Secure Payment
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// --- Configuration ---
+const STRIPE_KEY = "{{ config('services.stripe.key') }}";
+const ORDER_TOKEN = "{{ session('user_token') }}"; // Assuming user token handling matches existing pattern
+const API_CART_URL = "/api/cart";
+const API_INTENT_URL = "/api/create-payment-intent"; // Endpoint that returns client_secret
+const SUCCESS_URL = "{{ route('shop') }}?order_success=1";
+
+let stripe;
+let elements;
+let cartTotal = 0;
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Initialize logic
+    if (!STRIPE_KEY) {
+        console.error("Stripe Key missing!");
+        alert("Payment configuration error.");
+        return;
+    }
+    
+    stripe = Stripe(STRIPE_KEY);
+
+    // 2. Fetch Cart Data
+    await loadCartAndInitializePayment();
+});
+
+async function loadCartAndInitializePayment() {
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        
+        // Fetch Cart Items
+        const res = await fetch(API_CART_URL, {
+            headers: {
+                "Authorization": "Bearer " + ORDER_TOKEN, // If token logic is used
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken || ""
+            }
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch cart");
+        const data = await res.json();
+        
+        if (!data.data || data.data.length === 0) {
+            alert("Your cart is empty!");
+            window.location.href = "{{ route('shop') }}";
+            return;
+        }
+
+        // Render Summary
+        renderOrderSummary(data.data);
+        
+        // Calculate Total amount for Stripe
+        // Note: Frontend calculation is insecure for production but requested 'frontend only'.
+        // Backend should validate this derived from cart.
+        await initializeStripeElements(cartTotal);
+
+    } catch (e) {
+        console.error("Initialization Error:", e);
+        document.getElementById('order-items-container').innerHTML = `<div class="text-red-400 text-center">Failed to load order details.</div>`;
+    }
+}
+
+function renderOrderSummary(items) {
+    const container = document.getElementById('order-items-container');
+    container.innerHTML = '';
+    
+    let subtotal = 0;
+
+    items.forEach(item => {
+        subtotal += parseFloat(item.price) * parseInt(item.quantity);
+        
+        // Dynamic Image handling
+        let imgUrl = item.image_url || 'images/Petmart.png';
+        if (!imgUrl.startsWith('http') && !imgUrl.startsWith('/')) imgUrl = '/' + imgUrl;
+        if (imgUrl.startsWith('//')) imgUrl = imgUrl.substring(1);
+
+        const html = `
+            <div class="flex gap-4 items-center">
+                <div class="w-16 h-16 bg-white rounded-xl overflow-hidden shadow-sm flex-shrink-0">
+                    <img src="${imgUrl}" class="w-full h-full object-cover" onerror="this.src='{{ asset('images/Petmart.png') }}'">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-white font-medium text-sm truncate">${item.product_name}</h4>
+                    <p class="text-gray-400 text-xs mt-1">Qty: ${item.quantity}</p>
+                </div>
+                <div class="text-white font-semibold text-sm">
+                    Rs. ${(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2)}
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    });
+
+    // Calc Totals
+    const tax = subtotal * 0.08;
+    cartTotal = subtotal + tax;
+
+    document.getElementById('item-count-badge').textContent = `${items.length} items`;
+    document.getElementById('summary-subtotal').textContent = `Rs. ${subtotal.toFixed(2)}`;
+    document.getElementById('summary-tax').textContent = `Rs. ${tax.toFixed(2)}`;
+    document.getElementById('summary-total').textContent = `Rs. ${cartTotal.toFixed(2)}`;
+    
+    // Update button text
+    document.getElementById('button-text').textContent = `Pay Rs. ${cartTotal.toFixed(2)}`;
+}
+
+async function initializeStripeElements(amount) {
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+        // Create PaymentIntent via Backend
+        const response = await fetch(API_INTENT_URL, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken || ""
+            },
+            body: JSON.stringify({ 
+                amount: amount,
+                email: document.getElementById('email').value 
+            })
+        });
+
+        const { client_secret, error } = await response.json();
+        
+        if (error) throw new Error(error);
+
+        // Mount Elements
+        const appearance = {
+            theme: 'stripe',
+            variables: {
+                colorPrimary: '#2563eb',
+            },
+        };
+        elements = stripe.elements({ appearance, clientSecret: client_secret });
+
+        const paymentElement = elements.create("payment");
+        paymentElement.mount("#payment-element");
+
+    } catch (e) {
+        console.error("Stripe Init Failed:", e);
+        showMessage(e.message || "Failed to initialize payment system.");
+    }
+}
+
+// Handle Form Submit
+document.getElementById("payment-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    setLoading(true);
+
+    const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+            return_url: SUCCESS_URL, // Redirects here after payment
+            receipt_email: document.getElementById("email").value,
+        },
+    });
+
+    // This point is reached only if there is an immediate error/validation fail
+    if (error) {
+        showMessage(error.message);
+        setLoading(false);
+    } else {
+        // Success - redirect happens automatically
+    }
+});
+
+// Helpers
+function showMessage(messageText) {
+    const messageContainer = document.querySelector("#payment-message");
+    messageContainer.classList.remove("hidden");
+    messageContainer.textContent = messageText;
+    setTimeout(() => messageContainer.classList.add("hidden"), 5000);
+}
+
+function setLoading(isLoading) {
+    const submitBtn = document.querySelector("#submit");
+    const spinner = document.querySelector("#spinner");
+    const buttonText = document.querySelector("#button-text");
+
+    if (isLoading) {
+        submitBtn.disabled = true;
+        spinner.classList.remove("hidden");
+        buttonText.classList.add("hidden");
+    } else {
+        submitBtn.disabled = false;
+        spinner.classList.add("hidden");
+        buttonText.classList.remove("hidden");
+    }
+}
+</script>
+
+<style>
+/* Custom Scrollbar for Items List */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #1f2937; 
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4b5563; 
+    border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #6b7280; 
+}
+</style>
+@endsection
 
 @section('content')
 @if(session('success') && session('order_id'))

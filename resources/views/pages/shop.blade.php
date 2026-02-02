@@ -89,6 +89,36 @@
     @livewire('shop-filter')
   </div>
 
+  <!-- Login Required Modal -->
+  <div id="login-modal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity opacity-0" id="login-modal-backdrop"></div>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" id="login-modal-panel">
+          <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+              <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              </div>
+              <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                <h3 class="text-xl font-bold leading-6 text-gray-900" id="modal-title">Log In Required</h3>
+                <div class="mt-2">
+                  <p class="text-sm text-gray-500">You need to be logged in to access this feature. Please log in or create an account to continue buying products.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+            <a href="{{ route('login') }}" class="inline-flex w-full justify-center rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto transition-colors">Log In / Register</a>
+            <button type="button" onclick="hideLoginModal()" class="mt-3 inline-flex w-full justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition-colors">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
 
@@ -107,9 +137,42 @@
       e.stopPropagation();
       
       if (!isAuthenticated) {
-        alert("Please login first");
-        window.location.href = "{{ route('login') }}";
+    function showLoginModal() {
+      const modal = document.getElementById('login-modal');
+      const backdrop = document.getElementById('login-modal-backdrop');
+      const panel = document.getElementById('login-modal-panel');
+      
+      modal.classList.remove('hidden');
+      // Trigger animations
+      setTimeout(() => {
+        backdrop.classList.remove('opacity-0');
+        panel.classList.remove('opacity-0', 'translate-y-4', 'sm:scale-95');
+        panel.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+      }, 10);
+    }
+
+    function hideLoginModal() {
+      const modal = document.getElementById('login-modal');
+      const backdrop = document.getElementById('login-modal-backdrop');
+      const panel = document.getElementById('login-modal-panel');
+
+      backdrop.classList.add('opacity-0');
+      panel.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+      panel.classList.add('opacity-0', 'translate-y-4', 'sm:scale-95');
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    async function handleFavoriteClick(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (!isAuthenticated) {
+        showLoginModal();
         return;
+      }
       }
 
       const btn = e.currentTarget;
@@ -269,9 +332,10 @@
             e.stopPropagation();
             
             if (!isAuthenticated) {
-                alert("Please login first");
-                window.location.href = "{{ route('login') }}";
+            if (!isAuthenticated) {
+                showLoginModal();
                 return;
+            }
             }
             
             const submitBtn = this.querySelector('button[type="submit"]');
