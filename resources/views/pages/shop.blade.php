@@ -122,28 +122,13 @@
   <script>
     const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
 
-    // I added this to set up click handlers for the heart/favorite buttons
-    function initFavoriteButtons() {
-      document.querySelectorAll('.favorite-btn').forEach(btn => {
-        if (!btn.hasAttribute('data-listener-attached')) {
-          btn.setAttribute('data-listener-attached', 'true');
-          btn.addEventListener('click', handleFavoriteClick);
-        }
-      });
-    }
-
-    async function handleFavoriteClick(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      if (!isAuthenticated) {
+    // Modal Functions
     function showLoginModal() {
       const modal = document.getElementById('login-modal');
       const backdrop = document.getElementById('login-modal-backdrop');
       const panel = document.getElementById('login-modal-panel');
       
       modal.classList.remove('hidden');
-      // Trigger animations
       setTimeout(() => {
         backdrop.classList.remove('opacity-0');
         panel.classList.remove('opacity-0', 'translate-y-4', 'sm:scale-95');
@@ -165,7 +150,15 @@
       }, 300);
     }
 
-    async function handleFavoriteClick(e) {
+    // Event Delegation for Favorite Buttons - works even after Livewire re-renders
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.favorite-btn');
+      if (btn) {
+        handleFavoriteClick(e, btn);
+      }
+    });
+
+    async function handleFavoriteClick(e, btn) {
       e.preventDefault();
       e.stopPropagation();
       
@@ -173,13 +166,8 @@
         showLoginModal();
         return;
       }
-      }
 
-      const btn = e.currentTarget;
       const petId = btn.dataset.petId;
-      // No need to check isFav for URL selection anymore, we always hit toggle
-      // const isFav = btn.dataset.favorited === "1";
-
       const url = `/api/favorites/toggle`;
 
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -195,7 +183,7 @@
         body: JSON.stringify({ pet_id: petId })
       };
 
-      // Disable button
+      // Disable button during request
       btn.disabled = true;
       const svg = btn.querySelector('svg');
       if (svg) svg.classList.add('opacity-50');
@@ -205,7 +193,7 @@
         const data = await response.json();
         
         if (response.ok && data.success) {
-          const newFavState = data.is_favorited; // Boolean from backend
+          const newFavState = data.is_favorited;
           
           btn.setAttribute('data-favorited', newFavState ? "1" : "0");
           
@@ -260,12 +248,6 @@
 
     // Setting everything up when the page loads
     document.addEventListener('DOMContentLoaded', function() {
-      initFavoriteButtons();
-      
-      // I need to re-attach the buttons after Livewire updates the page
-      document.addEventListener('livewire:load', initFavoriteButtons);
-      document.addEventListener('livewire:update', initFavoriteButtons);
-      
       // This animates the hero text sliding in from the left
       const heroContent = document.getElementById('hero-content');
       if (heroContent) {
@@ -287,11 +269,11 @@
       }
     });
 
-    // In case the page is already loaded, I'll initialize right away
+    // Initialize add to cart forms
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initFavoriteButtons);
+      document.addEventListener('DOMContentLoaded', initAddToCartForms);
     } else {
-      initFavoriteButtons();
+      initAddToCartForms();
     }
 
     // This shows the "Added to Cart" notification
