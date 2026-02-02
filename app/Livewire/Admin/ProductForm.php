@@ -49,7 +49,8 @@ class ProductForm extends Component
         $imagePath = null;
         if ($this->image) {
             // Store in public/images/products
-            $filename = time() . '_' . $this->image->getClientOriginalName();
+            $extension = $this->image->getClientOriginalExtension();
+            $filename = time() . '_' . uniqid() . '.' . $extension;
             $this->image->storeAs('images/products', $filename, 'public');
             $imagePath = 'storage/images/products/' . $filename;
         }

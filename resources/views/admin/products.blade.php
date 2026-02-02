@@ -23,17 +23,7 @@
             </a>
         </div>
 
-        @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-                {{ session('success') }}
-            </div>
-        @endif
 
-        @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="overflow-x-auto">
@@ -69,10 +59,10 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex gap-2">
                                     <a href="{{ route('admin.edit-product', $product->id) }}" class="text-blue-600 hover:text-blue-900 transition-colors">Edit</a>
-                                    <form method="POST" action="{{ route('admin.delete-product', $product->id) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                    <button type="button" onclick="confirmDelete('delete-product-{{ $product->id }}')" class="text-red-600 hover:text-red-900 transition-colors">Delete</button>
+                                    <form id="delete-product-{{ $product->id }}" method="POST" action="{{ route('admin.delete-product', $product->id) }}" class="hidden">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900 transition-colors">Delete</button>
                                     </form>
                                 </div>
                             </td>
