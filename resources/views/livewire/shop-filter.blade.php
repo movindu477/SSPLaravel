@@ -122,12 +122,11 @@
                <!-- Favorite Button (Absolute Top Right) -->
                <button 
                   type="button"
-                  class="favorite-btn absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors"
+                  class="favorite-btn absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
                   data-pet-id="{{ $product->id }}"
                   data-favorited="{{ in_array($product->id, $favoriteIds) ? '1' : '0' }}"
-                  onclick="event.preventDefault(); event.stopPropagation();"
                 >
-                  <svg class="w-5 h-5" fill="{{ in_array($product->id, $favoriteIds) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5 pointer-events-none" fill="{{ in_array($product->id, $favoriteIds) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24" style="{{ in_array($product->id, $favoriteIds) ? 'stroke:#ef4444;fill:#ef4444;' : 'stroke:#6b7280;fill:none;' }}">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                   </svg>
                </button>
