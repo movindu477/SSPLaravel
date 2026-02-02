@@ -40,6 +40,10 @@ class Pet extends Model
         if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
             return $value;
         }
+        
+        if (str_starts_with($value, 'storage/')) {
+             return $value;
+        }
 
         if (str_starts_with($value, '/')) {
             $value = ltrim($value, '/');

@@ -51,7 +51,7 @@ class ProductForm extends Component
             // Store in public/images/products
             $filename = time() . '_' . $this->image->getClientOriginalName();
             $this->image->storeAs('images/products', $filename, 'public');
-            $imagePath = 'images/products/' . $filename;
+            $imagePath = 'storage/images/products/' . $filename;
         }
 
         Pet::create([
