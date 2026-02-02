@@ -63,7 +63,7 @@
                 <div class="space-y-4">
                     @foreach($recentProducts as $product)
                     <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                        <img src="{{ $product->getImageAssetUrl() }}" alt="{{ $product->product_name }}" class="w-16 h-16 object-cover rounded-lg" onerror="this.onerror=null; this.src='{{ asset('images/Petmart.png') }}';">
+                        <img src="{{ $product->image_url }}" alt="{{ $product->product_name }}" class="w-16 h-16 object-cover rounded-lg" onerror="this.onerror=null; this.src='{{ asset('images/Petmart.png') }}';">
                         <div class="flex-1">
                             <h3 class="font-semibold text-gray-800">{{ $product->product_name }}</h3>
                             <p class="text-sm text-gray-600">{{ $product->pet_type }} - {{ $product->accessories_type }}</p>

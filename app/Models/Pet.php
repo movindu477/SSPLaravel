@@ -31,37 +31,19 @@ class Pet extends Model
 
     public function getImageUrlAttribute($value)
     {
-        if (empty($value) || trim($value) === '') {
-            return 'images/Petmart.png';
+        if (empty($value)) {
+            return asset('images/Petmart.png');
         }
 
-        $value = trim($value);
-
-        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+        if (str_starts_with($value, 'http')) {
             return $value;
         }
-        
-        if (str_starts_with($value, 'storage/')) {
-             return $value;
+
+        // Fix for legacy public images (if any) to avoid breaking them
+        if ($value === 'images/Petmart.png' || $value === 'images/login.jpg' || $value === 'images/register.jpg') {
+            return asset($value);
         }
 
-        if (str_starts_with($value, '/')) {
-            $value = ltrim($value, '/');
-        }
-
-        if (!str_starts_with($value, 'images/')) {
-            $value = 'images/' . ltrim($value, '/');
-        }
-
-        return $value;
-    }
-
-    public function getImageAssetUrl()
-    {
-        $imageUrl = $this->image_url;
-        if (str_starts_with($imageUrl, 'http://') || str_starts_with($imageUrl, 'https://')) {
-            return $imageUrl;
-        }
-        return asset($imageUrl);
+        return asset('storage/' . $value);
     }
 }

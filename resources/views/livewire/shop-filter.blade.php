@@ -134,7 +134,7 @@
                <!-- Image -->
                <div class="relative w-full h-48 mb-4 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden group-hover:bg-blue-50/30 transition-colors">
                   <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
-                    <img src="{{ $product->getImageAssetUrl() }}" alt="{{ $product->product_name }}" class="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-500 drop-shadow-sm" onerror="this.src='{{ asset('images/Petmart.png') }}'">
+                    <img src="{{ $product->image_url }}" alt="{{ $product->product_name }}" class="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-500 drop-shadow-sm" onerror="this.src='{{ asset('images/Petmart.png') }}'">
                   </a>
                </div>
 

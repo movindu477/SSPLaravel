@@ -43,7 +43,7 @@
                 <!-- Product Image Section -->
                 <div class="relative bg-gradient-to-br from-gray-50 to-gray-100 p-6 sm:p-8 lg:p-12">
                     <div class="aspect-square bg-white rounded-2xl overflow-hidden shadow-lg">
-                        <img src="{{ $product->getImageAssetUrl() }}" 
+                        <img src="{{ $product->image_url }}" 
                              alt="{{ $product->product_name }}" 
                              class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" 
                              onerror="this.src='{{ asset('images/Petmart.png') }}'">

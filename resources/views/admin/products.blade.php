@@ -42,7 +42,7 @@
                         @foreach($products as $product)
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <img src="{{ $product->getImageAssetUrl() }}" alt="{{ $product->product_name }}" class="w-16 h-16 object-cover rounded-lg" onerror="this.onerror=null; this.src='{{ asset('images/Petmart.png') }}';">
+                                <img src="{{ $product->image_url }}" alt="{{ $product->product_name }}" class="w-16 h-16 object-cover rounded-lg" onerror="this.onerror=null; this.src='{{ asset('images/Petmart.png') }}';">
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900">{{ $product->product_name }}</div>

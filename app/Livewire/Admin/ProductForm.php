@@ -52,7 +52,7 @@ class ProductForm extends Component
             $extension = $this->image->getClientOriginalExtension();
             $filename = time() . '_' . uniqid() . '.' . $extension;
             $this->image->storeAs('images/products', $filename, 'public');
-            $imagePath = 'storage/images/products/' . $filename;
+            $imagePath = 'images/products/' . $filename;
         }
 
         Pet::create([
