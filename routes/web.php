@@ -70,6 +70,8 @@ Route::middleware('auth')->group(function () {
         return app(ProfileController::class)->index();
     })->name('profile');
 
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
     Route::post('/cart/add', [CartController::class, 'add'])
         ->name('cart.add');
 

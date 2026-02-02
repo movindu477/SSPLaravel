@@ -43,7 +43,7 @@
                             <span class="bg-green-100 text-green-800 px-4 py-1 rounded-full text-sm font-semibold">Verified</span>
                         </div>
                     </div>
-                    <button class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg">
+                    <button id="edit-profile-btn" class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg">
                         Edit Profile
                     </button>
                 </div>
@@ -183,6 +183,220 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Profile Modal -->
+<div id="edit-profile-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all scale-95 opacity-0" id="modal-content">
+        <div class="sticky top-0 bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-6 rounded-t-2xl z-10">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-bold">Edit Profile</h2>
+                <button onclick="closeEditModal()" class="text-white hover:bg-white/20 rounded-full p-2 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <form id="edit-profile-form" class="p-6 space-y-6">
+            @csrf
+            
+            <!-- Success/Error Messages -->
+            <div id="form-message" class="hidden rounded-lg p-4"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Name -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700">Full Name *</label>
+                    <input type="text" id="edit-name" name="name" value="{{ session('user_name', $user->name ?? '') }}" required
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 outline-none transition-all">
+                    <p class="text-sm text-red-600 hidden" id="name-error"></p>
+                </div>
+
+                <!-- Email -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700">Email Address *</label>
+                    <input type="email" id="edit-email" name="email" value="{{ session('user_email', $user->email ?? '') }}" required
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 outline-none transition-all">
+                    <p class="text-sm text-red-600 hidden" id="email-error"></p>
+                </div>
+
+                <!-- Phone -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700">Phone Number</label>
+                    <input type="tel" id="edit-phone" name="phonenumber" value="{{ session('user_phone', $user->phonenumber ?? '') }}"
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 outline-none transition-all">
+                    <p class="text-sm text-red-600 hidden" id="phone-error"></p>
+                </div>
+
+                <!-- City -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700">City</label>
+                    <input type="text" id="edit-city" name="city" value="{{ $user->city ?? '' }}"
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 outline-none transition-all">
+                    <p class="text-sm text-red-600 hidden" id="city-error"></p>
+                </div>
+            </div>
+
+            <!-- Address -->
+            <div class="space-y-2">
+                <label class="block text-sm font-semibold text-gray-700">Address</label>
+                <textarea id="edit-address" name="address" rows="3"
+                          class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 outline-none transition-all resize-none">{{ session('user_address', $user->address ?? '') }}</textarea>
+                <p class="text-sm text-red-600 hidden" id="address-error"></p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-4 pt-4 border-t">
+                <button type="button" onclick="closeEditModal()" class="flex-1 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-xl transition-colors">
+                    Cancel
+                </button>
+                <button type="submit" id="save-btn" class="flex-1 px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Modal Functions
+function openEditModal() {
+    const modal = document.getElementById('edit-profile-modal');
+    const content = document.getElementById('modal-content');
+    
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    setTimeout(() => {
+        content.classList.remove('scale-95', 'opacity-0');
+        content.classList.add('scale-100', 'opacity-100');
+    }, 10);
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('edit-profile-modal');
+    const content = document.getElementById('modal-content');
+    
+    content.classList.remove('scale-100', 'opacity-100');
+    content.classList.add('scale-95', 'opacity-0');
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        // Clear messages
+        document.getElementById('form-message').classList.add('hidden');
+    }, 300);
+}
+
+// Open modal on button click
+document.getElementById('edit-profile-btn')?.addEventListener('click', openEditModal);
+
+// Form Submission
+document.getElementById('edit-profile-form')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const saveBtn = document.getElementById('save-btn');
+    const originalText = saveBtn.innerHTML;
+    
+    // Clear previous errors
+    document.querySelectorAll('[id$="-error"]').forEach(el => {
+        el.classList.add('hidden');
+        el.textContent = '';
+    });
+    document.getElementById('form-message').classList.add('hidden');
+    
+    // Show loading state
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+    
+    const formData = new FormData(this);
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    try {
+        const response = await fetch("{{ route('profile.update') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+            },
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+            // Show success message
+            const msgEl = document.getElementById('form-message');
+            msgEl.className = 'bg-green-100 border border-green-200 text-green-800 rounded-lg p-4';
+            msgEl.textContent = data.message || 'Profile updated successfully!';
+            msgEl.classList.remove('hidden');
+            
+            // Update displayed values on the page
+            if (data.user) {
+                // Update all displayed values
+                document.querySelectorAll('div').forEach(div => {
+                    if (div.textContent.trim() === '{{ session("user_name", $user->name ?? "N/A") }}') {
+                        div.textContent = data.user.name;
+                    }
+                    if (div.textContent.trim() === '{{ session("user_email", $user->email ?? "N/A") }}') {
+                        div.textContent = data.user.email;
+                    }
+                    if (div.textContent.trim() === '{{ session("user_phone", $user->phonenumber ?? "N/A") }}') {
+                        div.textContent = data.user.phonenumber || 'N/A';
+                    }
+                    if (div.textContent.trim() === '{{ session("user_address", $user->address ?? "No address provided") }}') {
+                        div.textContent = data.user.address || 'No address provided';
+                    }
+                });
+                
+                // Update header name
+                document.querySelector('h1').textContent = data.user.name;
+            }
+            
+            // Close modal after 2 seconds
+            setTimeout(() => {
+                closeEditModal();
+                // Refresh page to show updated data
+                window.location.reload();
+            }, 2000);
+            
+        } else {
+            // Show validation errors
+            if (data.errors) {
+                Object.keys(data.errors).forEach(field => {
+                    const errorEl = document.getElementById(field + '-error');
+                    if (errorEl) {
+                        errorEl.textContent = data.errors[field][0];
+                        errorEl.classList.remove('hidden');
+                    }
+                });
+            } else {
+                const msgEl = document.getElementById('form-message');
+                msgEl.className = 'bg-red-100 border border-red-200 text-red-800 rounded-lg p-4';
+                msgEl.textContent = data.message || 'Failed to update profile. Please try again.';
+                msgEl.classList.remove('hidden');
+            }
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        const msgEl = document.getElementById('form-message');
+        msgEl.className = 'bg-red-100 border border-red-200 text-red-800 rounded-lg p-4';
+        msgEl.textContent = 'Network error. Please check your connection and try again.';
+        msgEl.classList.remove('hidden');
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalText;
+    }
+});
+
+// Close modal on backdrop click
+document.getElementById('edit-profile-modal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeEditModal();
+    }
+});
+</script>
 @endif
 @endsection
 

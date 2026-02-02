@@ -48,4 +48,63 @@ class ProfileController extends Controller
             'favorites' => $favorites
         ]);
     }
+
+    public function update(Request $request)
+    {
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        $user = User::find(Auth::id());
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        // Validation rules
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'phonenumber' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:100',
+        ]);
+
+        try {
+            // Update user data
+            $user->update([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phonenumber' => $validated['phonenumber'] ?? null,
+                'address' => $validated['address'] ?? null,
+                'city' => $validated['city'] ?? null,
+            ]);
+
+            // Update session
+            session([
+                'user_name' => $user->name,
+                'user_email' => $user->email,
+                'user_phone' => $user->phonenumber ?? '',
+                'user_address' => $user->address ?? '',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Profile updated successfully!',
+                'user' => $user
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update profile: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
